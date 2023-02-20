@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "noLib": true,
+    "noEmit": true,
+    "types": []
+  }
+}
+//{
+//    "compilerOptions": {
+//      "noEmit": true,
+//      "lib": ["es6", "dom",
+//      "dom.iterable",
+//      "esnext"],
+//      "types": [],
+//    "strict": false,
+//    "skipLibCheck": true,
+//    },
+//"include": [
+//    "src"
+//]
+//}

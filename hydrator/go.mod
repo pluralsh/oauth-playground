@@ -1,4 +1,4 @@
-module github.com/pluralsh/oauth-playground
+module github.com/pluralsh/oauth-playground/hydrator
 
 go 1.19
 

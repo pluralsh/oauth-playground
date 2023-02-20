@@ -1,0 +1,11 @@
+[
+  {
+    "namespace": "Group",
+    "object": "ops",
+    "relation": "member",
+    "subject": {
+      "namespace": "User",
+      "object": "hans"
+    }
+  }
+]
