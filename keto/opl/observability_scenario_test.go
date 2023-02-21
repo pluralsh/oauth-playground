@@ -13,7 +13,7 @@ var observability_scenario_admins = []*rts.RelationTuple{
 		Object:    "main",
 		Relation:  "admins",
 		Subject: rts.NewSubjectSet(
-			"Admin",
+			"User",
 			"david",
 			"",
 		),
@@ -23,7 +23,7 @@ var observability_scenario_admins = []*rts.RelationTuple{
 		Object:    "main",
 		Relation:  "admins",
 		Subject: rts.NewSubjectSet(
-			"Admin",
+			"User",
 			"hans",
 			"",
 		),
@@ -37,11 +37,11 @@ var observability_scenario_users_groups = []*rts.RelationTuple{
 	{
 		Namespace: "User",
 		Object:    "",
-		Relation:  "admins",
+		Relation:  "organizations",
 		Subject: rts.NewSubjectSet(
 			"Organization",
 			"main",
-			"admins",
+			"",
 		),
 	},
 	// -------- create empty Groups ---------
@@ -50,11 +50,11 @@ var observability_scenario_users_groups = []*rts.RelationTuple{
 	{
 		Namespace: "Group",
 		Object:    "",
-		Relation:  "admins",
+		Relation:  "organizations",
 		Subject: rts.NewSubjectSet(
 			"Organization",
 			"main",
-			"admins",
+			"",
 		),
 	},
 	// -------- create a user in the AllUser group ---------
@@ -106,62 +106,62 @@ var observability_scenario_users_groups = []*rts.RelationTuple{
 	{
 		Namespace: "User",
 		Object:    "sam",
-		Relation:  "admins",
+		Relation:  "organizations",
 		Subject: rts.NewSubjectSet(
 			"Organization",
 			"main",
-			"admins",
+			"",
 		),
 	},
 	{
 		Namespace: "User",
 		Object:    "aaron",
-		Relation:  "admins",
+		Relation:  "organizations",
 		Subject: rts.NewSubjectSet(
 			"Organization",
 			"main",
-			"admins",
+			"",
 		),
 	},
 	{
 		Namespace: "User",
 		Object:    "nick",
-		Relation:  "admins",
+		Relation:  "organizations",
 		Subject: rts.NewSubjectSet(
 			"Organization",
 			"main",
-			"admins",
+			"",
 		),
 	},
 	{
 		Namespace: "User",
 		Object:    "cris",
-		Relation:  "admins",
+		Relation:  "organizations",
 		Subject: rts.NewSubjectSet(
 			"Organization",
 			"main",
-			"admins",
+			"",
 		),
 	},
 	// -------- create actual group and Users ---------
 	{
 		Namespace: "Group",
 		Object:    "MainCluster",
-		Relation:  "admins",
+		Relation:  "organizations",
 		Subject: rts.NewSubjectSet(
 			"Organization",
 			"main",
-			"admins",
+			"",
 		),
 	},
 	{
 		Namespace: "Group",
 		Object:    "FirstWorkloadCluster",
-		Relation:  "admins",
+		Relation:  "organizations",
 		Subject: rts.NewSubjectSet(
 			"Organization",
 			"main",
-			"admins",
+			"",
 		),
 	},
 	// -------- add users to group --------
@@ -194,11 +194,11 @@ var observability_scenario_clients_tenants = []*rts.RelationTuple{
 	{
 		Namespace: "OAuth2Client",
 		Object:    "",
-		Relation:  "admins",
+		Relation:  "organizations",
 		Subject: rts.NewSubjectSet(
 			"Organization",
 			"main",
-			"admins",
+			"",
 		),
 	},
 	// -------- create empty ObservabilityTenant ---------
@@ -207,22 +207,22 @@ var observability_scenario_clients_tenants = []*rts.RelationTuple{
 	{
 		Namespace: "ObservabilityTenant",
 		Object:    "",
-		Relation:  "admins",
+		Relation:  "organizations",
 		Subject: rts.NewSubjectSet(
 			"Organization",
 			"main",
-			"admins",
+			"",
 		),
 	},
 	// -------- create actual OAuth2Client and  add loginBindings for Users and Groups ---------
 	{
 		Namespace: "OAuth2Client",
 		Object:    "MainClusterGrafana",
-		Relation:  "admins",
+		Relation:  "organizations",
 		Subject: rts.NewSubjectSet(
 			"Organization",
 			"main",
-			"admins",
+			"",
 		),
 	},
 	{
@@ -249,22 +249,22 @@ var observability_scenario_clients_tenants = []*rts.RelationTuple{
 	{
 		Namespace: "OAuth2Client",
 		Object:    "MainClusterAgent",
-		Relation:  "admins",
+		Relation:  "organizations",
 		Subject: rts.NewSubjectSet(
 			"Organization",
 			"main",
-			"admins",
+			"",
 		),
 	},
 	// -------- create actual ObservabilityTenant and add loginBindings for Users and Groups ---------
 	{
 		Namespace: "ObservabilityTenant",
 		Object:    "MainCluster",
-		Relation:  "admins",
+		Relation:  "organizations",
 		Subject: rts.NewSubjectSet(
 			"Organization",
 			"main",
-			"admins",
+			"",
 		),
 	},
 	{
@@ -310,11 +310,11 @@ var observability_scenario_clients_tenants = []*rts.RelationTuple{
 	{
 		Namespace: "ObservabilityTenant",
 		Object:    "FirstWorkloadCluster",
-		Relation:  "admins",
+		Relation:  "organizations",
 		Subject: rts.NewSubjectSet(
 			"Organization",
 			"main",
-			"admins",
+			"",
 		),
 	},
 	{

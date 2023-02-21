@@ -77,7 +77,7 @@ var _ = Describe("Verify expected behaviour of the opl configuration.", func() {
 				Object:    "main",
 				Relation:  "admins",
 				Subject: rts.NewSubjectSet(
-					"Admin",
+					"User",
 					"david",
 					"",
 				),
@@ -87,7 +87,7 @@ var _ = Describe("Verify expected behaviour of the opl configuration.", func() {
 			if err != nil {
 				panic("Encountered error: " + err.Error())
 			}
-			GinkgoWriter.Printf("Admin `david` is an admin: %v\n", ok)
+			GinkgoWriter.Printf("User `david` is an admin: %v\n", ok)
 			Expect(ok).To(BeTrue())
 		})
 		It("admin user should be able to create new group", func() {
@@ -96,7 +96,7 @@ var _ = Describe("Verify expected behaviour of the opl configuration.", func() {
 				Object:    "",
 				Relation:  "create",
 				Subject: rts.NewSubjectSet(
-					"Admin",
+					"User",
 					"david",
 					"",
 				),
@@ -107,7 +107,7 @@ var _ = Describe("Verify expected behaviour of the opl configuration.", func() {
 				panic("Encountered error: " + err.Error())
 			}
 			Expect(ok).To(BeTrue())
-			GinkgoWriter.Printf("Admin `david` can create new Group: %v\n", ok)
+			GinkgoWriter.Printf("User `david` can create new Group: %v\n", ok)
 		})
 		It("admin user should be able to edit existing group", func() {
 			query := rts.RelationTuple{
@@ -115,7 +115,7 @@ var _ = Describe("Verify expected behaviour of the opl configuration.", func() {
 				Object:    "MainCluster",
 				Relation:  "edit",
 				Subject: rts.NewSubjectSet(
-					"Admin",
+					"User",
 					"david",
 					"",
 				),
@@ -126,7 +126,7 @@ var _ = Describe("Verify expected behaviour of the opl configuration.", func() {
 				panic("Encountered error: " + err.Error())
 			}
 			Expect(ok).To(BeTrue())
-			GinkgoWriter.Printf("Admin `david` can edit Group `MainCluster`: %v\n", ok)
+			GinkgoWriter.Printf("User `david` can edit Group `MainCluster`: %v\n", ok)
 		})
 		It("admin user should be able to delete existing group", func() {
 			query := rts.RelationTuple{
@@ -134,7 +134,7 @@ var _ = Describe("Verify expected behaviour of the opl configuration.", func() {
 				Object:    "MainCluster",
 				Relation:  "delete",
 				Subject: rts.NewSubjectSet(
-					"Admin",
+					"User",
 					"david",
 					"",
 				),
@@ -145,7 +145,7 @@ var _ = Describe("Verify expected behaviour of the opl configuration.", func() {
 				panic("Encountered error: " + err.Error())
 			}
 			Expect(ok).To(BeTrue())
-			GinkgoWriter.Printf("Admin `david` can delete Group `MainCluster`: %v\n", ok)
+			GinkgoWriter.Printf("User `david` can delete Group `MainCluster`: %v\n", ok)
 		})
 		It("admin user should not be able to delete the AllUsers Group", func() {
 			query := rts.RelationTuple{
@@ -153,7 +153,7 @@ var _ = Describe("Verify expected behaviour of the opl configuration.", func() {
 				Object:    "AllUsers",
 				Relation:  "delete",
 				Subject: rts.NewSubjectSet(
-					"Admin",
+					"User",
 					"david",
 					"",
 				),
@@ -164,7 +164,7 @@ var _ = Describe("Verify expected behaviour of the opl configuration.", func() {
 				panic("Encountered error: " + err.Error())
 			}
 			Expect(ok).To(BeFalse())
-			GinkgoWriter.Printf("Admin `david` can't delete Group `AllUsers`: %v\n", ok)
+			GinkgoWriter.Printf("User `david` can't delete Group `AllUsers`: %v\n", ok)
 		})
 		It("admin user should be able to create new user", func() {
 			query := rts.RelationTuple{
@@ -172,7 +172,7 @@ var _ = Describe("Verify expected behaviour of the opl configuration.", func() {
 				Object:    "",
 				Relation:  "create",
 				Subject: rts.NewSubjectSet(
-					"Admin",
+					"User",
 					"hans",
 					"",
 				),
@@ -183,7 +183,7 @@ var _ = Describe("Verify expected behaviour of the opl configuration.", func() {
 				panic("Encountered error: " + err.Error())
 			}
 			Expect(ok).To(BeTrue())
-			GinkgoWriter.Printf("Admin `hans` can create new User: %v\n", ok)
+			GinkgoWriter.Printf("User `hans` can create new User: %v\n", ok)
 		})
 		It("admin user should be able to edit existing user", func() {
 			query := rts.RelationTuple{
@@ -191,7 +191,7 @@ var _ = Describe("Verify expected behaviour of the opl configuration.", func() {
 				Object:    "sam",
 				Relation:  "edit",
 				Subject: rts.NewSubjectSet(
-					"Admin",
+					"User",
 					"hans",
 					"",
 				),
@@ -202,7 +202,7 @@ var _ = Describe("Verify expected behaviour of the opl configuration.", func() {
 				panic("Encountered error: " + err.Error())
 			}
 			Expect(ok).To(BeTrue())
-			GinkgoWriter.Printf("Admin `hans` can edit User `sam`: %v\n", ok)
+			GinkgoWriter.Printf("User `hans` can edit User `sam`: %v\n", ok)
 		})
 		It("admin user should be able to delete existing user", func() {
 			query := rts.RelationTuple{
@@ -210,7 +210,7 @@ var _ = Describe("Verify expected behaviour of the opl configuration.", func() {
 				Object:    "nick",
 				Relation:  "delete",
 				Subject: rts.NewSubjectSet(
-					"Admin",
+					"User",
 					"hans",
 					"",
 				),
@@ -221,7 +221,7 @@ var _ = Describe("Verify expected behaviour of the opl configuration.", func() {
 				panic("Encountered error: " + err.Error())
 			}
 			Expect(ok).To(BeTrue())
-			GinkgoWriter.Printf("Admin `hans` can delete User `nick`: %v\n", ok)
+			GinkgoWriter.Printf("User `hans` can delete User `nick`: %v\n", ok)
 		})
 		It("admin user should be able to create a new OAuth2Client", func() {
 			query := rts.RelationTuple{
@@ -229,7 +229,7 @@ var _ = Describe("Verify expected behaviour of the opl configuration.", func() {
 				Object:    "",
 				Relation:  "create",
 				Subject: rts.NewSubjectSet(
-					"Admin",
+					"User",
 					"david",
 					"",
 				),
@@ -240,7 +240,7 @@ var _ = Describe("Verify expected behaviour of the opl configuration.", func() {
 				panic("Encountered error: " + err.Error())
 			}
 			Expect(ok).To(BeTrue())
-			GinkgoWriter.Printf("Admin `david` can create new OAuth2Client: %v\n", ok)
+			GinkgoWriter.Printf("User `david` can create new OAuth2Client: %v\n", ok)
 		})
 		It("admin user should be able to edit an existing OAuth2Client", func() {
 			query := rts.RelationTuple{
@@ -248,7 +248,7 @@ var _ = Describe("Verify expected behaviour of the opl configuration.", func() {
 				Object:    "MainClusterGrafana",
 				Relation:  "edit",
 				Subject: rts.NewSubjectSet(
-					"Admin",
+					"User",
 					"david",
 					"",
 				),
@@ -259,7 +259,7 @@ var _ = Describe("Verify expected behaviour of the opl configuration.", func() {
 				panic("Encountered error: " + err.Error())
 			}
 			Expect(ok).To(BeTrue())
-			GinkgoWriter.Printf("Admin `david` can edit OAuth2Client `MainClusterGrafana`: %v\n", ok)
+			GinkgoWriter.Printf("User `david` can edit OAuth2Client `MainClusterGrafana`: %v\n", ok)
 		})
 		It("admin user should be able to delete an existing OAuth2Client", func() {
 			query := rts.RelationTuple{
@@ -267,7 +267,7 @@ var _ = Describe("Verify expected behaviour of the opl configuration.", func() {
 				Object:    "MainClusterGrafana",
 				Relation:  "delete",
 				Subject: rts.NewSubjectSet(
-					"Admin",
+					"User",
 					"david",
 					"",
 				),
@@ -278,7 +278,7 @@ var _ = Describe("Verify expected behaviour of the opl configuration.", func() {
 				panic("Encountered error: " + err.Error())
 			}
 			Expect(ok).To(BeTrue())
-			GinkgoWriter.Printf("Admin `david` can delete OAuth2Client `MainClusterGrafana`: %v\n", ok)
+			GinkgoWriter.Printf("User `david` can delete OAuth2Client `MainClusterGrafana`: %v\n", ok)
 		})
 		It("admin user should be able to login through an existing OAuth2Client", func() {
 			query := rts.RelationTuple{
@@ -286,7 +286,7 @@ var _ = Describe("Verify expected behaviour of the opl configuration.", func() {
 				Object:    "MainClusterGrafana",
 				Relation:  "login",
 				Subject: rts.NewSubjectSet(
-					"Admin",
+					"User",
 					"david",
 					"",
 				),
@@ -297,7 +297,7 @@ var _ = Describe("Verify expected behaviour of the opl configuration.", func() {
 				panic("Encountered error: " + err.Error())
 			}
 			Expect(ok).To(BeTrue())
-			GinkgoWriter.Printf("Admin `david` can login to OAuth2Client `MainClusterGrafana`: %v\n", ok)
+			GinkgoWriter.Printf("User `david` can login to OAuth2Client `MainClusterGrafana`: %v\n", ok)
 		})
 		It("User in Group with login binding to OAuth2Client should be able to login", func() {
 			query := rts.RelationTuple{
@@ -381,7 +381,7 @@ var _ = Describe("Verify expected behaviour of the opl configuration.", func() {
 				Object:    "",
 				Relation:  "create",
 				Subject: rts.NewSubjectSet(
-					"Admin",
+					"User",
 					"david",
 					"",
 				),
@@ -392,7 +392,7 @@ var _ = Describe("Verify expected behaviour of the opl configuration.", func() {
 				panic("Encountered error: " + err.Error())
 			}
 			Expect(ok).To(BeTrue())
-			GinkgoWriter.Printf("Admin `david` can create new ObservabilityTenant: %v\n", ok)
+			GinkgoWriter.Printf("User `david` can create new ObservabilityTenant: %v\n", ok)
 		})
 		It("admin user should be able to edit an existing ObservabilityTenant", func() {
 			query := rts.RelationTuple{
@@ -400,7 +400,7 @@ var _ = Describe("Verify expected behaviour of the opl configuration.", func() {
 				Object:    "MainCluster",
 				Relation:  "edit",
 				Subject: rts.NewSubjectSet(
-					"Admin",
+					"User",
 					"david",
 					"",
 				),
@@ -411,7 +411,7 @@ var _ = Describe("Verify expected behaviour of the opl configuration.", func() {
 				panic("Encountered error: " + err.Error())
 			}
 			Expect(ok).To(BeTrue())
-			GinkgoWriter.Printf("Admin `david` can edit ObservabilityTenant `MainCluster`: %v\n", ok)
+			GinkgoWriter.Printf("User `david` can edit ObservabilityTenant `MainCluster`: %v\n", ok)
 		})
 		It("admin user should be able to delete an existing ObservabilityTenant", func() {
 			query := rts.RelationTuple{
@@ -419,7 +419,7 @@ var _ = Describe("Verify expected behaviour of the opl configuration.", func() {
 				Object:    "MainCluster",
 				Relation:  "delete",
 				Subject: rts.NewSubjectSet(
-					"Admin",
+					"User",
 					"david",
 					"",
 				),
@@ -430,7 +430,7 @@ var _ = Describe("Verify expected behaviour of the opl configuration.", func() {
 				panic("Encountered error: " + err.Error())
 			}
 			Expect(ok).To(BeTrue())
-			GinkgoWriter.Printf("Admin `david` can delete ObservabilityTenant `MainCluster`: %v\n", ok)
+			GinkgoWriter.Printf("User `david` can delete ObservabilityTenant `MainCluster`: %v\n", ok)
 		})
 		It("admin user should be able to view an existing ObservabilityTenant", func() {
 			query := rts.RelationTuple{
@@ -438,7 +438,7 @@ var _ = Describe("Verify expected behaviour of the opl configuration.", func() {
 				Object:    "MainCluster",
 				Relation:  "view",
 				Subject: rts.NewSubjectSet(
-					"Admin",
+					"User",
 					"david",
 					"",
 				),
@@ -449,7 +449,7 @@ var _ = Describe("Verify expected behaviour of the opl configuration.", func() {
 				panic("Encountered error: " + err.Error())
 			}
 			Expect(ok).To(BeTrue())
-			GinkgoWriter.Printf("Admin `david` can view to ObservabilityTenant `MainCluster`: %v\n", ok)
+			GinkgoWriter.Printf("User `david` can view to ObservabilityTenant `MainCluster`: %v\n", ok)
 		})
 		It("User with view permissions should be able to view an existing ObservabilityTenant", func() {
 			query := rts.RelationTuple{
