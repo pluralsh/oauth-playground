@@ -90,6 +90,47 @@ var _ = Describe("Verify expected behaviour of the opl configuration.", func() {
 			GinkgoWriter.Printf("User `david` is an admin: %v\n", ok)
 			Expect(ok).To(BeTrue())
 		})
+		It("check in which organizations a user is an admin", func() {
+			query := rts.RelationQuery{
+				Namespace: px.Ptr("Organization"),
+				Relation:  px.Ptr("admins"),
+				Subject: rts.NewSubjectSet(
+					"User",
+					"david",
+					"",
+				),
+			}
+
+			respTuples, err := kcl.QueryAllTuples(context.Background(), &query, 100)
+			if err != nil {
+				panic("Encountered error: " + err.Error())
+			}
+			// need to sort the tuples to make sure they are in the same order as the expected tuples
+			client.SortRelationTuples(respTuples)
+
+			// GinkgoWriter.Printf("User `david` is an admin in the organizations: %v\n", respTuples)
+			var expected = []*rts.RelationTuple{
+				{
+					Namespace: "Organization",
+					Object:    "main",
+					Relation:  "admins",
+					Subject: rts.NewSubjectSet(
+						"User",
+						"david",
+						"",
+					),
+				},
+			}
+
+			equal := cmp.Equal(respTuples, expected, protocmp.Transform())
+
+			if !equal {
+				diff := cmp.Diff(respTuples, expected, protocmp.Transform())
+				GinkgoWriter.Printf("Diff: %s", diff)
+			}
+
+			Expect(equal).To(BeTrue())
+		})
 		It("admin user should be able to create new group", func() {
 			query := rts.RelationTuple{
 				Namespace: "Group",
