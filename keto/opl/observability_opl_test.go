@@ -774,5 +774,64 @@ var _ = Describe("Verify expected behaviour of the opl configuration.", func() {
 
 			Expect(equal).To(BeTrue())
 		})
+		It("Should be able to list all ObservabilityTenants for an organization", func() {
+
+			query := rts.RelationQuery{
+				Namespace: px.Ptr("ObservabilityTenant"),
+				// Object:    nil,
+				// Relation: px.Ptr("viewers"),
+				Subject: rts.NewSubjectSet("Organization", "main", ""),
+			}
+
+			respTuples, err := kcl.QueryAllTuples(context.Background(), &query, 100) // if pageSize > 2, another tuple needs to be present
+			if err != nil {
+				panic("Encountered error: " + err.Error())
+			}
+			// need to sort the tuples to make sure they are in the same order as the expected tuples
+			client.SortRelationTuples(respTuples)
+
+			var expected = []*rts.RelationTuple{
+				// needed if pageSize > 2, pageSize =< 2 is unstable in the test
+				// unsure why this is needed
+				{
+					Namespace: "ObservabilityTenant",
+					Relation:  "organizations",
+					Subject: rts.NewSubjectSet(
+						"Organization",
+						"main",
+						"",
+					),
+				},
+				{
+					Namespace: "ObservabilityTenant",
+					Object:    "FirstWorkloadCluster",
+					Relation:  "organizations",
+					Subject: rts.NewSubjectSet(
+						"Organization",
+						"main",
+						"",
+					),
+				},
+				{
+					Namespace: "ObservabilityTenant",
+					Object:    "MainCluster",
+					Relation:  "organizations",
+					Subject: rts.NewSubjectSet(
+						"Organization",
+						"main",
+						"",
+					),
+				},
+			}
+
+			equal := cmp.Equal(respTuples, expected, protocmp.Transform())
+
+			if !equal {
+				diff := cmp.Diff(respTuples, expected, protocmp.Transform())
+				GinkgoWriter.Printf("Diff: %s", diff)
+			}
+
+			Expect(equal).To(BeTrue())
+		})
 	})
 })
