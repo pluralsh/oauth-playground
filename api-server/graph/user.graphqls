@@ -1,0 +1,16 @@
+"Representation of the information about a user sourced from Kratos."
+type User {
+  "The unique ID of the user."
+  id: ID!
+
+  "The user's full name."
+  name: String
+
+  "The user's email address."
+  email: String!
+}
+
+extend type Query {
+  "Get a list of all users."
+  listUsers: [User!]! @checkPermissions @isAuthenticated
+}

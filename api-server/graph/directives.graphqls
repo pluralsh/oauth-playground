@@ -1,0 +1,5 @@
+#check if the user is authenticated or not
+directive @isAuthenticated on QUERY | MUTATION | FIELD | FIELD_DEFINITION
+
+#checks user permissions using Keto
+directive @checkPermissions on QUERY | MUTATION | FIELD | FIELD_DEFINITION
