@@ -17,6 +17,7 @@ func (r *queryResolver) ListUsers(ctx context.Context) ([]*model.User, error) {
 	log := r.C.Log.WithName("ListUsers")
 	users, resp, err := r.C.KratosClient.IdentityApi.ListIdentities(ctx).Execute()
 	if err != nil || resp.StatusCode != 200 {
+		log.Error(err, "failed to list users")
 		return nil, fmt.Errorf("failed to list users: %w", err)
 	}
 

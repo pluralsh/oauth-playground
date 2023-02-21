@@ -256,8 +256,8 @@ github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e h1:fD57ERR4JtEqsWb
 github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e/go.mod h1:zD1mROLANZcx1PVRCS0qkT7pwLkGfwJo4zjcN/Tysno=
 github.com/onsi/ginkgo/v2 v2.6.0 h1:9t9b9vRUbFq3C4qKFCGkVuq/fIHji802N1nrtkh1mNc=
 github.com/onsi/gomega v1.24.1 h1:KORJXNNTzJXzu4ScJWssJfJMnJ+2QJqhoQSRwNlze9E=
-github.com/ory/hydra-client-go v1.11.8 h1:GwJjvH/DBcfYzoST4vUpi4pIRzDGH5oODKpIVuhwVyc=
-github.com/ory/hydra-client-go v1.11.8/go.mod h1:4YuBuwUEC4yiyDrnKjGYc1tB3gUXan4ZiUYMjXJbfxA=
+github.com/ory/hydra-client-go/v2 v2.0.3 h1:jIx968J9RBnjRuaQ21QMLCwZoa28FPvzYWAQ+88XVLw=
+github.com/ory/hydra-client-go/v2 v2.0.3/go.mod h1:FRuayIF1H/HD2umlad8c3h7RuHpcmsjBDpW0/R2OQ/U=
 github.com/ory/keto/proto v0.10.0-alpha.0.pre.1 h1:2/GcklHec0V38B76Dv6MdqA++1QJNpXXWcMzcG3fiv4=
 github.com/ory/keto/proto v0.10.0-alpha.0.pre.1/go.mod h1:g89tEf3y7WE1E5wPPVsWU36/qP1SAvjQ+LoQaLa1QF0=
 github.com/ory/kratos-client-go v0.11.1 h1:2f+WZ94NReAUQlxdV/pp1ipScy5o5gYLHt2ThSNHHeA=

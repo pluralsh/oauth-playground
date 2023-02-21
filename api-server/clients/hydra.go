@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	hydra "github.com/ory/hydra-client-go"
+	hydra "github.com/ory/hydra-client-go/v2"
 )
 
 const (
@@ -20,6 +20,7 @@ func NewHydraAdminClient() (*hydra.APIClient, error) {
 		return nil, fmt.Errorf("No admin address configured for hydra")
 	}
 	hydraAdminConfiguration := hydra.NewConfiguration()
+	hydraAdminConfiguration.Scheme = "http"
 	hydraAdminConfiguration.Servers = []hydra.ServerConfiguration{
 		{
 			URL: hydraAdminUrl, // Hydra Admin API

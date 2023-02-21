@@ -10,7 +10,7 @@ type User {
   email: String!
 }
 
-extend type Query {
+type Query {
   "Get a list of all users."
   listUsers: [User!]! @checkPermissions @isAuthenticated
 }
