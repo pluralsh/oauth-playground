@@ -1,37 +1,29 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"log"
 	"net/http"
-	"net/url"
+	"strings"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/render"
+	"github.com/ory/oathkeeper/pipeline/authn"
+
+	rts "github.com/ory/keto/proto/ory/keto/relation_tuples/v1alpha2"
+	px "github.com/ory/x/pointerx"
+	ketocl "github.com/pluralsh/oauth-playground/keto/client"
 )
 
 type AuthenticationSessionRequest struct {
-	*AuthenticationSession
+	*authn.AuthenticationSession
 
 	// User *UserPayload `json:"user,omitempty"`
 
 	// ProtectedID string `json:"id"` // override 'id' json to have more control
-}
-
-type AuthenticationSession struct {
-	Subject      string                 `json:"subject"`
-	Extra        map[string]interface{} `json:"extra"`
-	Header       http.Header            `json:"header"`
-	MatchContext MatchContext           `json:"match_context"`
-}
-
-type MatchContext struct {
-	RegexpCaptureGroups []string    `json:"regexp_capture_groups"`
-	URL                 *url.URL    `json:"url"`
-	Method              string      `json:"method"`
-	Header              http.Header `json:"header"`
 }
 
 func (a *AuthenticationSessionRequest) Bind(r *http.Request) error {
@@ -61,15 +53,18 @@ func main() {
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
 	r.Use(render.SetContentType(render.ContentTypeJSON))
-	// r.Post("/", func(w http.ResponseWriter, r *http.Request) {
-	// 	w.Write([]byte("welcome"))
-	// 	log.Printf("Post body: %s", r.Body)
-	// })
 	r.Post("/", LogAuthenticationSession)
 	http.ListenAndServe(":8080", r)
 }
 
 func LogAuthenticationSession(w http.ResponseWriter, r *http.Request) {
+
+	conndetails := ketocl.NewConnectionDetailsFromEnv()
+	kcl, err := ketocl.NewGrpcClient(context.Background(), conndetails)
+	if err != nil {
+		panic("Encountered error: " + err.Error())
+	}
+
 	data := &AuthenticationSessionRequest{}
 	if err := render.Bind(r, data); err != nil {
 		render.Render(w, r, ErrInvalidRequest(err))
@@ -83,11 +78,171 @@ func LogAuthenticationSession(w http.ResponseWriter, r *http.Request) {
 	log.Printf("Post body: %v", string(json))
 
 	render.Status(r, http.StatusCreated)
-	render.Render(w, r, NewAuthenticationSessionResponse(data))
+	render.Render(w, r, NewAuthenticationSessionResponse(kcl, data))
 }
 
-func NewAuthenticationSessionResponse(session *AuthenticationSessionRequest) *AuthenticationSessionRequest {
+func NewAuthenticationSessionResponse(kcl *ketocl.GrpcClient, session *AuthenticationSessionRequest) *AuthenticationSessionRequest {
+	tenants, err := getUserTenants(kcl, session.Subject)
+	if err != nil {
+		log.Printf("Error getting tenants: %v", err)
+	}
+	log.Printf("Tenants: %v", tenants)
+
+	session.Header = map[string][]string{
+		"X-Scope-OrgID": {strings.Join(tenants, "|")},
+	}
 	return session
+}
+
+// Get all the ObservabilityTenants has permissions for based on direct bindings and group memberships
+func getUserTenants(kcl *ketocl.GrpcClient, subject string) ([]string, error) {
+	// get all the groups a user is a member of
+	groups, err := getUserGroups(kcl, subject)
+	if err != nil {
+		return []string{}, err
+	}
+
+	// get all the tenants a user has permissions for
+	tenants, err := getUserDirectTenants(kcl, subject)
+	if err != nil {
+		return []string{}, err
+	}
+
+	// get all the tenants a user has permissions for via group membership
+	for _, group := range groups {
+		groupTenants, err := getGroupTenants(kcl, group)
+		if err != nil {
+			return []string{}, err
+		}
+		tenants = append(tenants, groupTenants...)
+	}
+
+	// get all the tenants a user has permissions for via organization admin permissions
+	orgs, err := isOrgAdmin(kcl, subject)
+	if err != nil {
+		return []string{}, err
+	}
+	for _, org := range orgs {
+		orgTenants, err := getOrgTenants(kcl, org)
+		if err != nil {
+			return []string{}, err
+		}
+		tenants = append(tenants, orgTenants...)
+	}
+
+	return tenants, nil
+}
+
+// Check in which organizations a user is an admin
+func isOrgAdmin(kcl *ketocl.GrpcClient, subject string) ([]string, error) {
+	query := rts.RelationQuery{
+		Namespace: px.Ptr("Organization"),
+		Relation:  px.Ptr("admins"),
+		Subject:   rts.NewSubjectSet("User", subject, ""),
+	}
+	respTuples, err := kcl.QueryAllTuples(context.Background(), &query, 100)
+	if err != nil {
+		return []string{}, err
+	}
+
+	output := []string{}
+	for _, tuple := range respTuples {
+		// likely unnecessary but just in case
+		if tuple.Namespace == "Organization" && tuple.Relation == "admins" && tuple.Object != "" {
+			output = append(output, tuple.Object)
+		}
+	}
+
+	return output, nil
+}
+
+// Get all the ObservabilityTenants that belong to an organization
+func getOrgTenants(kcl *ketocl.GrpcClient, org string) ([]string, error) {
+	query := rts.RelationQuery{
+		Namespace: px.Ptr("ObservabilityTenant"),
+		Subject:   rts.NewSubjectSet("Organization", org, ""),
+	}
+	respTuples, err := kcl.QueryAllTuples(context.Background(), &query, 100)
+	if err != nil {
+		return []string{}, err
+	}
+
+	output := []string{}
+	for _, tuple := range respTuples {
+		// likely unnecessary but just in case
+		if tuple.Namespace == "ObservabilityTenant" && tuple.Relation == "organizations" && tuple.Object != "" {
+			output = append(output, tuple.Object)
+		}
+	}
+
+	return output, nil
+}
+
+// Get the groups a user is a member of
+func getUserGroups(kcl *ketocl.GrpcClient, subject string) ([]string, error) {
+	query := rts.RelationQuery{
+		Namespace: px.Ptr("Group"),
+		Relation:  px.Ptr("members"),
+		Subject:   rts.NewSubjectSet("User", subject, ""),
+	}
+	respTuples, err := kcl.QueryAllTuples(context.Background(), &query, 100)
+	if err != nil {
+		return []string{}, err
+	}
+
+	output := []string{}
+	for _, tuple := range respTuples {
+		// likely unnecessary but just in case
+		if tuple.Namespace == "Group" && tuple.Relation == "members" && tuple.Object != "" {
+			output = append(output, tuple.Object)
+		}
+	}
+
+	return output, nil
+}
+
+// Get the ObservabilityTenants a user has permissions for
+func getUserDirectTenants(kcl *ketocl.GrpcClient, subject string) ([]string, error) {
+	query := rts.RelationQuery{
+		Namespace: px.Ptr("ObservabilityTenant"),
+		Subject:   rts.NewSubjectSet("User", subject, ""),
+	}
+	respTuples, err := kcl.QueryAllTuples(context.Background(), &query, 100)
+	if err != nil {
+		return []string{}, err
+	}
+
+	output := []string{}
+	for _, tuple := range respTuples {
+		// likely unnecessary but just in case
+		if tuple.Namespace == "ObservabilityTenant" && tuple.Object != "" {
+			output = append(output, tuple.Object)
+		}
+	}
+
+	return output, nil
+}
+
+// Get the ObservabilityTenants a group has permissions for
+func getGroupTenants(kcl *ketocl.GrpcClient, group string) ([]string, error) {
+	query := rts.RelationQuery{
+		Namespace: px.Ptr("ObservabilityTenant"),
+		Subject:   rts.NewSubjectSet("Group", group, "members"),
+	}
+	respTuples, err := kcl.QueryAllTuples(context.Background(), &query, 100)
+	if err != nil {
+		return []string{}, err
+	}
+
+	output := []string{}
+	for _, tuple := range respTuples {
+		// likely unnecessary but just in case
+		if tuple.Namespace == "ObservabilityTenant" && tuple.Object != "" {
+			output = append(output, tuple.Object)
+		}
+	}
+
+	return output, nil
 }
 
 func ErrInvalidRequest(err error) render.Renderer {
