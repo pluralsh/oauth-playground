@@ -17,5 +17,5 @@ extend type Query {
 
 extend type Mutation {
   "Create a new organization."
-  createOrganization(name: String!): Organization! @checkPermissions @isAuthenticated
+  createOrganization(name: String!, initialAdmin: String!): Organization! @checkPermissions @isAuthenticated
 }

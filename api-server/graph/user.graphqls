@@ -16,4 +16,7 @@ type User {
 type Query {
   "Get a list of all users."
   listUsers: [User!]! @checkPermissions @isAuthenticated
+
+  "Get a user by ID."
+  getUser(id: ID!): User! @checkPermissions @isAuthenticated
 }

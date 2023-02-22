@@ -59,6 +59,11 @@ func (r *queryResolver) ListUsers(ctx context.Context) ([]*model.User, error) {
 	return output, nil
 }
 
+// GetUser is the resolver for the getUser field.
+func (r *queryResolver) GetUser(ctx context.Context, id string) (*model.User, error) {
+	return r.C.GetUserFromId(ctx, id)
+}
+
 // Query returns generated.QueryResolver implementation.
 func (r *Resolver) Query() generated.QueryResolver { return &queryResolver{r} }
 

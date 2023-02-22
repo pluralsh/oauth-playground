@@ -9,20 +9,65 @@ import (
 	"fmt"
 
 	"github.com/google/uuid"
+	rts "github.com/ory/keto/proto/ory/keto/relation_tuples/v1alpha2"
+	px "github.com/ory/x/pointerx"
 	"github.com/pluralsh/oauth-playground/api-server/graph/generated"
 	"github.com/pluralsh/oauth-playground/api-server/graph/model"
 )
 
 // CreateOrganization is the resolver for the createOrganization field.
-func (r *mutationResolver) CreateOrganization(ctx context.Context, name string) (*model.Organization, error) {
+func (r *mutationResolver) CreateOrganization(ctx context.Context, name string, initialAdmin string) (*model.Organization, error) {
 	org, err := r.C.DbClient.Organization.Create().SetName(name).SetID(uuid.New()).Save(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create organization: %w", err)
 	}
+
+	err = r.C.KetoClient.CreateTuple(ctx, &rts.RelationTuple{
+		Namespace: "Organization",
+		Object:    org.ID.String(),
+		Relation:  "admins",
+		Subject: rts.NewSubjectSet(
+			"User",
+			initialAdmin,
+			"",
+		),
+	})
+	if err != nil {
+		return nil, fmt.Errorf("failed to create tuple: %w", err)
+	}
+
+	query := rts.RelationQuery{
+		Namespace: px.Ptr("Organization"),
+		Object:    px.Ptr(org.ID.String()),
+		Relation:  px.Ptr("admins"),
+		Subject:   nil,
+	}
+
+	respTuples, err := r.C.KetoClient.QueryAllTuples(context.Background(), &query, 100)
+	if err != nil {
+		return nil, fmt.Errorf("failed to query tuples: %w", err)
+	}
+
+	var admins []*model.User
+
+	for _, tuple := range respTuples {
+		subjectSet := tuple.Subject.GetSet()
+		if subjectSet.Namespace == "User" {
+			user, err := r.C.GetUserFromId(ctx, subjectSet.Object)
+			if err != nil {
+				continue
+			}
+			admins = append(admins, user)
+		} else {
+			continue
+		}
+
+	}
+
 	return &model.Organization{
 		ID:     org.ID.String(),
 		Name:   &org.Name,
-		Admins: []*model.User{},
+		Admins: admins,
 	}, nil
 }
 
