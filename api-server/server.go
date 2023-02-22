@@ -15,9 +15,12 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/pluralsh/oauth-playground/api-server/auth"
 	"github.com/pluralsh/oauth-playground/api-server/clients"
+	"github.com/pluralsh/oauth-playground/api-server/ent"
 	"github.com/pluralsh/oauth-playground/api-server/graph/generated"
 	"github.com/pluralsh/oauth-playground/api-server/graph/resolvers"
 	"github.com/rs/cors"
+
+	_ "github.com/mattn/go-sqlite3"
 
 	kratos "github.com/ory/kratos-client-go"
 	ctrl "sigs.k8s.io/controller-runtime"
@@ -63,11 +66,22 @@ func main() {
 		panic(err)
 	}
 
+	client, err := ent.Open("sqlite3", "file:ent?mode=memory&cache=shared&_fk=1")
+	if err != nil {
+		setupLog.Error(err, "failed opening connection to sqlite")
+	}
+	defer client.Close()
+	// Run the auto migration tool.
+	if err := client.Schema.Create(context.Background()); err != nil {
+		setupLog.Error(err, "failed creating schema resources")
+	}
+
 	resolver := &resolvers.Resolver{
 		C: &clients.ClientWrapper{
 			KratosClient: kratosAdminClient,
 			KetoClient:   ketoClient,
 			HydraClient:  hydraAdminClient,
+			DbClient:     client,
 			Log:          ctrl.Log.WithName("clients"),
 		},
 	}

@@ -4,3 +4,6 @@ run:
 
 generate:
 	go run github.com/99designs/gqlgen generate
+
+generate-db:
+	go generate ./ent

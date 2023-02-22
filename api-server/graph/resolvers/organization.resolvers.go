@@ -8,18 +8,39 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/google/uuid"
 	"github.com/pluralsh/oauth-playground/api-server/graph/generated"
 	"github.com/pluralsh/oauth-playground/api-server/graph/model"
 )
 
 // CreateOrganization is the resolver for the createOrganization field.
 func (r *mutationResolver) CreateOrganization(ctx context.Context, name string) (*model.Organization, error) {
-	panic(fmt.Errorf("not implemented: CreateOrganization - createOrganization"))
+	org, err := r.C.DbClient.Organization.Create().SetName(name).SetID(uuid.New()).Save(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create organization: %w", err)
+	}
+	return &model.Organization{
+		ID:     org.ID.String(),
+		Name:   &org.Name,
+		Admins: []*model.User{},
+	}, nil
 }
 
 // ListOrganizations is the resolver for the listOrganizations field.
 func (r *queryResolver) ListOrganizations(ctx context.Context) ([]*model.Organization, error) {
-	panic(fmt.Errorf("not implemented: ListOrganizations - listOrganizations"))
+	orgs, err := r.C.DbClient.Organization.Query().All(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("failed to list organizations: %w", err)
+	}
+	var output []*model.Organization
+	for _, org := range orgs {
+		output = append(output, &model.Organization{
+			ID:     org.ID.String(),
+			Name:   &org.Name,
+			Admins: []*model.User{},
+		})
+	}
+	return output, nil
 }
 
 // Mutation returns generated.MutationResolver implementation.
