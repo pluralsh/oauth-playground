@@ -1,0 +1,16 @@
+"Representation an Organization in the auth stack."
+type Organization {
+  "The unique ID of the organization."
+  id: ID!
+
+  "The name of the organization."
+  name: String
+
+  "The users that are admins of the organization."
+  admins: [User!]!
+}
+
+extend type Query {
+  "Get a list of all users."
+  listOrganizations: [Organization!]! @checkPermissions @isAuthenticated
+}

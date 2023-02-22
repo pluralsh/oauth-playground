@@ -1,0 +1,19 @@
+"Representation a group of users."
+type Group {
+  "The unique ID of the group."
+  id: ID!
+
+  "The name of the group."
+  name: String
+
+  "The users that are admins of the organization."
+  members: [User!]
+
+  "The organization that the group belongs to."
+  organization: Organization!
+}
+
+extend type Query {
+  "Get a list of all users."
+  listGroups: [Group!]! @checkPermissions @isAuthenticated
+}

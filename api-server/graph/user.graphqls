@@ -8,6 +8,9 @@ type User {
 
   "The user's email address."
   email: String!
+
+  "The organization the user belongs to."
+  organization: Organization!
 }
 
 type Query {

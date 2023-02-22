@@ -1,0 +1,43 @@
+"Representation a tenant in the Grafana observability stack where metrics, logs and traces can be sent to or retrieved from."
+type ObservabilityTenant {
+  "The unique ID of the tenant."
+  id: ID!
+
+  "The name of the tenant."
+  name: String
+
+  "The organization that the tenant belongs to."
+  organization: Organization!
+
+  "The users that are admins of the organization."
+  viewers: ObservabilityTenantViewers
+
+  "The users and groups that can edit a tenant to add users, groups or oauth2 clients to it."
+  editors: ObservabilityTenantEditors
+}
+
+"Representation of the users, groups and oauth2 clients that can view or send data a tenant."
+type ObservabilityTenantViewers {
+  "The users that can view a tenant."
+  users: [User!]
+
+  "The groups that can view a tenant."
+  groups: [Group!]
+
+  "The oauth2 clients that can send data a tenant."
+  oauth2Clients: [OAuth2Client!]
+}
+
+"Representation of the users and groups that can edit a tenant."
+type ObservabilityTenantEditors {
+  "The users that can edit a tenant."
+  users: [User!]
+
+  "The groups that can edit a tenant."
+  groups: [Group!]
+}
+
+extend type Query {
+  "Get a list of all users."
+  listObservabilityTenants: [ObservabilityTenant!]! @checkPermissions @isAuthenticated
+}

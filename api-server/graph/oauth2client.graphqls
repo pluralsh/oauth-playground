@@ -116,6 +116,21 @@ type OAuth2Client {
 
   "OpenID Connect Userinfo Signed Response Algorithm. UserInfoSignedResponseAlg is a string containing the JWS signing algorithm (alg) parameter required for signing UserInfo Responses. The value none MAY be used, which indicates that the UserInfo Response will not be signed. The alg value RS256 MUST be used unless support for RS256 has been explicitly disabled. If support for RS256 has been disabled, the value none MUST be used."
   userinfoSignedResponseAlgorithm: String
+
+  "The organization that owns this OAuth2 Client."
+  organization: Organization!
+
+  "The users and groups that are allowed to login with this OAuth2 Client."
+  loginBindings: loginBindings
+}
+
+"Representation of users and groups that are allowed to login with through OAuth2 Client."
+type loginBindings {
+  "The users that are allowed to login with this OAuth2 Client."
+  users: [User!]
+
+  "The groups that are allowed to login with this OAuth2 Client."
+  groups: [Group!]
 }
 
 extend type Query {

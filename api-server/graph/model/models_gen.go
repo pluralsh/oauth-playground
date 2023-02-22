@@ -6,6 +6,18 @@ import (
 	"time"
 )
 
+// Representation a group of users.
+type Group struct {
+	// The unique ID of the group.
+	ID string `json:"id"`
+	// The name of the group.
+	Name *string `json:"name"`
+	// The users that are admins of the organization.
+	Members []*User `json:"members"`
+	// The organization that the group belongs to.
+	Organization *Organization `json:"organization"`
+}
+
 // Representation of the information about an OAuth2 Client sourced from Hydra.
 type OAuth2Client struct {
 	// OAuth 2.0 Client Allowed CORS Origins. AllowedCORSOrigins is an array of allowed CORS origins. If the array is empty, the value of the first element is considered valid.
@@ -83,6 +95,52 @@ type OAuth2Client struct {
 	UpdatedAt *time.Time `json:"updatedAt"`
 	// OpenID Connect Userinfo Signed Response Algorithm. UserInfoSignedResponseAlg is a string containing the JWS signing algorithm (alg) parameter required for signing UserInfo Responses. The value none MAY be used, which indicates that the UserInfo Response will not be signed. The alg value RS256 MUST be used unless support for RS256 has been explicitly disabled. If support for RS256 has been disabled, the value none MUST be used.
 	UserinfoSignedResponseAlgorithm *string `json:"userinfoSignedResponseAlgorithm"`
+	// The organization that owns this OAuth2 Client.
+	Organization *Organization `json:"organization"`
+	// The users and groups that are allowed to login with this OAuth2 Client.
+	LoginBindings *LoginBindings `json:"loginBindings"`
+}
+
+// Representation a tenant in the Grafana observability stack where metrics, logs and traces can be sent to or retrieved from.
+type ObservabilityTenant struct {
+	// The unique ID of the tenant.
+	ID string `json:"id"`
+	// The name of the tenant.
+	Name *string `json:"name"`
+	// The organization that the tenant belongs to.
+	Organization *Organization `json:"organization"`
+	// The users that are admins of the organization.
+	Viewers *ObservabilityTenantViewers `json:"viewers"`
+	// The users and groups that can edit a tenant to add users, groups or oauth2 clients to it.
+	Editors *ObservabilityTenantEditors `json:"editors"`
+}
+
+// Representation of the users and groups that can edit a tenant.
+type ObservabilityTenantEditors struct {
+	// The users that can edit a tenant.
+	Users []*User `json:"users"`
+	// The groups that can edit a tenant.
+	Groups []*Group `json:"groups"`
+}
+
+// Representation of the users, groups and oauth2 clients that can view or send data a tenant.
+type ObservabilityTenantViewers struct {
+	// The users that can view a tenant.
+	Users []*User `json:"users"`
+	// The groups that can view a tenant.
+	Groups []*Group `json:"groups"`
+	// The oauth2 clients that can send data a tenant.
+	Oauth2Clients []*OAuth2Client `json:"oauth2Clients"`
+}
+
+// Representation an Organization in the auth stack.
+type Organization struct {
+	// The unique ID of the organization.
+	ID string `json:"id"`
+	// The name of the organization.
+	Name *string `json:"name"`
+	// The users that are admins of the organization.
+	Admins []*User `json:"admins"`
 }
 
 // Representation of the information about a user sourced from Kratos.
@@ -93,4 +151,14 @@ type User struct {
 	Name *string `json:"name"`
 	// The user's email address.
 	Email string `json:"email"`
+	// The organization the user belongs to.
+	Organization *Organization `json:"organization"`
+}
+
+// Representation of users and groups that are allowed to login with through OAuth2 Client.
+type LoginBindings struct {
+	// The users that are allowed to login with this OAuth2 Client.
+	Users []*User `json:"users"`
+	// The groups that are allowed to login with this OAuth2 Client.
+	Groups []*Group `json:"groups"`
 }
