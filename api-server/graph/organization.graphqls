@@ -7,10 +7,15 @@ type Organization {
   name: String
 
   "The users that are admins of the organization."
-  admins: [User!]!
+  admins: [User!]
 }
 
 extend type Query {
   "Get a list of all users."
   listOrganizations: [Organization!]! @checkPermissions @isAuthenticated
+}
+
+extend type Mutation {
+  "Create a new organization."
+  createOrganization(name: String!): Organization! @checkPermissions @isAuthenticated
 }

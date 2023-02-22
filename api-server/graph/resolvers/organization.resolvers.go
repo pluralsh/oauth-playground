@@ -8,10 +8,21 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/pluralsh/oauth-playground/api-server/graph/generated"
 	"github.com/pluralsh/oauth-playground/api-server/graph/model"
 )
+
+// CreateOrganization is the resolver for the createOrganization field.
+func (r *mutationResolver) CreateOrganization(ctx context.Context, name string) (*model.Organization, error) {
+	panic(fmt.Errorf("not implemented: CreateOrganization - createOrganization"))
+}
 
 // ListOrganizations is the resolver for the listOrganizations field.
 func (r *queryResolver) ListOrganizations(ctx context.Context) ([]*model.Organization, error) {
 	panic(fmt.Errorf("not implemented: ListOrganizations - listOrganizations"))
 }
+
+// Mutation returns generated.MutationResolver implementation.
+func (r *Resolver) Mutation() generated.MutationResolver { return &mutationResolver{r} }
+
+type mutationResolver struct{ *Resolver }
