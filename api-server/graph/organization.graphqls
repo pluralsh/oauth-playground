@@ -10,6 +10,12 @@ type Organization {
   admins: [User!]
 }
 
+"Input for adding a user to an organization as an administrator."
+input Admin {
+  "The ID of the user to add as an admin."
+  id: ID!
+}
+
 extend type Query {
   "Get a list of all users."
   listOrganizations: [Organization!]! @checkPermissions @isAuthenticated
@@ -17,5 +23,11 @@ extend type Query {
 
 extend type Mutation {
   "Create a new organization."
-  createOrganization(name: String!, initialAdmin: String!): Organization! @checkPermissions @isAuthenticated
+  organization(
+    "The name of the organization."
+    name: String!,
+
+    "The users to add as admins."
+    admins: [Admin!]!
+    ): Organization! @checkPermissions @isAuthenticated
 }

@@ -6,6 +6,12 @@ import (
 	"time"
 )
 
+// Input for adding a user to an organization as an administrator.
+type Admin struct {
+	// The ID of the user to add as an admin.
+	ID string `json:"id"`
+}
+
 // Representation a group of users.
 type Group struct {
 	// The unique ID of the group.

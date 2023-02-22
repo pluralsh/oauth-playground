@@ -15,23 +15,29 @@ import (
 	"github.com/pluralsh/oauth-playground/api-server/graph/model"
 )
 
-// CreateOrganization is the resolver for the createOrganization field.
-func (r *mutationResolver) CreateOrganization(ctx context.Context, name string, initialAdmin string) (*model.Organization, error) {
+// Organization is the resolver for the organization field.
+func (r *mutationResolver) Organization(ctx context.Context, name string, admins []*model.Admin) (*model.Organization, error) {
 	org, err := r.C.DbClient.Organization.Create().SetName(name).SetID(uuid.New()).Save(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create organization: %w", err)
 	}
 
-	err = r.C.KetoClient.CreateTuple(ctx, &rts.RelationTuple{
-		Namespace: "Organization",
-		Object:    org.ID.String(),
-		Relation:  "admins",
-		Subject: rts.NewSubjectSet(
-			"User",
-			initialAdmin,
-			"",
-		),
-	})
+	var adminTuples []*rts.RelationTuple
+
+	for _, admin := range admins {
+		adminTuples = append(adminTuples, &rts.RelationTuple{
+			Namespace: "Organization",
+			Object:    org.ID.String(),
+			Relation:  "admins",
+			Subject: rts.NewSubjectSet(
+				"User",
+				admin.ID,
+				"",
+			),
+		})
+	}
+
+	err = r.C.KetoClient.CreateTuples(ctx, adminTuples)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create tuple: %w", err)
 	}
@@ -48,7 +54,7 @@ func (r *mutationResolver) CreateOrganization(ctx context.Context, name string, 
 		return nil, fmt.Errorf("failed to query tuples: %w", err)
 	}
 
-	var admins []*model.User
+	var outputAdmins []*model.User
 
 	for _, tuple := range respTuples {
 		subjectSet := tuple.Subject.GetSet()
@@ -57,7 +63,7 @@ func (r *mutationResolver) CreateOrganization(ctx context.Context, name string, 
 			if err != nil {
 				continue
 			}
-			admins = append(admins, user)
+			outputAdmins = append(outputAdmins, user)
 		} else {
 			continue
 		}
@@ -67,7 +73,7 @@ func (r *mutationResolver) CreateOrganization(ctx context.Context, name string, 
 	return &model.Organization{
 		ID:     org.ID.String(),
 		Name:   &org.Name,
-		Admins: admins,
+		Admins: outputAdmins,
 	}, nil
 }
 

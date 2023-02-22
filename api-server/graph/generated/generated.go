@@ -54,7 +54,7 @@ type ComplexityRoot struct {
 	}
 
 	Mutation struct {
-		CreateOrganization func(childComplexity int, name string, initialAdmin string) int
+		Organization func(childComplexity int, name string, admins []*model.Admin) int
 	}
 
 	OAuth2Client struct {
@@ -148,7 +148,7 @@ type ComplexityRoot struct {
 }
 
 type MutationResolver interface {
-	CreateOrganization(ctx context.Context, name string, initialAdmin string) (*model.Organization, error)
+	Organization(ctx context.Context, name string, admins []*model.Admin) (*model.Organization, error)
 }
 type QueryResolver interface {
 	ListUsers(ctx context.Context) ([]*model.User, error)
@@ -202,17 +202,17 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Group.Organization(childComplexity), true
 
-	case "Mutation.createOrganization":
-		if e.complexity.Mutation.CreateOrganization == nil {
+	case "Mutation.organization":
+		if e.complexity.Mutation.Organization == nil {
 			break
 		}
 
-		args, err := ec.field_Mutation_createOrganization_args(context.TODO(), rawArgs)
+		args, err := ec.field_Mutation_organization_args(context.TODO(), rawArgs)
 		if err != nil {
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateOrganization(childComplexity, args["name"].(string), args["initialAdmin"].(string)), true
+		return e.complexity.Mutation.Organization(childComplexity, args["name"].(string), args["admins"].([]*model.Admin)), true
 
 	case "OAuth2Client.allowedCorsOrigins":
 		if e.complexity.OAuth2Client.AllowedCorsOrigins == nil {
@@ -681,7 +681,9 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 	rc := graphql.GetOperationContext(ctx)
 	ec := executionContext{rc, e}
-	inputUnmarshalMap := graphql.BuildUnmarshalerMap()
+	inputUnmarshalMap := graphql.BuildUnmarshalerMap(
+		ec.unmarshalInputAdmin,
+	)
 	first := true
 
 	switch rc.Operation.Operation {
@@ -967,6 +969,12 @@ type Organization {
   admins: [User!]
 }
 
+"Input for adding a user to an organization as an administrator."
+input Admin {
+  "The ID of the user to add as an admin."
+  id: ID!
+}
+
 extend type Query {
   "Get a list of all users."
   listOrganizations: [Organization!]! @checkPermissions @isAuthenticated
@@ -974,7 +982,13 @@ extend type Query {
 
 extend type Mutation {
   "Create a new organization."
-  createOrganization(name: String!, initialAdmin: String!): Organization! @checkPermissions @isAuthenticated
+  organization(
+    "The name of the organization."
+    name: String!,
+
+    "The users to add as admins."
+    admins: [Admin!]!
+    ): Organization! @checkPermissions @isAuthenticated
 }
 `, BuiltIn: false},
 	{Name: "../user.graphqls", Input: `"Representation of the information about a user sourced from Kratos."
@@ -1007,7 +1021,7 @@ var parsedSchema = gqlparser.MustLoadSchema(sources...)
 
 // region    ***************************** args.gotpl *****************************
 
-func (ec *executionContext) field_Mutation_createOrganization_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_organization_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
 	var arg0 string
@@ -1019,15 +1033,15 @@ func (ec *executionContext) field_Mutation_createOrganization_args(ctx context.C
 		}
 	}
 	args["name"] = arg0
-	var arg1 string
-	if tmp, ok := rawArgs["initialAdmin"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("initialAdmin"))
-		arg1, err = ec.unmarshalNString2string(ctx, tmp)
+	var arg1 []*model.Admin
+	if tmp, ok := rawArgs["admins"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("admins"))
+		arg1, err = ec.unmarshalNAdmin2ᚕᚖgithubᚗcomᚋpluralshᚋoauthᚑplaygroundᚋapiᚑserverᚋgraphᚋmodelᚐAdminᚄ(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["initialAdmin"] = arg1
+	args["admins"] = arg1
 	return args, nil
 }
 
@@ -1375,8 +1389,8 @@ func (ec *executionContext) fieldContext_Group_organization(ctx context.Context,
 	return fc, nil
 }
 
-func (ec *executionContext) _Mutation_createOrganization(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Mutation_createOrganization(ctx, field)
+func (ec *executionContext) _Mutation_organization(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_organization(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -1390,7 +1404,7 @@ func (ec *executionContext) _Mutation_createOrganization(ctx context.Context, fi
 	resTmp := ec._fieldMiddleware(ctx, nil, func(rctx context.Context) (interface{}, error) {
 		directive0 := func(rctx context.Context) (interface{}, error) {
 			ctx = rctx // use context from middleware stack in children
-			return ec.resolvers.Mutation().CreateOrganization(rctx, fc.Args["name"].(string), fc.Args["initialAdmin"].(string))
+			return ec.resolvers.Mutation().Organization(rctx, fc.Args["name"].(string), fc.Args["admins"].([]*model.Admin))
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
 			if ec.directives.CheckPermissions == nil {
@@ -1429,7 +1443,7 @@ func (ec *executionContext) _Mutation_createOrganization(ctx context.Context, fi
 	return ec.marshalNOrganization2ᚖgithubᚗcomᚋpluralshᚋoauthᚑplaygroundᚋapiᚑserverᚋgraphᚋmodelᚐOrganization(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Mutation_createOrganization(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Mutation_organization(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Mutation",
 		Field:      field,
@@ -1454,7 +1468,7 @@ func (ec *executionContext) fieldContext_Mutation_createOrganization(ctx context
 		}
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Mutation_createOrganization_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+	if fc.Args, err = ec.field_Mutation_organization_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return
 	}
@@ -6256,6 +6270,34 @@ func (ec *executionContext) fieldContext_loginBindings_groups(ctx context.Contex
 
 // region    **************************** input.gotpl *****************************
 
+func (ec *executionContext) unmarshalInputAdmin(ctx context.Context, obj interface{}) (model.Admin, error) {
+	var it model.Admin
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"id"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "id":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+			it.ID, err = ec.unmarshalNID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
 // endregion **************************** input.gotpl *****************************
 
 // region    ************************** interface.gotpl ***************************
@@ -6325,10 +6367,10 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("Mutation")
-		case "createOrganization":
+		case "organization":
 
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_createOrganization(ctx, field)
+				return ec._Mutation_organization(ctx, field)
 			})
 
 		default:
@@ -7218,6 +7260,28 @@ func (ec *executionContext) _loginBindings(ctx context.Context, sel ast.Selectio
 // endregion **************************** object.gotpl ****************************
 
 // region    ***************************** type.gotpl *****************************
+
+func (ec *executionContext) unmarshalNAdmin2ᚕᚖgithubᚗcomᚋpluralshᚋoauthᚑplaygroundᚋapiᚑserverᚋgraphᚋmodelᚐAdminᚄ(ctx context.Context, v interface{}) ([]*model.Admin, error) {
+	var vSlice []interface{}
+	if v != nil {
+		vSlice = graphql.CoerceList(v)
+	}
+	var err error
+	res := make([]*model.Admin, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNAdmin2ᚖgithubᚗcomᚋpluralshᚋoauthᚑplaygroundᚋapiᚑserverᚋgraphᚋmodelᚐAdmin(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) unmarshalNAdmin2ᚖgithubᚗcomᚋpluralshᚋoauthᚑplaygroundᚋapiᚑserverᚋgraphᚋmodelᚐAdmin(ctx context.Context, v interface{}) (*model.Admin, error) {
+	res, err := ec.unmarshalInputAdmin(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
 
 func (ec *executionContext) unmarshalNBoolean2bool(ctx context.Context, v interface{}) (bool, error) {
 	res, err := graphql.UnmarshalBoolean(v)
