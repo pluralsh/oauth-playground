@@ -14,14 +14,42 @@ type Admin struct {
 
 // Representation a group of users.
 type Group struct {
-	// The unique ID of the group.
-	ID string `json:"id"`
 	// The name of the group.
-	Name *string `json:"name"`
+	Name string `json:"name"`
 	// The users that are admins of the organization.
 	Members []*User `json:"members"`
 	// The organization that the group belongs to.
 	Organization *Organization `json:"organization"`
+}
+
+// Representation of users and groups that are allowed to login with through OAuth2 Client.
+type LoginBindings struct {
+	// The users that are allowed to login with this OAuth2 Client.
+	Users []*User `json:"users"`
+	// The groups that are allowed to login with this OAuth2 Client.
+	Groups []*Group `json:"groups"`
+}
+
+type LoginBindingsInput struct {
+	// The users that are allowed to login with this OAuth2 Client.
+	Users []string `json:"users"`
+	// The groups that are allowed to login with this OAuth2 Client.
+	Groups []string `json:"groups"`
+}
+
+// The first and last name of a user.
+type Name struct {
+	// The user's first name.
+	First *string `json:"first"`
+	// The user's last name.
+	Last *string `json:"last"`
+}
+
+type NameInput struct {
+	// The user's first name.
+	First *string `json:"first"`
+	// The user's last name.
+	Last *string `json:"last"`
 }
 
 // Representation of the information about an OAuth2 Client sourced from Hydra.
@@ -141,10 +169,8 @@ type ObservabilityTenantViewers struct {
 
 // Representation an Organization in the auth stack.
 type Organization struct {
-	// The unique ID of the organization.
-	ID string `json:"id"`
 	// The name of the organization.
-	Name *string `json:"name"`
+	Name string `json:"name"`
 	// The users that are admins of the organization.
 	Admins []*User `json:"admins"`
 }
@@ -154,17 +180,13 @@ type User struct {
 	// The unique ID of the user.
 	ID string `json:"id"`
 	// The user's full name.
-	Name *string `json:"name"`
+	Name *Name `json:"name"`
 	// The user's email address.
 	Email string `json:"email"`
+	// The groups the user belongs to.
+	Groups []*Group `json:"groups"`
 	// The organization the user belongs to.
 	Organization *Organization `json:"organization"`
-}
-
-// Representation of users and groups that are allowed to login with through OAuth2 Client.
-type LoginBindings struct {
-	// The users that are allowed to login with this OAuth2 Client.
-	Users []*User `json:"users"`
-	// The groups that are allowed to login with this OAuth2 Client.
-	Groups []*Group `json:"groups"`
+	// The link a user can use to recover their account.
+	RecoveryLink *string `json:"recoveryLink"`
 }

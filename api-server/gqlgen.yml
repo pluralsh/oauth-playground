@@ -62,3 +62,23 @@ models:
       - github.com/99designs/gqlgen/graphql.Int64
       - github.com/99designs/gqlgen/graphql.Int
       - github.com/99designs/gqlgen/graphql.Int32
+  User:
+    fields:
+      groups:
+        resolver: true
+  Group:
+    fields:
+      members:
+        resolver: true
+  OAuth2Client:
+    fields:
+      owner:
+        resolver: true
+      loginBindings:
+        resolver: true
+  LoginBindings:
+    fields:
+      users:
+        resolver: true
+      groups:
+        resolver: true

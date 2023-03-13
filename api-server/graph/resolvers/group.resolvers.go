@@ -8,10 +8,45 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/pluralsh/oauth-playground/api-server/graph/generated"
 	"github.com/pluralsh/oauth-playground/api-server/graph/model"
 )
 
+// Members is the resolver for the members field.
+func (r *groupResolver) Members(ctx context.Context, obj *model.Group) ([]*model.User, error) {
+	return r.C.GetGroupMembersInKeto(ctx, obj.Name)
+}
+
+// Group is the resolver for the group field.
+func (r *mutationResolver) Group(ctx context.Context, name string, members []string) (*model.Group, error) {
+	if name == "" {
+		return nil, fmt.Errorf("group name cannot be empty")
+	}
+
+	var sanitizedMembers []string
+	for _, member := range members {
+		if member != "" {
+			sanitizedMembers = append(sanitizedMembers, member)
+		}
+	}
+
+	return r.C.MutateGroup(ctx, name, sanitizedMembers)
+}
+
+// DeleteGroup is the resolver for the deleteGroup field.
+func (r *mutationResolver) DeleteGroup(ctx context.Context, name string) (*model.Group, error) {
+	if name == "" {
+		return nil, fmt.Errorf("group name cannot be empty")
+	}
+	return r.C.DeleteGroup(ctx, name)
+}
+
 // ListGroups is the resolver for the listGroups field.
 func (r *queryResolver) ListGroups(ctx context.Context) ([]*model.Group, error) {
-	panic(fmt.Errorf("not implemented: ListGroups - listGroups"))
+	return r.C.ListGroupsInKeto(ctx)
 }
+
+// Group returns generated.GroupResolver implementation.
+func (r *Resolver) Group() generated.GroupResolver { return &groupResolver{r} }
+
+type groupResolver struct{ *Resolver }

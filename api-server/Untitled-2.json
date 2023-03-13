@@ -1,0 +1,46 @@
+{
+    "created_at": "2023-02-15T17:23:06.840354Z",
+    "credentials": {
+        "password": {
+            "created_at": "2023-02-15T17:23:06.86382Z",
+            "identifiers": [
+                "david@plural.sh"
+            ],
+            "type": "password",
+            "updated_at": "2023-02-15T17:32:47.931643Z",
+            "version": 0
+        }
+    },
+    "id": "2294d0d3-3836-4c0d-93a7-2e3862ec9fdc",
+    "recovery_addresses": [
+        {
+            "created_at": "2023-02-15T17:23:06.852783Z",
+            "id": "85f0d661-336e-4488-ae6f-55e8046b5b7f",
+            "updated_at": "2023-02-15T17:23:06.852783Z",
+            "value": "david@plural.sh",
+            "via": "email"
+        }
+    ],
+    "schema_id": "person",
+    "schema_url": "https://kratos.mimir-cloud.pluraldev.sh/.ory/kratos/public/schemas/cGVyc29u",
+    "state": "active",
+    "traits": {
+        "email": "david@plural.sh",
+        "name": {
+            "first": "David",
+            "last": "van der Spek"
+        }
+    },
+    "updated_at": "2023-02-15T17:23:06.840354Z",
+    "verifiable_addresses": [
+        {
+            "created_at": "2023-02-15T17:23:06.848445Z",
+            "id": "dbacee88-eb6c-4c3f-8a2a-1da05b499539",
+            "status": "sent",
+            "updated_at": "2023-02-15T17:23:06.848445Z",
+            "value": "david@plural.sh",
+            "verified": false,
+            "via": "email"
+        }
+    ]
+}

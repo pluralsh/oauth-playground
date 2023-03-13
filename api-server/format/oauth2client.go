@@ -8,7 +8,7 @@ import (
 // function to convert a hydra OAuth2Client to a GraphQL OAuth2Client
 func HydraOAuth2ClientToGraphQL(oauth2Client hydra.OAuth2Client) *model.OAuth2Client {
 
-	jwksUri, _ := ToMapStringInterface(oauth2Client.JwksUri)
+	jwks, _ := ToMapStringInterface(oauth2Client.Jwks)
 
 	metadata, _ := ToMapStringInterface(oauth2Client.Metadata)
 
@@ -33,7 +33,7 @@ func HydraOAuth2ClientToGraphQL(oauth2Client hydra.OAuth2Client) *model.OAuth2Cl
 		GrantTypes:                        oauth2Client.GrantTypes,
 		ImplicitGrantAccessTokenLifespan:  oauth2Client.ImplicitGrantAccessTokenLifespan,
 		ImplicitGrantIDTokenLifespan:      oauth2Client.ImplicitGrantIdTokenLifespan,
-		Jwks:                              jwksUri,
+		Jwks:                              jwks,
 		JwksURI:                           oauth2Client.JwksUri,
 		JwtBearerGrantAccessTokenLifespan: oauth2Client.JwtBearerGrantAccessTokenLifespan,
 		LogoURI:                           oauth2Client.LogoUri,
@@ -51,5 +51,44 @@ func HydraOAuth2ClientToGraphQL(oauth2Client hydra.OAuth2Client) *model.OAuth2Cl
 		TosURI:                            oauth2Client.TosUri,
 		UpdatedAt:                         oauth2Client.UpdatedAt,
 		UserinfoSignedResponseAlgorithm:   oauth2Client.UserinfoSignedResponseAlg,
+	}
+}
+
+func GraphQLNewOAuth2ClientToHydra(allowedCorsOrigins []string, audience []string, authorizationCodeGrantAccessTokenLifespan *string, authorizationCodeGrantIDTokenLifespan *string, authorizationCodeGrantRefreshTokenLifespan *string, backChannelLogoutSessionRequired *bool, backChannelLogoutURI *string, clientCredentialsGrantAccessTokenLifespan *string, clientName string, clientSecret string, clientSecretExpiresAt *int64, clientURI *string, contacts []string, frontchannelLogoutSessionRequired *bool, frontchannelLogoutURI *string, grantTypes []string, implicitGrantAccessTokenLifespan *string, implicitGrantIDTokenLifespan *string, jwks map[string]interface{}, jwksURI *string, jwtBearerGrantAccessTokenLifespan *string, logoURI *string, metadata map[string]interface{}, policyURI *string, postLogoutRedirectUris []string, redirectUris []string, responseTypes []string, scope *string, sectorIdentifierURI *string, subjectType *string, tokenEndpointAuthMethod *string, tokenEndpointAuthSigningAlgorithm *string, tosURI *string, userinfoSignedResponseAlgorithm *string, loginBindings *model.LoginBindingsInput) hydra.OAuth2Client {
+	return hydra.OAuth2Client{
+		AllowedCorsOrigins: allowedCorsOrigins,
+		Audience:           audience,
+		AuthorizationCodeGrantAccessTokenLifespan:  authorizationCodeGrantAccessTokenLifespan,
+		AuthorizationCodeGrantIdTokenLifespan:      authorizationCodeGrantIDTokenLifespan,
+		AuthorizationCodeGrantRefreshTokenLifespan: authorizationCodeGrantRefreshTokenLifespan,
+		BackchannelLogoutSessionRequired:           backChannelLogoutSessionRequired,
+		BackchannelLogoutUri:                       backChannelLogoutURI,
+		ClientCredentialsGrantAccessTokenLifespan:  clientCredentialsGrantAccessTokenLifespan,
+		ClientName:                        &clientName,
+		ClientSecret:                      &clientSecret,
+		ClientSecretExpiresAt:             clientSecretExpiresAt,
+		ClientUri:                         clientURI,
+		Contacts:                          contacts,
+		FrontchannelLogoutSessionRequired: frontchannelLogoutSessionRequired,
+		FrontchannelLogoutUri:             frontchannelLogoutURI,
+		GrantTypes:                        grantTypes,
+		ImplicitGrantAccessTokenLifespan:  implicitGrantAccessTokenLifespan,
+		ImplicitGrantIdTokenLifespan:      implicitGrantIDTokenLifespan,
+		Jwks:                              jwks,
+		JwksUri:                           jwksURI,
+		JwtBearerGrantAccessTokenLifespan: jwtBearerGrantAccessTokenLifespan,
+		LogoUri:                           logoURI,
+		Metadata:                          metadata,
+		PolicyUri:                         policyURI,
+		PostLogoutRedirectUris:            postLogoutRedirectUris,
+		RedirectUris:                      redirectUris,
+		ResponseTypes:                     responseTypes,
+		Scope:                             scope,
+		SectorIdentifierUri:               sectorIdentifierURI,
+		SubjectType:                       subjectType,
+		TokenEndpointAuthMethod:           tokenEndpointAuthMethod,
+		TokenEndpointAuthSigningAlg:       tokenEndpointAuthSigningAlgorithm,
+		TosUri:                            tosURI,
+		UserinfoSignedResponseAlg:         userinfoSignedResponseAlgorithm,
 	}
 }

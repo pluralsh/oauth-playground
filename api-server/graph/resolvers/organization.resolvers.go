@@ -11,7 +11,6 @@ import (
 	"github.com/google/uuid"
 	rts "github.com/ory/keto/proto/ory/keto/relation_tuples/v1alpha2"
 	px "github.com/ory/x/pointerx"
-	"github.com/pluralsh/oauth-playground/api-server/graph/generated"
 	"github.com/pluralsh/oauth-playground/api-server/graph/model"
 )
 
@@ -71,8 +70,8 @@ func (r *mutationResolver) Organization(ctx context.Context, name string, admins
 	}
 
 	return &model.Organization{
-		ID:     org.ID.String(),
-		Name:   &org.Name,
+		// ID:     org.ID.String(),
+		Name:   org.Name,
 		Admins: outputAdmins,
 	}, nil
 }
@@ -86,15 +85,10 @@ func (r *queryResolver) ListOrganizations(ctx context.Context) ([]*model.Organiz
 	var output []*model.Organization
 	for _, org := range orgs {
 		output = append(output, &model.Organization{
-			ID:     org.ID.String(),
-			Name:   &org.Name,
+			// ID:     org.ID.String(),
+			Name:   org.Name,
 			Admins: []*model.User{},
 		})
 	}
 	return output, nil
 }
-
-// Mutation returns generated.MutationResolver implementation.
-func (r *Resolver) Mutation() generated.MutationResolver { return &mutationResolver{r} }
-
-type mutationResolver struct{ *Resolver }

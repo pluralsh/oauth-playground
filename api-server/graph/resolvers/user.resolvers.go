@@ -6,57 +6,24 @@ package resolvers
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/pluralsh/oauth-playground/api-server/graph/generated"
 	"github.com/pluralsh/oauth-playground/api-server/graph/model"
 )
 
+// CreateUser is the resolver for the createUser field.
+func (r *mutationResolver) CreateUser(ctx context.Context, email string, name *model.NameInput) (*model.User, error) {
+	return r.C.CreateUser(ctx, email, name)
+}
+
+// DeleteUser is the resolver for the deleteUser field.
+func (r *mutationResolver) DeleteUser(ctx context.Context, id string) (*model.User, error) {
+	return r.C.DeleteUser(ctx, id)
+}
+
 // ListUsers is the resolver for the listUsers field.
 func (r *queryResolver) ListUsers(ctx context.Context) ([]*model.User, error) {
-	log := r.C.Log.WithName("ListUsers")
-	users, resp, err := r.C.KratosClient.IdentityApi.ListIdentities(ctx).Execute()
-	if err != nil || resp.StatusCode != 200 {
-		log.Error(err, "failed to list users")
-		return nil, fmt.Errorf("failed to list users: %w", err)
-	}
-
-	var output []*model.User
-
-	for _, user := range users {
-
-		var email string
-		var name string
-
-		if val, ok := user.Traits.(map[string]interface{})["email"]; ok {
-			if foundEmail, ok := val.(string); ok {
-				email = foundEmail
-			} else {
-				log.Error(err, "Error when parsing email")
-			}
-		}
-
-		if val, ok := user.Traits.(map[string]interface{})["name"]; ok {
-			first, firstFound := val.(map[string]interface{})["first"]
-			last, lastFound := val.(map[string]interface{})["last"]
-
-			if firstName, ok := first.(string); ok {
-				if lastName, ok := last.(string); ok {
-					if firstFound && lastFound {
-						name = firstName + " " + lastName
-					}
-				}
-			}
-		}
-
-		output = append(output, &model.User{
-			ID:    user.Id,
-			Email: email,
-			Name:  &name,
-		})
-
-	}
-	return output, nil
+	return r.C.ListUsers(ctx)
 }
 
 // GetUser is the resolver for the getUser field.
@@ -64,7 +31,20 @@ func (r *queryResolver) GetUser(ctx context.Context, id string) (*model.User, er
 	return r.C.GetUserFromId(ctx, id)
 }
 
+// Groups is the resolver for the groups field.
+func (r *userResolver) Groups(ctx context.Context, obj *model.User) ([]*model.Group, error) {
+	return r.C.GetUserGroups(ctx, obj.ID)
+}
+
+// Mutation returns generated.MutationResolver implementation.
+func (r *Resolver) Mutation() generated.MutationResolver { return &mutationResolver{r} }
+
 // Query returns generated.QueryResolver implementation.
 func (r *Resolver) Query() generated.QueryResolver { return &queryResolver{r} }
 
+// User returns generated.UserResolver implementation.
+func (r *Resolver) User() generated.UserResolver { return &userResolver{r} }
+
+type mutationResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
+type userResolver struct{ *Resolver }

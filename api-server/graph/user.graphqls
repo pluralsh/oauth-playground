@@ -4,13 +4,36 @@ type User {
   id: ID!
 
   "The user's full name."
-  name: String
+  name: Name
 
   "The user's email address."
   email: String!
 
+  "The groups the user belongs to."
+  groups: [Group!]
+
   "The organization the user belongs to."
   organization: Organization!
+
+  "The link a user can use to recover their account."
+  recoveryLink: String
+}
+
+"The first and last name of a user."
+type Name {
+  "The user's first name."
+  first: String
+
+  "The user's last name."
+  last: String
+}
+
+input NameInput {
+  "The user's first name."
+  first: String
+
+  "The user's last name."
+  last: String
 }
 
 type Query {
@@ -19,4 +42,22 @@ type Query {
 
   "Get a user by ID."
   getUser(id: ID!): User! @checkPermissions @isAuthenticated
+}
+
+type Mutation {
+  "Create a new user."
+  createUser(
+    "The user's email address."
+    email: String!
+  
+    "The user's name."
+    name: NameInput
+
+  ): User! @checkPermissions @isAuthenticated
+
+  "Delete a user."
+  deleteUser(
+    "The ID of the user to delete."
+    id: ID!
+  ): User! @checkPermissions @isAuthenticated
 }
