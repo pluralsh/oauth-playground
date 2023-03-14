@@ -37,6 +37,11 @@ func (r *mutationResolver) UpdateOAuth2Client(ctx context.Context, allowedCorsOr
 	return r.C.CreateOAuth2Client(ctx, clients.HydraOperationUpdate, allowedCorsOrigins, audience, authorizationCodeGrantAccessTokenLifespan, authorizationCodeGrantIDTokenLifespan, authorizationCodeGrantRefreshTokenLifespan, backChannelLogoutSessionRequired, backChannelLogoutURI, clientCredentialsGrantAccessTokenLifespan, &clientID, clientName, clientSecret, clientSecretExpiresAt, clientURI, contacts, frontchannelLogoutSessionRequired, frontchannelLogoutURI, grantTypes, implicitGrantAccessTokenLifespan, implicitGrantIDTokenLifespan, jwks, jwksURI, jwtBearerGrantAccessTokenLifespan, logoURI, metadata, policyURI, postLogoutRedirectUris, redirectUris, responseTypes, scope, sectorIdentifierURI, subjectType, tokenEndpointAuthMethod, tokenEndpointAuthSigningAlgorithm, tosURI, userinfoSignedResponseAlgorithm, loginBindings)
 }
 
+// DeleteOAuth2Client is the resolver for the deleteOAuth2Client field.
+func (r *mutationResolver) DeleteOAuth2Client(ctx context.Context, clientID string) (*model.OAuth2Client, error) {
+	return r.C.DeleteOAuth2Client(ctx, clientID)
+}
+
 // Owner is the resolver for the owner field.
 func (r *oAuth2ClientResolver) Owner(ctx context.Context, obj *model.OAuth2Client) (*string, error) {
 	// panic(fmt.Errorf("not implemented: Owner - owner"))

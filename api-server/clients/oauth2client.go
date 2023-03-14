@@ -126,7 +126,7 @@ const (
 )
 
 func (c *ClientWrapper) CreateOAuth2Client(ctx context.Context, mode HydraOperation, allowedCorsOrigins []string, audience []string, authorizationCodeGrantAccessTokenLifespan *string, authorizationCodeGrantIDTokenLifespan *string, authorizationCodeGrantRefreshTokenLifespan *string, backChannelLogoutSessionRequired *bool, backChannelLogoutURI *string, clientCredentialsGrantAccessTokenLifespan *string, clientID *string, clientName *string, clientSecret *string, clientSecretExpiresAt *int64, clientURI *string, contacts []string, frontchannelLogoutSessionRequired *bool, frontchannelLogoutURI *string, grantTypes []string, implicitGrantAccessTokenLifespan *string, implicitGrantIDTokenLifespan *string, jwks map[string]interface{}, jwksURI *string, jwtBearerGrantAccessTokenLifespan *string, logoURI *string, metadata map[string]interface{}, policyURI *string, postLogoutRedirectUris []string, redirectUris []string, responseTypes []string, scope *string, sectorIdentifierURI *string, subjectType *string, tokenEndpointAuthMethod *string, tokenEndpointAuthSigningAlgorithm *string, tosURI *string, userinfoSignedResponseAlgorithm *string, loginBindings *model.LoginBindingsInput) (*model.OAuth2Client, error) {
-	log := c.Log.WithName("CreateOAuth2Client").WithValues("Name", clientName)
+	log := c.Log.WithName("CreateOAuth2Client").WithValues("Name", clientName, "ID", clientID, "Mode", mode)
 
 	client := format.GraphQLNewOAuth2ClientToHydra(allowedCorsOrigins, audience, authorizationCodeGrantAccessTokenLifespan, authorizationCodeGrantIDTokenLifespan, authorizationCodeGrantRefreshTokenLifespan, backChannelLogoutSessionRequired, backChannelLogoutURI, clientCredentialsGrantAccessTokenLifespan, clientID, clientName, clientSecret, clientSecretExpiresAt, clientURI, contacts, frontchannelLogoutSessionRequired, frontchannelLogoutURI, grantTypes, implicitGrantAccessTokenLifespan, implicitGrantIDTokenLifespan, jwks, jwksURI, jwtBearerGrantAccessTokenLifespan, logoURI, metadata, policyURI, postLogoutRedirectUris, redirectUris, responseTypes, scope, sectorIdentifierURI, subjectType, tokenEndpointAuthMethod, tokenEndpointAuthSigningAlgorithm, tosURI, userinfoSignedResponseAlgorithm, loginBindings)
 
@@ -205,6 +205,37 @@ func (c *ClientWrapper) CreateOAuth2Client(ctx context.Context, mode HydraOperat
 	return output, nil
 }
 
+// function that deletes an oauth2 client
+func (c *ClientWrapper) DeleteOAuth2Client(ctx context.Context, clientID string) (*model.OAuth2Client, error) {
+	log := c.Log.WithName("DeleteOAuth2Client").WithValues("ID", clientID)
+
+	resp, err := c.HydraClient.OAuth2Api.DeleteOAuth2Client(ctx, clientID).Execute()
+	if err != nil || resp.StatusCode != 204 {
+		log.Error(err, "failed to delete oauth2 client")
+		return nil, fmt.Errorf("failed to delete oauth2 client: %w", err)
+	}
+
+	exist, err := c.OAuth2ClientExistsInKeto(ctx, clientID)
+	if err != nil {
+		log.Error(err, "failed to check if oauth2 client exists in keto")
+	}
+	if exist {
+		err = c.DeleteOAuth2ClientInKeto(ctx, clientID)
+		if err != nil {
+			log.Error(err, "failed to delete oauth2 client in keto")
+		}
+	}
+
+	log.Info("Success deleting oauth2 client")
+
+	return &model.OAuth2Client{
+		ClientID: px.Ptr(clientID),
+		Organization: &model.Organization{
+			Name: "main", //TODO: decide whether to hardcode this or not
+		},
+	}, nil
+}
+
 // function that checks if an oauth2 client exists in keto
 func (c *ClientWrapper) OAuth2ClientExistsInKeto(ctx context.Context, id string) (bool, error) {
 	log := c.Log.WithName("OAuth2ClientExistsInKeto").WithValues("ID", id)
@@ -254,6 +285,30 @@ func (c *ClientWrapper) CreateOAuth2ClientInKeto(ctx context.Context, id string)
 	}
 
 	log.Info("Success creating oauth2client in keto")
+	return nil
+}
+
+// function that deletes an oauth2client in keto
+func (c *ClientWrapper) DeleteOAuth2ClientInKeto(ctx context.Context, id string) error {
+	log := c.Log.WithName("DeleteOAuth2ClientInKeto").WithValues("ID", id)
+
+	clientTuple := &rts.RelationTuple{
+		Namespace: "OAuth2Client",
+		Object:    id,
+		Relation:  "organizations",
+		Subject: rts.NewSubjectSet(
+			"Organization",
+			"main", //TODO: decide whether to hardcode this or not
+			"",
+		),
+	}
+
+	err := c.KetoClient.DeleteTuple(ctx, clientTuple)
+	if err != nil {
+		return fmt.Errorf("failed to delete tuple: %w", err)
+	}
+
+	log.Info("Success deleting oauth2client in keto")
 	return nil
 }
 
