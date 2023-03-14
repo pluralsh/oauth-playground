@@ -6,12 +6,81 @@ package resolvers
 
 import (
 	"context"
-	"fmt"
 
+	"github.com/pluralsh/oauth-playground/api-server/graph/generated"
 	"github.com/pluralsh/oauth-playground/api-server/graph/model"
 )
 
+// ObservabilityTenant is the resolver for the observabilityTenant field.
+func (r *mutationResolver) ObservabilityTenant(ctx context.Context, name string, viewers *model.ObservabilityTenantViewersInput, editors *model.ObservabilityTenantEditorsInput) (*model.ObservabilityTenant, error) {
+	return r.C.MutateObservabilityTenant(ctx, name, viewers, editors)
+}
+
+// DeleteObservabilityTenant is the resolver for the deleteObservabilityTenant field.
+func (r *mutationResolver) DeleteObservabilityTenant(ctx context.Context, name string) (*model.ObservabilityTenant, error) {
+	return r.C.DeleteObservabilityTenantInKeto(ctx, name)
+}
+
+// Viewers is the resolver for the viewers field.
+func (r *observabilityTenantResolver) Viewers(ctx context.Context, obj *model.ObservabilityTenant) (*model.ObservabilityTenantViewers, error) {
+	return r.C.GetViewersOfTenantFromKeto(ctx, obj.Name)
+}
+
+// Editors is the resolver for the editors field.
+func (r *observabilityTenantResolver) Editors(ctx context.Context, obj *model.ObservabilityTenant) (*model.ObservabilityTenantEditors, error) {
+	return r.C.GetEditorsOfTenantFromKeto(ctx, obj.Name)
+}
+
+// Users is the resolver for the users field.
+func (r *observabilityTenantEditorsResolver) Users(ctx context.Context, obj *model.ObservabilityTenantEditors) ([]*model.User, error) {
+	return r.C.GetObservabilityTenantUsers(ctx, obj.Users)
+}
+
+// Groups is the resolver for the groups field.
+func (r *observabilityTenantEditorsResolver) Groups(ctx context.Context, obj *model.ObservabilityTenantEditors) ([]*model.Group, error) {
+	return r.C.GetObservabilityTenantGroups(ctx, obj.Groups)
+}
+
+// Users is the resolver for the users field.
+func (r *observabilityTenantViewersResolver) Users(ctx context.Context, obj *model.ObservabilityTenantViewers) ([]*model.User, error) {
+	return r.C.GetObservabilityTenantUsers(ctx, obj.Users)
+}
+
+// Groups is the resolver for the groups field.
+func (r *observabilityTenantViewersResolver) Groups(ctx context.Context, obj *model.ObservabilityTenantViewers) ([]*model.Group, error) {
+	return r.C.GetObservabilityTenantGroups(ctx, obj.Groups)
+}
+
+// Oauth2Clients is the resolver for the oauth2Clients field.
+func (r *observabilityTenantViewersResolver) Oauth2Clients(ctx context.Context, obj *model.ObservabilityTenantViewers) ([]*model.OAuth2Client, error) {
+	return r.C.GetObservabilityTenantOauth2Clients(ctx, obj.Oauth2Clients)
+}
+
 // ListObservabilityTenants is the resolver for the listObservabilityTenants field.
 func (r *queryResolver) ListObservabilityTenants(ctx context.Context) ([]*model.ObservabilityTenant, error) {
-	panic(fmt.Errorf("not implemented: ListObservabilityTenants - listObservabilityTenants"))
+	return r.C.ListTenantsInKeto(ctx)
 }
+
+// GetObservabilityTenant is the resolver for the getObservabilityTenant field.
+func (r *queryResolver) GetObservabilityTenant(ctx context.Context, name string) (*model.ObservabilityTenant, error) {
+	return r.C.GetTenantFromKeto(ctx, name)
+}
+
+// ObservabilityTenant returns generated.ObservabilityTenantResolver implementation.
+func (r *Resolver) ObservabilityTenant() generated.ObservabilityTenantResolver {
+	return &observabilityTenantResolver{r}
+}
+
+// ObservabilityTenantEditors returns generated.ObservabilityTenantEditorsResolver implementation.
+func (r *Resolver) ObservabilityTenantEditors() generated.ObservabilityTenantEditorsResolver {
+	return &observabilityTenantEditorsResolver{r}
+}
+
+// ObservabilityTenantViewers returns generated.ObservabilityTenantViewersResolver implementation.
+func (r *Resolver) ObservabilityTenantViewers() generated.ObservabilityTenantViewersResolver {
+	return &observabilityTenantViewersResolver{r}
+}
+
+type observabilityTenantResolver struct{ *Resolver }
+type observabilityTenantEditorsResolver struct{ *Resolver }
+type observabilityTenantViewersResolver struct{ *Resolver }

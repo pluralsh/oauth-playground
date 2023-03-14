@@ -14,7 +14,7 @@ type Admin struct {
 
 // Representation a group of users.
 type Group struct {
-	// The name of the group.
+	// The unique name of the group.
 	Name string `json:"name"`
 	// The users that are admins of the organization.
 	Members []*User `json:"members"`
@@ -137,10 +137,8 @@ type OAuth2Client struct {
 
 // Representation a tenant in the Grafana observability stack where metrics, logs and traces can be sent to or retrieved from.
 type ObservabilityTenant struct {
-	// The unique ID of the tenant.
-	ID string `json:"id"`
-	// The name of the tenant.
-	Name *string `json:"name"`
+	// The unique name of the tenant.
+	Name string `json:"name"`
 	// The organization that the tenant belongs to.
 	Organization *Organization `json:"organization"`
 	// The users that are admins of the organization.
@@ -157,6 +155,13 @@ type ObservabilityTenantEditors struct {
 	Groups []*Group `json:"groups"`
 }
 
+type ObservabilityTenantEditorsInput struct {
+	// The IDs of users that can edit a tenant.
+	Users []string `json:"users"`
+	// The names of groups that can edit a tenant.
+	Groups []string `json:"groups"`
+}
+
 // Representation of the users, groups and oauth2 clients that can view or send data a tenant.
 type ObservabilityTenantViewers struct {
 	// The users that can view a tenant.
@@ -167,9 +172,18 @@ type ObservabilityTenantViewers struct {
 	Oauth2Clients []*OAuth2Client `json:"oauth2Clients"`
 }
 
+type ObservabilityTenantViewersInput struct {
+	// The IDs of users that can view a tenant.
+	Users []string `json:"users"`
+	// The names of groups that can view a tenant.
+	Groups []string `json:"groups"`
+	// The clientIDs oauth2 clients that can send data a tenant.
+	Oauth2Clients []string `json:"oauth2Clients"`
+}
+
 // Representation an Organization in the auth stack.
 type Organization struct {
-	// The name of the organization.
+	// The unique name of the organization.
 	Name string `json:"name"`
 	// The users that are admins of the organization.
 	Admins []*User `json:"admins"`

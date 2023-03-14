@@ -41,6 +41,9 @@ type ResolverRoot interface {
 	LoginBindings() LoginBindingsResolver
 	Mutation() MutationResolver
 	OAuth2Client() OAuth2ClientResolver
+	ObservabilityTenant() ObservabilityTenantResolver
+	ObservabilityTenantEditors() ObservabilityTenantEditorsResolver
+	ObservabilityTenantViewers() ObservabilityTenantViewersResolver
 	Organization() OrganizationResolver
 	Query() QueryResolver
 	User() UserResolver
@@ -64,14 +67,16 @@ type ComplexityRoot struct {
 	}
 
 	Mutation struct {
-		CreateOAuth2Client func(childComplexity int, allowedCorsOrigins []string, audience []string, authorizationCodeGrantAccessTokenLifespan *string, authorizationCodeGrantIDTokenLifespan *string, authorizationCodeGrantRefreshTokenLifespan *string, backChannelLogoutSessionRequired *bool, backChannelLogoutURI *string, clientCredentialsGrantAccessTokenLifespan *string, clientName *string, clientSecret *string, clientSecretExpiresAt *int64, clientURI *string, contacts []string, frontchannelLogoutSessionRequired *bool, frontchannelLogoutURI *string, grantTypes []string, implicitGrantAccessTokenLifespan *string, implicitGrantIDTokenLifespan *string, jwks map[string]interface{}, jwksURI *string, jwtBearerGrantAccessTokenLifespan *string, logoURI *string, metadata map[string]interface{}, policyURI *string, postLogoutRedirectUris []string, redirectUris []string, responseTypes []string, scope *string, sectorIdentifierURI *string, subjectType *string, tokenEndpointAuthMethod *string, tokenEndpointAuthSigningAlgorithm *string, tosURI *string, userinfoSignedResponseAlgorithm *string, loginBindings *model.LoginBindingsInput) int
-		CreateUser         func(childComplexity int, email string, name *model.NameInput) int
-		DeleteGroup        func(childComplexity int, name string) int
-		DeleteOAuth2Client func(childComplexity int, clientID string) int
-		DeleteUser         func(childComplexity int, id string) int
-		Group              func(childComplexity int, name string, members []string) int
-		Organization       func(childComplexity int, name string, admins []string) int
-		UpdateOAuth2Client func(childComplexity int, allowedCorsOrigins []string, audience []string, authorizationCodeGrantAccessTokenLifespan *string, authorizationCodeGrantIDTokenLifespan *string, authorizationCodeGrantRefreshTokenLifespan *string, backChannelLogoutSessionRequired *bool, backChannelLogoutURI *string, clientCredentialsGrantAccessTokenLifespan *string, clientID string, clientName *string, clientSecret *string, clientSecretExpiresAt *int64, clientURI *string, contacts []string, frontchannelLogoutSessionRequired *bool, frontchannelLogoutURI *string, grantTypes []string, implicitGrantAccessTokenLifespan *string, implicitGrantIDTokenLifespan *string, jwks map[string]interface{}, jwksURI *string, jwtBearerGrantAccessTokenLifespan *string, logoURI *string, metadata map[string]interface{}, policyURI *string, postLogoutRedirectUris []string, redirectUris []string, responseTypes []string, scope *string, sectorIdentifierURI *string, subjectType *string, tokenEndpointAuthMethod *string, tokenEndpointAuthSigningAlgorithm *string, tosURI *string, userinfoSignedResponseAlgorithm *string, loginBindings *model.LoginBindingsInput) int
+		CreateOAuth2Client        func(childComplexity int, allowedCorsOrigins []string, audience []string, authorizationCodeGrantAccessTokenLifespan *string, authorizationCodeGrantIDTokenLifespan *string, authorizationCodeGrantRefreshTokenLifespan *string, backChannelLogoutSessionRequired *bool, backChannelLogoutURI *string, clientCredentialsGrantAccessTokenLifespan *string, clientName *string, clientSecret *string, clientSecretExpiresAt *int64, clientURI *string, contacts []string, frontchannelLogoutSessionRequired *bool, frontchannelLogoutURI *string, grantTypes []string, implicitGrantAccessTokenLifespan *string, implicitGrantIDTokenLifespan *string, jwks map[string]interface{}, jwksURI *string, jwtBearerGrantAccessTokenLifespan *string, logoURI *string, metadata map[string]interface{}, policyURI *string, postLogoutRedirectUris []string, redirectUris []string, responseTypes []string, scope *string, sectorIdentifierURI *string, subjectType *string, tokenEndpointAuthMethod *string, tokenEndpointAuthSigningAlgorithm *string, tosURI *string, userinfoSignedResponseAlgorithm *string, loginBindings *model.LoginBindingsInput) int
+		CreateUser                func(childComplexity int, email string, name *model.NameInput) int
+		DeleteGroup               func(childComplexity int, name string) int
+		DeleteOAuth2Client        func(childComplexity int, clientID string) int
+		DeleteObservabilityTenant func(childComplexity int, name string) int
+		DeleteUser                func(childComplexity int, id string) int
+		Group                     func(childComplexity int, name string, members []string) int
+		ObservabilityTenant       func(childComplexity int, name string, viewers *model.ObservabilityTenantViewersInput, editors *model.ObservabilityTenantEditorsInput) int
+		Organization              func(childComplexity int, name string, admins []string) int
+		UpdateOAuth2Client        func(childComplexity int, allowedCorsOrigins []string, audience []string, authorizationCodeGrantAccessTokenLifespan *string, authorizationCodeGrantIDTokenLifespan *string, authorizationCodeGrantRefreshTokenLifespan *string, backChannelLogoutSessionRequired *bool, backChannelLogoutURI *string, clientCredentialsGrantAccessTokenLifespan *string, clientID string, clientName *string, clientSecret *string, clientSecretExpiresAt *int64, clientURI *string, contacts []string, frontchannelLogoutSessionRequired *bool, frontchannelLogoutURI *string, grantTypes []string, implicitGrantAccessTokenLifespan *string, implicitGrantIDTokenLifespan *string, jwks map[string]interface{}, jwksURI *string, jwtBearerGrantAccessTokenLifespan *string, logoURI *string, metadata map[string]interface{}, policyURI *string, postLogoutRedirectUris []string, redirectUris []string, responseTypes []string, scope *string, sectorIdentifierURI *string, subjectType *string, tokenEndpointAuthMethod *string, tokenEndpointAuthSigningAlgorithm *string, tosURI *string, userinfoSignedResponseAlgorithm *string, loginBindings *model.LoginBindingsInput) int
 	}
 
 	Name struct {
@@ -124,7 +129,6 @@ type ComplexityRoot struct {
 
 	ObservabilityTenant struct {
 		Editors      func(childComplexity int) int
-		ID           func(childComplexity int) int
 		Name         func(childComplexity int) int
 		Organization func(childComplexity int) int
 		Viewers      func(childComplexity int) int
@@ -147,6 +151,7 @@ type ComplexityRoot struct {
 	}
 
 	Query struct {
+		GetObservabilityTenant   func(childComplexity int, name string) int
 		GetUser                  func(childComplexity int, id string) int
 		ListGroups               func(childComplexity int) int
 		ListOAuth2Clients        func(childComplexity int) int
@@ -181,12 +186,27 @@ type MutationResolver interface {
 	CreateOAuth2Client(ctx context.Context, allowedCorsOrigins []string, audience []string, authorizationCodeGrantAccessTokenLifespan *string, authorizationCodeGrantIDTokenLifespan *string, authorizationCodeGrantRefreshTokenLifespan *string, backChannelLogoutSessionRequired *bool, backChannelLogoutURI *string, clientCredentialsGrantAccessTokenLifespan *string, clientName *string, clientSecret *string, clientSecretExpiresAt *int64, clientURI *string, contacts []string, frontchannelLogoutSessionRequired *bool, frontchannelLogoutURI *string, grantTypes []string, implicitGrantAccessTokenLifespan *string, implicitGrantIDTokenLifespan *string, jwks map[string]interface{}, jwksURI *string, jwtBearerGrantAccessTokenLifespan *string, logoURI *string, metadata map[string]interface{}, policyURI *string, postLogoutRedirectUris []string, redirectUris []string, responseTypes []string, scope *string, sectorIdentifierURI *string, subjectType *string, tokenEndpointAuthMethod *string, tokenEndpointAuthSigningAlgorithm *string, tosURI *string, userinfoSignedResponseAlgorithm *string, loginBindings *model.LoginBindingsInput) (*model.OAuth2Client, error)
 	UpdateOAuth2Client(ctx context.Context, allowedCorsOrigins []string, audience []string, authorizationCodeGrantAccessTokenLifespan *string, authorizationCodeGrantIDTokenLifespan *string, authorizationCodeGrantRefreshTokenLifespan *string, backChannelLogoutSessionRequired *bool, backChannelLogoutURI *string, clientCredentialsGrantAccessTokenLifespan *string, clientID string, clientName *string, clientSecret *string, clientSecretExpiresAt *int64, clientURI *string, contacts []string, frontchannelLogoutSessionRequired *bool, frontchannelLogoutURI *string, grantTypes []string, implicitGrantAccessTokenLifespan *string, implicitGrantIDTokenLifespan *string, jwks map[string]interface{}, jwksURI *string, jwtBearerGrantAccessTokenLifespan *string, logoURI *string, metadata map[string]interface{}, policyURI *string, postLogoutRedirectUris []string, redirectUris []string, responseTypes []string, scope *string, sectorIdentifierURI *string, subjectType *string, tokenEndpointAuthMethod *string, tokenEndpointAuthSigningAlgorithm *string, tosURI *string, userinfoSignedResponseAlgorithm *string, loginBindings *model.LoginBindingsInput) (*model.OAuth2Client, error)
 	DeleteOAuth2Client(ctx context.Context, clientID string) (*model.OAuth2Client, error)
+	ObservabilityTenant(ctx context.Context, name string, viewers *model.ObservabilityTenantViewersInput, editors *model.ObservabilityTenantEditorsInput) (*model.ObservabilityTenant, error)
+	DeleteObservabilityTenant(ctx context.Context, name string) (*model.ObservabilityTenant, error)
 	Organization(ctx context.Context, name string, admins []string) (*model.Organization, error)
 }
 type OAuth2ClientResolver interface {
 	Owner(ctx context.Context, obj *model.OAuth2Client) (*string, error)
 
 	LoginBindings(ctx context.Context, obj *model.OAuth2Client) (*model.LoginBindings, error)
+}
+type ObservabilityTenantResolver interface {
+	Viewers(ctx context.Context, obj *model.ObservabilityTenant) (*model.ObservabilityTenantViewers, error)
+	Editors(ctx context.Context, obj *model.ObservabilityTenant) (*model.ObservabilityTenantEditors, error)
+}
+type ObservabilityTenantEditorsResolver interface {
+	Users(ctx context.Context, obj *model.ObservabilityTenantEditors) ([]*model.User, error)
+	Groups(ctx context.Context, obj *model.ObservabilityTenantEditors) ([]*model.Group, error)
+}
+type ObservabilityTenantViewersResolver interface {
+	Users(ctx context.Context, obj *model.ObservabilityTenantViewers) ([]*model.User, error)
+	Groups(ctx context.Context, obj *model.ObservabilityTenantViewers) ([]*model.Group, error)
+	Oauth2Clients(ctx context.Context, obj *model.ObservabilityTenantViewers) ([]*model.OAuth2Client, error)
 }
 type OrganizationResolver interface {
 	Admins(ctx context.Context, obj *model.Organization) ([]*model.User, error)
@@ -198,6 +218,7 @@ type QueryResolver interface {
 	ListOAuth2Clients(ctx context.Context) ([]*model.OAuth2Client, error)
 	OAuth2Client(ctx context.Context, clientID string) (*model.OAuth2Client, error)
 	ListObservabilityTenants(ctx context.Context) ([]*model.ObservabilityTenant, error)
+	GetObservabilityTenant(ctx context.Context, name string) (*model.ObservabilityTenant, error)
 	ListOrganizations(ctx context.Context) ([]*model.Organization, error)
 }
 type UserResolver interface {
@@ -302,6 +323,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.DeleteOAuth2Client(childComplexity, args["clientId"].(string)), true
 
+	case "Mutation.deleteObservabilityTenant":
+		if e.complexity.Mutation.DeleteObservabilityTenant == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteObservabilityTenant_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteObservabilityTenant(childComplexity, args["name"].(string)), true
+
 	case "Mutation.deleteUser":
 		if e.complexity.Mutation.DeleteUser == nil {
 			break
@@ -325,6 +358,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.Group(childComplexity, args["name"].(string), args["members"].([]string)), true
+
+	case "Mutation.observabilityTenant":
+		if e.complexity.Mutation.ObservabilityTenant == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_observabilityTenant_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.ObservabilityTenant(childComplexity, args["name"].(string), args["viewers"].(*model.ObservabilityTenantViewersInput), args["editors"].(*model.ObservabilityTenantEditorsInput)), true
 
 	case "Mutation.organization":
 		if e.complexity.Mutation.Organization == nil {
@@ -651,13 +696,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.ObservabilityTenant.Editors(childComplexity), true
 
-	case "ObservabilityTenant.id":
-		if e.complexity.ObservabilityTenant.ID == nil {
-			break
-		}
-
-		return e.complexity.ObservabilityTenant.ID(childComplexity), true
-
 	case "ObservabilityTenant.name":
 		if e.complexity.ObservabilityTenant.Name == nil {
 			break
@@ -727,6 +765,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Organization.Name(childComplexity), true
+
+	case "Query.getObservabilityTenant":
+		if e.complexity.Query.GetObservabilityTenant == nil {
+			break
+		}
+
+		args, err := ec.field_Query_getObservabilityTenant_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.GetObservabilityTenant(childComplexity, args["name"].(string)), true
 
 	case "Query.getUser":
 		if e.complexity.Query.GetUser == nil {
@@ -840,6 +890,8 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputAdmin,
 		ec.unmarshalInputLoginBindingsInput,
 		ec.unmarshalInputNameInput,
+		ec.unmarshalInputObservabilityTenantEditorsInput,
+		ec.unmarshalInputObservabilityTenantViewersInput,
 	)
 	first := true
 
@@ -912,7 +964,7 @@ directive @checkPermissions on QUERY | MUTATION | FIELD | FIELD_DEFINITION
 `, BuiltIn: false},
 	{Name: "../group.graphqls", Input: `"Representation a group of users."
 type Group {
-  "The name of the group."
+  "The unique name of the group."
   name: String!
 
   "The users that are admins of the organization."
@@ -928,7 +980,7 @@ extend type Query {
 }
 
 extend type Mutation {
-  "Create a new group."
+  "Create or update a group."
   group(
     "The unique name of the group."
     name: String!
@@ -1325,11 +1377,8 @@ extend type Mutation {
 `, BuiltIn: false},
 	{Name: "../observabilitytenant.graphqls", Input: `"Representation a tenant in the Grafana observability stack where metrics, logs and traces can be sent to or retrieved from."
 type ObservabilityTenant {
-  "The unique ID of the tenant."
-  id: ID!
-
-  "The name of the tenant."
-  name: String
+  "The unique name of the tenant."
+  name: String!
 
   "The organization that the tenant belongs to."
   organization: Organization!
@@ -1362,14 +1411,56 @@ type ObservabilityTenantEditors {
   groups: [Group!]
 }
 
+input ObservabilityTenantViewersInput {
+  "The IDs of users that can view a tenant."
+  users: [String!]
+
+  "The names of groups that can view a tenant."
+  groups: [String!]
+
+  "The clientIDs oauth2 clients that can send data a tenant."
+  oauth2Clients: [String!]
+}
+
+input ObservabilityTenantEditorsInput {
+  "The IDs of users that can edit a tenant."
+  users: [String!]
+
+  "The names of groups that can edit a tenant."
+  groups: [String!]
+}
+
 extend type Query {
   "Get a list of all users."
   listObservabilityTenants: [ObservabilityTenant!]! @checkPermissions @isAuthenticated
+
+  getObservabilityTenant(
+    "The name of the tenant."
+    name: String!
+  ): ObservabilityTenant! @checkPermissions @isAuthenticated
+}
+
+extend type Mutation {
+  "Create or update an observability tenant."
+  observabilityTenant(
+    "The name of the tenant."
+    name: String!
+    "The users, groups or OAuth 2.0 client that have access to the observability tenant."
+    viewers: ObservabilityTenantViewersInput
+    "The users and groups that can edit a tenant to add users, groups or oauth2 clients to it."
+    editors: ObservabilityTenantEditorsInput
+  ): ObservabilityTenant! @checkPermissions @isAuthenticated
+
+  "Delete an observability tenant."
+  deleteObservabilityTenant(
+    "The name of the tenant."
+    name: String!
+  ): ObservabilityTenant! @checkPermissions @isAuthenticated
 }
 `, BuiltIn: false},
 	{Name: "../organization.graphqls", Input: `"Representation an Organization in the auth stack."
 type Organization {
-  "The name of the organization."
+  "The unique name of the organization."
   name: String!
 
   "The users that are admins of the organization."
@@ -1844,6 +1935,21 @@ func (ec *executionContext) field_Mutation_deleteOAuth2Client_args(ctx context.C
 	return args, nil
 }
 
+func (ec *executionContext) field_Mutation_deleteObservabilityTenant_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["name"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
+		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["name"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_deleteUser_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
@@ -1880,6 +1986,39 @@ func (ec *executionContext) field_Mutation_group_args(ctx context.Context, rawAr
 		}
 	}
 	args["members"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_observabilityTenant_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["name"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
+		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["name"] = arg0
+	var arg1 *model.ObservabilityTenantViewersInput
+	if tmp, ok := rawArgs["viewers"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("viewers"))
+		arg1, err = ec.unmarshalOObservabilityTenantViewersInput2ᚖgithubᚗcomᚋpluralshᚋoauthᚑplaygroundᚋapiᚑserverᚋgraphᚋmodelᚐObservabilityTenantViewersInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["viewers"] = arg1
+	var arg2 *model.ObservabilityTenantEditorsInput
+	if tmp, ok := rawArgs["editors"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("editors"))
+		arg2, err = ec.unmarshalOObservabilityTenantEditorsInput2ᚖgithubᚗcomᚋpluralshᚋoauthᚑplaygroundᚋapiᚑserverᚋgraphᚋmodelᚐObservabilityTenantEditorsInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["editors"] = arg2
 	return args, nil
 }
 
@@ -2238,6 +2377,21 @@ func (ec *executionContext) field_Mutation_updateOAuth2Client_args(ctx context.C
 }
 
 func (ec *executionContext) field_Query___type_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["name"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
+		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["name"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_getObservabilityTenant_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
 	var arg0 string
@@ -3488,6 +3642,182 @@ func (ec *executionContext) fieldContext_Mutation_deleteOAuth2Client(ctx context
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_deleteOAuth2Client_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_observabilityTenant(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_observabilityTenant(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, nil, func(rctx context.Context) (interface{}, error) {
+		directive0 := func(rctx context.Context) (interface{}, error) {
+			ctx = rctx // use context from middleware stack in children
+			return ec.resolvers.Mutation().ObservabilityTenant(rctx, fc.Args["name"].(string), fc.Args["viewers"].(*model.ObservabilityTenantViewersInput), fc.Args["editors"].(*model.ObservabilityTenantEditorsInput))
+		}
+		directive1 := func(ctx context.Context) (interface{}, error) {
+			if ec.directives.CheckPermissions == nil {
+				return nil, errors.New("directive checkPermissions is not implemented")
+			}
+			return ec.directives.CheckPermissions(ctx, nil, directive0)
+		}
+		directive2 := func(ctx context.Context) (interface{}, error) {
+			if ec.directives.IsAuthenticated == nil {
+				return nil, errors.New("directive isAuthenticated is not implemented")
+			}
+			return ec.directives.IsAuthenticated(ctx, nil, directive1)
+		}
+
+		tmp, err := directive2(rctx)
+		if err != nil {
+			return nil, graphql.ErrorOnPath(ctx, err)
+		}
+		if tmp == nil {
+			return nil, nil
+		}
+		if data, ok := tmp.(*model.ObservabilityTenant); ok {
+			return data, nil
+		}
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/pluralsh/oauth-playground/api-server/graph/model.ObservabilityTenant`, tmp)
+	})
+
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.ObservabilityTenant)
+	fc.Result = res
+	return ec.marshalNObservabilityTenant2ᚖgithubᚗcomᚋpluralshᚋoauthᚑplaygroundᚋapiᚑserverᚋgraphᚋmodelᚐObservabilityTenant(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_observabilityTenant(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "name":
+				return ec.fieldContext_ObservabilityTenant_name(ctx, field)
+			case "organization":
+				return ec.fieldContext_ObservabilityTenant_organization(ctx, field)
+			case "viewers":
+				return ec.fieldContext_ObservabilityTenant_viewers(ctx, field)
+			case "editors":
+				return ec.fieldContext_ObservabilityTenant_editors(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type ObservabilityTenant", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_observabilityTenant_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_deleteObservabilityTenant(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_deleteObservabilityTenant(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, nil, func(rctx context.Context) (interface{}, error) {
+		directive0 := func(rctx context.Context) (interface{}, error) {
+			ctx = rctx // use context from middleware stack in children
+			return ec.resolvers.Mutation().DeleteObservabilityTenant(rctx, fc.Args["name"].(string))
+		}
+		directive1 := func(ctx context.Context) (interface{}, error) {
+			if ec.directives.CheckPermissions == nil {
+				return nil, errors.New("directive checkPermissions is not implemented")
+			}
+			return ec.directives.CheckPermissions(ctx, nil, directive0)
+		}
+		directive2 := func(ctx context.Context) (interface{}, error) {
+			if ec.directives.IsAuthenticated == nil {
+				return nil, errors.New("directive isAuthenticated is not implemented")
+			}
+			return ec.directives.IsAuthenticated(ctx, nil, directive1)
+		}
+
+		tmp, err := directive2(rctx)
+		if err != nil {
+			return nil, graphql.ErrorOnPath(ctx, err)
+		}
+		if tmp == nil {
+			return nil, nil
+		}
+		if data, ok := tmp.(*model.ObservabilityTenant); ok {
+			return data, nil
+		}
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/pluralsh/oauth-playground/api-server/graph/model.ObservabilityTenant`, tmp)
+	})
+
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.ObservabilityTenant)
+	fc.Result = res
+	return ec.marshalNObservabilityTenant2ᚖgithubᚗcomᚋpluralshᚋoauthᚑplaygroundᚋapiᚑserverᚋgraphᚋmodelᚐObservabilityTenant(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_deleteObservabilityTenant(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "name":
+				return ec.fieldContext_ObservabilityTenant_name(ctx, field)
+			case "organization":
+				return ec.fieldContext_ObservabilityTenant_organization(ctx, field)
+			case "viewers":
+				return ec.fieldContext_ObservabilityTenant_viewers(ctx, field)
+			case "editors":
+				return ec.fieldContext_ObservabilityTenant_editors(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type ObservabilityTenant", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_deleteObservabilityTenant_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return
 	}
@@ -5189,47 +5519,6 @@ func (ec *executionContext) fieldContext_OAuth2Client_loginBindings(ctx context.
 	return fc, nil
 }
 
-func (ec *executionContext) _ObservabilityTenant_id(ctx context.Context, field graphql.CollectedField, obj *model.ObservabilityTenant) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ObservabilityTenant_id(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.ID, nil
-	})
-
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNID2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_ObservabilityTenant_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ObservabilityTenant",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _ObservabilityTenant_name(ctx context.Context, field graphql.CollectedField, obj *model.ObservabilityTenant) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_ObservabilityTenant_name(ctx, field)
 	if err != nil {
@@ -5248,11 +5537,14 @@ func (ec *executionContext) _ObservabilityTenant_name(ctx context.Context, field
 	})
 
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
-	res := resTmp.(*string)
+	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_ObservabilityTenant_name(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -5329,7 +5621,7 @@ func (ec *executionContext) _ObservabilityTenant_viewers(ctx context.Context, fi
 	}()
 	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Viewers, nil
+		return ec.resolvers.ObservabilityTenant().Viewers(rctx, obj)
 	})
 
 	if resTmp == nil {
@@ -5344,8 +5636,8 @@ func (ec *executionContext) fieldContext_ObservabilityTenant_viewers(ctx context
 	fc = &graphql.FieldContext{
 		Object:     "ObservabilityTenant",
 		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
+		IsMethod:   true,
+		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
 			case "users":
@@ -5375,7 +5667,7 @@ func (ec *executionContext) _ObservabilityTenant_editors(ctx context.Context, fi
 	}()
 	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Editors, nil
+		return ec.resolvers.ObservabilityTenant().Editors(rctx, obj)
 	})
 
 	if resTmp == nil {
@@ -5390,8 +5682,8 @@ func (ec *executionContext) fieldContext_ObservabilityTenant_editors(ctx context
 	fc = &graphql.FieldContext{
 		Object:     "ObservabilityTenant",
 		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
+		IsMethod:   true,
+		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
 			case "users":
@@ -5419,7 +5711,7 @@ func (ec *executionContext) _ObservabilityTenantEditors_users(ctx context.Contex
 	}()
 	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Users, nil
+		return ec.resolvers.ObservabilityTenantEditors().Users(rctx, obj)
 	})
 
 	if resTmp == nil {
@@ -5434,8 +5726,8 @@ func (ec *executionContext) fieldContext_ObservabilityTenantEditors_users(ctx co
 	fc = &graphql.FieldContext{
 		Object:     "ObservabilityTenantEditors",
 		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
+		IsMethod:   true,
+		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
 			case "id":
@@ -5471,7 +5763,7 @@ func (ec *executionContext) _ObservabilityTenantEditors_groups(ctx context.Conte
 	}()
 	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Groups, nil
+		return ec.resolvers.ObservabilityTenantEditors().Groups(rctx, obj)
 	})
 
 	if resTmp == nil {
@@ -5486,8 +5778,8 @@ func (ec *executionContext) fieldContext_ObservabilityTenantEditors_groups(ctx c
 	fc = &graphql.FieldContext{
 		Object:     "ObservabilityTenantEditors",
 		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
+		IsMethod:   true,
+		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
 			case "name":
@@ -5517,7 +5809,7 @@ func (ec *executionContext) _ObservabilityTenantViewers_users(ctx context.Contex
 	}()
 	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Users, nil
+		return ec.resolvers.ObservabilityTenantViewers().Users(rctx, obj)
 	})
 
 	if resTmp == nil {
@@ -5532,8 +5824,8 @@ func (ec *executionContext) fieldContext_ObservabilityTenantViewers_users(ctx co
 	fc = &graphql.FieldContext{
 		Object:     "ObservabilityTenantViewers",
 		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
+		IsMethod:   true,
+		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
 			case "id":
@@ -5569,7 +5861,7 @@ func (ec *executionContext) _ObservabilityTenantViewers_groups(ctx context.Conte
 	}()
 	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Groups, nil
+		return ec.resolvers.ObservabilityTenantViewers().Groups(rctx, obj)
 	})
 
 	if resTmp == nil {
@@ -5584,8 +5876,8 @@ func (ec *executionContext) fieldContext_ObservabilityTenantViewers_groups(ctx c
 	fc = &graphql.FieldContext{
 		Object:     "ObservabilityTenantViewers",
 		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
+		IsMethod:   true,
+		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
 			case "name":
@@ -5615,7 +5907,7 @@ func (ec *executionContext) _ObservabilityTenantViewers_oauth2Clients(ctx contex
 	}()
 	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Oauth2Clients, nil
+		return ec.resolvers.ObservabilityTenantViewers().Oauth2Clients(rctx, obj)
 	})
 
 	if resTmp == nil {
@@ -5630,8 +5922,8 @@ func (ec *executionContext) fieldContext_ObservabilityTenantViewers_oauth2Client
 	fc = &graphql.FieldContext{
 		Object:     "ObservabilityTenantViewers",
 		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
+		IsMethod:   true,
+		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
 			case "allowedCorsOrigins":
@@ -6427,8 +6719,6 @@ func (ec *executionContext) fieldContext_Query_listObservabilityTenants(ctx cont
 		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
-			case "id":
-				return ec.fieldContext_ObservabilityTenant_id(ctx, field)
 			case "name":
 				return ec.fieldContext_ObservabilityTenant_name(ctx, field)
 			case "organization":
@@ -6440,6 +6730,94 @@ func (ec *executionContext) fieldContext_Query_listObservabilityTenants(ctx cont
 			}
 			return nil, fmt.Errorf("no field named %q was found under type ObservabilityTenant", field.Name)
 		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_getObservabilityTenant(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_getObservabilityTenant(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, nil, func(rctx context.Context) (interface{}, error) {
+		directive0 := func(rctx context.Context) (interface{}, error) {
+			ctx = rctx // use context from middleware stack in children
+			return ec.resolvers.Query().GetObservabilityTenant(rctx, fc.Args["name"].(string))
+		}
+		directive1 := func(ctx context.Context) (interface{}, error) {
+			if ec.directives.CheckPermissions == nil {
+				return nil, errors.New("directive checkPermissions is not implemented")
+			}
+			return ec.directives.CheckPermissions(ctx, nil, directive0)
+		}
+		directive2 := func(ctx context.Context) (interface{}, error) {
+			if ec.directives.IsAuthenticated == nil {
+				return nil, errors.New("directive isAuthenticated is not implemented")
+			}
+			return ec.directives.IsAuthenticated(ctx, nil, directive1)
+		}
+
+		tmp, err := directive2(rctx)
+		if err != nil {
+			return nil, graphql.ErrorOnPath(ctx, err)
+		}
+		if tmp == nil {
+			return nil, nil
+		}
+		if data, ok := tmp.(*model.ObservabilityTenant); ok {
+			return data, nil
+		}
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/pluralsh/oauth-playground/api-server/graph/model.ObservabilityTenant`, tmp)
+	})
+
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.ObservabilityTenant)
+	fc.Result = res
+	return ec.marshalNObservabilityTenant2ᚖgithubᚗcomᚋpluralshᚋoauthᚑplaygroundᚋapiᚑserverᚋgraphᚋmodelᚐObservabilityTenant(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_getObservabilityTenant(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "name":
+				return ec.fieldContext_ObservabilityTenant_name(ctx, field)
+			case "organization":
+				return ec.fieldContext_ObservabilityTenant_organization(ctx, field)
+			case "viewers":
+				return ec.fieldContext_ObservabilityTenant_viewers(ctx, field)
+			case "editors":
+				return ec.fieldContext_ObservabilityTenant_editors(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type ObservabilityTenant", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_getObservabilityTenant_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return
 	}
 	return fc, nil
 }
@@ -8665,6 +9043,86 @@ func (ec *executionContext) unmarshalInputNameInput(ctx context.Context, obj int
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputObservabilityTenantEditorsInput(ctx context.Context, obj interface{}) (model.ObservabilityTenantEditorsInput, error) {
+	var it model.ObservabilityTenantEditorsInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"users", "groups"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "users":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("users"))
+			it.Users, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "groups":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("groups"))
+			it.Groups, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputObservabilityTenantViewersInput(ctx context.Context, obj interface{}) (model.ObservabilityTenantViewersInput, error) {
+	var it model.ObservabilityTenantViewersInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"users", "groups", "oauth2Clients"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "users":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("users"))
+			it.Users, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "groups":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("groups"))
+			it.Groups, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "oauth2Clients":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("oauth2Clients"))
+			it.Oauth2Clients, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
 // endregion **************************** input.gotpl *****************************
 
 // region    ************************** interface.gotpl ***************************
@@ -8838,6 +9296,18 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_deleteOAuth2Client(ctx, field)
+			})
+
+		case "observabilityTenant":
+
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_observabilityTenant(ctx, field)
+			})
+
+		case "deleteObservabilityTenant":
+
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_deleteObservabilityTenant(ctx, field)
 			})
 
 		case "organization":
@@ -9103,32 +9573,54 @@ func (ec *executionContext) _ObservabilityTenant(ctx context.Context, sel ast.Se
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("ObservabilityTenant")
-		case "id":
-
-			out.Values[i] = ec._ObservabilityTenant_id(ctx, field, obj)
-
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
 		case "name":
 
 			out.Values[i] = ec._ObservabilityTenant_name(ctx, field, obj)
 
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&invalids, 1)
+			}
 		case "organization":
 
 			out.Values[i] = ec._ObservabilityTenant_organization(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
 		case "viewers":
+			field := field
 
-			out.Values[i] = ec._ObservabilityTenant_viewers(ctx, field, obj)
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._ObservabilityTenant_viewers(ctx, field, obj)
+				return res
+			}
 
+			out.Concurrently(i, func() graphql.Marshaler {
+				return innerFunc(ctx)
+
+			})
 		case "editors":
+			field := field
 
-			out.Values[i] = ec._ObservabilityTenant_editors(ctx, field, obj)
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._ObservabilityTenant_editors(ctx, field, obj)
+				return res
+			}
 
+			out.Concurrently(i, func() graphql.Marshaler {
+				return innerFunc(ctx)
+
+			})
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -9151,13 +9643,39 @@ func (ec *executionContext) _ObservabilityTenantEditors(ctx context.Context, sel
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("ObservabilityTenantEditors")
 		case "users":
+			field := field
 
-			out.Values[i] = ec._ObservabilityTenantEditors_users(ctx, field, obj)
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._ObservabilityTenantEditors_users(ctx, field, obj)
+				return res
+			}
 
+			out.Concurrently(i, func() graphql.Marshaler {
+				return innerFunc(ctx)
+
+			})
 		case "groups":
+			field := field
 
-			out.Values[i] = ec._ObservabilityTenantEditors_groups(ctx, field, obj)
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._ObservabilityTenantEditors_groups(ctx, field, obj)
+				return res
+			}
 
+			out.Concurrently(i, func() graphql.Marshaler {
+				return innerFunc(ctx)
+
+			})
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -9180,17 +9698,56 @@ func (ec *executionContext) _ObservabilityTenantViewers(ctx context.Context, sel
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("ObservabilityTenantViewers")
 		case "users":
+			field := field
 
-			out.Values[i] = ec._ObservabilityTenantViewers_users(ctx, field, obj)
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._ObservabilityTenantViewers_users(ctx, field, obj)
+				return res
+			}
 
+			out.Concurrently(i, func() graphql.Marshaler {
+				return innerFunc(ctx)
+
+			})
 		case "groups":
+			field := field
 
-			out.Values[i] = ec._ObservabilityTenantViewers_groups(ctx, field, obj)
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._ObservabilityTenantViewers_groups(ctx, field, obj)
+				return res
+			}
 
+			out.Concurrently(i, func() graphql.Marshaler {
+				return innerFunc(ctx)
+
+			})
 		case "oauth2Clients":
+			field := field
 
-			out.Values[i] = ec._ObservabilityTenantViewers_oauth2Clients(ctx, field, obj)
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._ObservabilityTenantViewers_oauth2Clients(ctx, field, obj)
+				return res
+			}
 
+			out.Concurrently(i, func() graphql.Marshaler {
+				return innerFunc(ctx)
+
+			})
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -9375,6 +9932,26 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 					}
 				}()
 				res = ec._Query_listObservabilityTenants(ctx, field)
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx, innerFunc)
+			}
+
+			out.Concurrently(i, func() graphql.Marshaler {
+				return rrm(innerCtx)
+			})
+		case "getObservabilityTenant":
+			field := field
+
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_getObservabilityTenant(ctx, field)
 				return res
 			}
 
@@ -9910,6 +10487,10 @@ func (ec *executionContext) marshalNOAuth2Client2ᚖgithubᚗcomᚋpluralshᚋoa
 		return graphql.Null
 	}
 	return ec._OAuth2Client(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNObservabilityTenant2githubᚗcomᚋpluralshᚋoauthᚑplaygroundᚋapiᚑserverᚋgraphᚋmodelᚐObservabilityTenant(ctx context.Context, sel ast.SelectionSet, v model.ObservabilityTenant) graphql.Marshaler {
+	return ec._ObservabilityTenant(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNObservabilityTenant2ᚕᚖgithubᚗcomᚋpluralshᚋoauthᚑplaygroundᚋapiᚑserverᚋgraphᚋmodelᚐObservabilityTenantᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.ObservabilityTenant) graphql.Marshaler {
@@ -10616,11 +11197,27 @@ func (ec *executionContext) marshalOObservabilityTenantEditors2ᚖgithubᚗcom�
 	return ec._ObservabilityTenantEditors(ctx, sel, v)
 }
 
+func (ec *executionContext) unmarshalOObservabilityTenantEditorsInput2ᚖgithubᚗcomᚋpluralshᚋoauthᚑplaygroundᚋapiᚑserverᚋgraphᚋmodelᚐObservabilityTenantEditorsInput(ctx context.Context, v interface{}) (*model.ObservabilityTenantEditorsInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputObservabilityTenantEditorsInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
 func (ec *executionContext) marshalOObservabilityTenantViewers2ᚖgithubᚗcomᚋpluralshᚋoauthᚑplaygroundᚋapiᚑserverᚋgraphᚋmodelᚐObservabilityTenantViewers(ctx context.Context, sel ast.SelectionSet, v *model.ObservabilityTenantViewers) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._ObservabilityTenantViewers(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalOObservabilityTenantViewersInput2ᚖgithubᚗcomᚋpluralshᚋoauthᚑplaygroundᚋapiᚑserverᚋgraphᚋmodelᚐObservabilityTenantViewersInput(ctx context.Context, v interface{}) (*model.ObservabilityTenantViewersInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputObservabilityTenantViewersInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) unmarshalOString2ᚕstringᚄ(ctx context.Context, v interface{}) ([]string, error) {

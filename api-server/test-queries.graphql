@@ -1,0 +1,513 @@
+query{
+  listUsers{
+    id
+    email
+    name{
+      first
+      last
+    }
+    groups{
+      name
+    }
+  }
+}
+
+query{
+  listOAuth2Clients{
+    allowedCorsOrigins
+    audience
+    authorizationCodeGrantAccessTokenLifespan
+    authorizationCodeGrantIdTokenLifespan
+    authorizationCodeGrantRefreshTokenLifespan
+    backChannelLogoutUri
+    clientCredentialsGrantAccessTokenLifespan
+    clientId
+    clientName
+    clientSecret
+    ClientSecretExpiresAt
+    clientUri
+    contacts
+    createdAt
+    frontchannelLogoutSessionRequired
+    frontchannelLogoutUri
+    grantTypes
+    implicitGrantAccessTokenLifespan
+    implicitGrantIdTokenLifespan
+    jwks
+    jwksUri
+    jwtBearerGrantAccessTokenLifespan
+    logoUri
+    metadata
+    owner
+    policyUri
+    postLogoutRedirectUris
+    redirectUris
+    responseTypes
+    scope
+    sectorIdentifierUri
+    subjectType
+    tokenEndpointAuthMethod
+    tokenEndpointAuthSigningAlgorithm
+    tosUri
+    updatedAt
+    userinfoSignedResponseAlgorithm
+    loginBindings{
+      users{
+        id
+        email
+      }
+      groups{
+        name
+      }
+    }
+  }
+}
+
+mutation{
+  organization(name: "main", admins: 
+  [
+    "2294d0d3-3836-4c0d-93a7-2e3862ec9fdc"
+  ]
+  ){
+    name
+    admins {
+      id
+      name{
+        first
+        last
+      }
+      email
+    }
+  }
+}
+
+query{
+  listOrganizations{
+    name
+    admins{
+      id
+      email
+    }
+  }
+}
+
+query{
+  getUser(id: "2294d0d3-3836-4c0d-93a7-2e3862ec9fdc"){
+    id
+    email
+    name{
+      first
+      last
+    }
+    groups{
+      name
+    }
+  }
+}
+
+mutation{
+  createUser(email: "test8@example.com", firstName: "test", lastName: "test"){
+    id
+    email
+    name{
+      first
+      last
+    }
+    recoveryLink
+  }
+}
+
+query{
+  listGroups{
+    name
+    organization{
+      name
+    }
+    members{
+      id
+      email
+    }
+  }
+}
+
+mutation{
+  group(name: "test", members: [
+    "fa6d11b4-6afc-4df8-a4a2-bd1ae94139ba"
+    "2294d0d3-3836-4c0d-93a7-2e3862ec9fdc"
+  ]){
+    name
+    members{
+      id
+      email
+    }
+  }
+}
+
+mutation{
+  deleteGroup(name: "test"){
+    name
+  }
+}
+
+mutation{
+  deleteUser(id: "cd7de57b-421e-42af-a128-1871a07a4096"){
+    id
+    email
+    organization{
+      name
+    }
+  }
+}
+
+query{
+  oAuth2Client(clientId: "96bf8c2a-1c62-4f7f-a931-0eb10bf03212"){
+    allowedCorsOrigins
+    audience
+    authorizationCodeGrantAccessTokenLifespan
+    authorizationCodeGrantIdTokenLifespan
+    authorizationCodeGrantRefreshTokenLifespan
+    backChannelLogoutUri
+    clientCredentialsGrantAccessTokenLifespan
+    clientId
+    clientName
+    clientSecret
+    ClientSecretExpiresAt
+    clientUri
+    contacts
+    createdAt
+    frontchannelLogoutSessionRequired
+    frontchannelLogoutUri
+    grantTypes
+    implicitGrantAccessTokenLifespan
+    implicitGrantIdTokenLifespan
+    jwks
+    jwksUri
+    jwtBearerGrantAccessTokenLifespan
+    logoUri
+    metadata
+    owner
+    policyUri
+    postLogoutRedirectUris
+    redirectUris
+    responseTypes
+    scope
+    sectorIdentifierUri
+    subjectType
+    tokenEndpointAuthMethod
+    tokenEndpointAuthSigningAlgorithm
+    tosUri
+    updatedAt
+    userinfoSignedResponseAlgorithm
+  }
+}
+
+mutation{
+  createOAuth2Client(
+    clientName: "test9"
+    grantTypes: [
+      "client_credentials"
+      "implicit"
+      "authorization_code"
+      "refresh_token"
+    ]
+    loginBindings: {
+      users: [
+        "c116abb8-046a-418a-a44e-b705a8fec0aa"
+        "2294d0d3-3836-4c0d-93a7-2e3862ec9fdc"
+      ]
+      groups: [
+        "test"
+      ]
+    }
+    redirectUris: [
+        "https://grafana.mimir-cloud.pluraldev.sh/login/generic_oauth"
+      ],
+    responseTypes: [
+        "id_token",
+        "code",
+        "token"
+      ],
+    scope: "openid profile offline_access email read write",
+  ){
+    allowedCorsOrigins
+    audience
+    authorizationCodeGrantAccessTokenLifespan
+    authorizationCodeGrantIdTokenLifespan
+    authorizationCodeGrantRefreshTokenLifespan
+    backChannelLogoutUri
+    clientCredentialsGrantAccessTokenLifespan
+    clientId
+    clientName
+    clientSecret
+    ClientSecretExpiresAt
+    clientUri
+    contacts
+    createdAt
+    frontchannelLogoutSessionRequired
+    frontchannelLogoutUri
+    grantTypes
+    implicitGrantAccessTokenLifespan
+    implicitGrantIdTokenLifespan
+    jwks
+    jwksUri
+    jwtBearerGrantAccessTokenLifespan
+    logoUri
+    metadata
+    owner
+    policyUri
+    postLogoutRedirectUris
+    redirectUris
+    responseTypes
+    scope
+    sectorIdentifierUri
+    subjectType
+    tokenEndpointAuthMethod
+    tokenEndpointAuthSigningAlgorithm
+    tosUri
+    updatedAt
+    userinfoSignedResponseAlgorithm
+    organization{
+      name
+    }
+    loginBindings{
+      users{
+        id
+        email
+      }
+      groups{
+        name
+      }
+    }
+  }
+}
+
+mutation{
+  updateOAuth2Client(
+    clientId: "e02d2e49-fa7c-41d6-8263-5a6def3387cf"
+    clientName: "test9"
+    grantTypes: [
+      "client_credentials"
+      "implicit"
+      "authorization_code"
+      "refresh_token"
+    ]
+    loginBindings: {
+      users: [
+        "2294d0d3-3836-4c0d-93a7-2e3862ec9fdc"
+        "b956cfd9-e516-4315-8981-2daae30e3d3b"
+      ]
+    }
+    redirectUris: [
+        "https://grafana.mimir-cloud.pluraldev.sh/login/generic_oauth"
+      	"https://grafana.test.sh/login/generic_oauth"
+      ],
+    responseTypes: [
+        "id_token",
+        "code",
+        "token"
+      ],
+    scope: "openid profile offline_access email read write",
+  ){
+    allowedCorsOrigins
+    audience
+    authorizationCodeGrantAccessTokenLifespan
+    authorizationCodeGrantIdTokenLifespan
+    authorizationCodeGrantRefreshTokenLifespan
+    backChannelLogoutUri
+    clientCredentialsGrantAccessTokenLifespan
+    clientId
+    clientName
+    clientSecret
+    ClientSecretExpiresAt
+    clientUri
+    contacts
+    createdAt
+    frontchannelLogoutSessionRequired
+    frontchannelLogoutUri
+    grantTypes
+    implicitGrantAccessTokenLifespan
+    implicitGrantIdTokenLifespan
+    jwks
+    jwksUri
+    jwtBearerGrantAccessTokenLifespan
+    logoUri
+    metadata
+    owner
+    policyUri
+    postLogoutRedirectUris
+    redirectUris
+    responseTypes
+    scope
+    sectorIdentifierUri
+    subjectType
+    tokenEndpointAuthMethod
+    tokenEndpointAuthSigningAlgorithm
+    tosUri
+    updatedAt
+    userinfoSignedResponseAlgorithm
+    organization{
+      name
+    }
+    loginBindings{
+      users{
+        id
+        email
+      }
+      groups{
+        name
+      }
+    }
+  }
+}
+
+mutation{
+  deleteOAuth2Client(clientId: "0fe5bc42-4274-476a-844a-0d166e27ed21"){
+    clientId
+  }
+}
+
+query{
+  listObservabilityTenants{
+    name
+    viewers{
+      users{
+        id
+        email
+      }
+      groups{
+        name
+      }
+      oauth2Clients{
+        clientId
+        clientName
+      }
+    }
+    editors{
+      users{
+        id
+        email
+      }
+      groups{
+        name
+      }
+    }
+  }
+}
+
+
+mutation{
+  observabilityTenant(
+    name: "test"
+  ){
+    name
+    viewers{
+      users{
+        id
+        email
+      }
+      groups{
+        name
+      }
+      oauth2Clients{
+        clientId
+        clientName
+      }
+    }
+    editors{
+      users{
+        id
+        email
+      }
+      groups{
+        name
+      }
+    }
+  }
+}
+
+mutation{
+  observabilityTenant(
+    name: "test"
+    viewers: {
+      users: [
+        "2294d0d3-3836-4c0d-93a7-2e3862ec9fdc"
+        "b956cfd9-e516-4315-8981-2daae30e3d3b"
+      ]
+      groups: [
+        "test"
+      ]
+      oauth2Clients: [
+        "379d6b0a-65a9-44b3-b390-b8cdae6fcd63"
+        "3ac4b2ef-77b4-4075-a8c4-791576fd644a"
+      ]
+    }
+    editors: {
+      users: [
+        "2294d0d3-3836-4c0d-93a7-2e3862ec9fdc"
+        "b956cfd9-e516-4315-8981-2daae30e3d3b"
+      ]
+      groups: [
+        "MainCluster"
+        "test"
+      ]
+    }
+  ){
+    name
+    viewers{
+      users{
+        id
+        email
+      }
+      groups{
+        name
+      }
+      oauth2Clients{
+        clientId
+        clientName
+      }
+    }
+    editors{
+      users{
+        id
+        email
+      }
+      groups{
+        name
+      }
+    }
+  }
+}
+
+query{
+  getObservabilityTenant(name: "test"){
+    name
+    viewers{
+      users{
+        id
+        email
+      }
+      groups{
+        name
+      }
+      oauth2Clients{
+        clientId
+        clientName
+      }
+    }
+    editors{
+      users{
+        id
+        email
+      }
+      groups{
+        name
+      }
+    }
+  }
+}
+
+mutation{
+  deleteObservabilityTenant(name: "test"){
+    name
+  }
+}

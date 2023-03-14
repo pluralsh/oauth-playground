@@ -1,6 +1,6 @@
 "Representation a group of users."
 type Group {
-  "The name of the group."
+  "The unique name of the group."
   name: String!
 
   "The users that are admins of the organization."
@@ -16,7 +16,7 @@ extend type Query {
 }
 
 extend type Mutation {
-  "Create a new group."
+  "Create or update a group."
   group(
     "The unique name of the group."
     name: String!

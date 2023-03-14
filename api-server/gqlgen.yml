@@ -86,3 +86,23 @@ models:
     fields:
       admins:
         resolver: true
+  ObservabilityTenant:
+    fields:
+      viewers:
+        resolver: true
+      editors:
+        resolver: true
+  ObservabilityTenantViewers:
+    fields:
+      users:
+        resolver: true
+      groups:
+        resolver: true
+      oauth2Clients:
+        resolver: true
+  ObservabilityTenantEditors:
+    fields:
+      users:
+        resolver: true
+      groups:
+        resolver: true

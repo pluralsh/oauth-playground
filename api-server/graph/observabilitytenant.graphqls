@@ -1,10 +1,7 @@
 "Representation a tenant in the Grafana observability stack where metrics, logs and traces can be sent to or retrieved from."
 type ObservabilityTenant {
-  "The unique ID of the tenant."
-  id: ID!
-
-  "The name of the tenant."
-  name: String
+  "The unique name of the tenant."
+  name: String!
 
   "The organization that the tenant belongs to."
   organization: Organization!
@@ -37,7 +34,49 @@ type ObservabilityTenantEditors {
   groups: [Group!]
 }
 
+input ObservabilityTenantViewersInput {
+  "The IDs of users that can view a tenant."
+  users: [String!]
+
+  "The names of groups that can view a tenant."
+  groups: [String!]
+
+  "The clientIDs oauth2 clients that can send data a tenant."
+  oauth2Clients: [String!]
+}
+
+input ObservabilityTenantEditorsInput {
+  "The IDs of users that can edit a tenant."
+  users: [String!]
+
+  "The names of groups that can edit a tenant."
+  groups: [String!]
+}
+
 extend type Query {
   "Get a list of all users."
   listObservabilityTenants: [ObservabilityTenant!]! @checkPermissions @isAuthenticated
+
+  getObservabilityTenant(
+    "The name of the tenant."
+    name: String!
+  ): ObservabilityTenant! @checkPermissions @isAuthenticated
+}
+
+extend type Mutation {
+  "Create or update an observability tenant."
+  observabilityTenant(
+    "The name of the tenant."
+    name: String!
+    "The users, groups or OAuth 2.0 client that have access to the observability tenant."
+    viewers: ObservabilityTenantViewersInput
+    "The users and groups that can edit a tenant to add users, groups or oauth2 clients to it."
+    editors: ObservabilityTenantEditorsInput
+  ): ObservabilityTenant! @checkPermissions @isAuthenticated
+
+  "Delete an observability tenant."
+  deleteObservabilityTenant(
+    "The name of the tenant."
+    name: String!
+  ): ObservabilityTenant! @checkPermissions @isAuthenticated
 }

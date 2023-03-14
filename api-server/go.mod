@@ -3,7 +3,6 @@ module github.com/pluralsh/oauth-playground/api-server
 go 1.19
 
 require (
-	entgo.io/ent v0.11.8
 	github.com/99designs/gqlgen v0.17.24
 	github.com/go-chi/chi/v5 v5.0.8
 	github.com/go-logr/logr v1.2.3
@@ -15,15 +14,8 @@ require (
 )
 
 require (
-	ariga.io/atlas v0.9.1-0.20230119145809-92243f7c55cb // indirect
 	cloud.google.com/go/compute v1.15.1 // indirect
 	cloud.google.com/go/compute/metadata v0.2.3 // indirect
-	github.com/agext/levenshtein v1.2.1 // indirect
-	github.com/apparentlymart/go-textseg/v13 v13.0.0 // indirect
-	github.com/go-openapi/inflect v0.19.0 // indirect
-	github.com/hashicorp/hcl/v2 v2.13.0 // indirect
-	github.com/mitchellh/go-wordwrap v1.0.0 // indirect
-	github.com/zclconf/go-cty v1.8.0 // indirect
 	google.golang.org/genproto v0.0.0-20230110181048-76db0878b65f // indirect
 )
 
@@ -46,7 +38,7 @@ require (
 	github.com/google/gnostic v0.5.7-v3refs // indirect
 	github.com/google/go-cmp v0.5.9 // indirect
 	github.com/google/gofuzz v1.1.0 // indirect
-	github.com/google/uuid v1.3.0
+	github.com/google/uuid v1.3.0 // indirect
 	github.com/gorilla/websocket v1.5.0 // indirect
 	github.com/hashicorp/golang-lru v0.5.4 // indirect
 	github.com/imdario/mergo v0.3.13 // indirect

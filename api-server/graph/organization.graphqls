@@ -1,6 +1,6 @@
 "Representation an Organization in the auth stack."
 type Organization {
-  "The name of the organization."
+  "The unique name of the organization."
   name: String!
 
   "The users that are admins of the organization."

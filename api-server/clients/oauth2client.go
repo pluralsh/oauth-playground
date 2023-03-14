@@ -12,6 +12,13 @@ import (
 	"github.com/pluralsh/oauth-playground/api-server/graph/model"
 )
 
+type HydraOperation string
+
+const (
+	HydraOperationCreate HydraOperation = "create"
+	HydraOperationUpdate HydraOperation = "update"
+)
+
 // ListOAuth2Clients is the resolver for the listOAuth2Clients field.
 func (c *ClientWrapper) ListOAuth2Clients(ctx context.Context) ([]*model.OAuth2Client, error) {
 	log := c.Log.WithName("ListOAuth2Clients")
@@ -117,13 +124,6 @@ func (c *ClientWrapper) GetOAuth2ClientLoginBindings(ctx context.Context, id str
 	log.Info("Success getting group members in keto")
 	return outputLoginBindings, nil
 }
-
-type HydraOperation string
-
-const (
-	HydraOperationCreate HydraOperation = "create"
-	HydraOperationUpdate HydraOperation = "update"
-)
 
 func (c *ClientWrapper) CreateOAuth2Client(ctx context.Context, mode HydraOperation, allowedCorsOrigins []string, audience []string, authorizationCodeGrantAccessTokenLifespan *string, authorizationCodeGrantIDTokenLifespan *string, authorizationCodeGrantRefreshTokenLifespan *string, backChannelLogoutSessionRequired *bool, backChannelLogoutURI *string, clientCredentialsGrantAccessTokenLifespan *string, clientID *string, clientName *string, clientSecret *string, clientSecretExpiresAt *int64, clientURI *string, contacts []string, frontchannelLogoutSessionRequired *bool, frontchannelLogoutURI *string, grantTypes []string, implicitGrantAccessTokenLifespan *string, implicitGrantIDTokenLifespan *string, jwks map[string]interface{}, jwksURI *string, jwtBearerGrantAccessTokenLifespan *string, logoURI *string, metadata map[string]interface{}, policyURI *string, postLogoutRedirectUris []string, redirectUris []string, responseTypes []string, scope *string, sectorIdentifierURI *string, subjectType *string, tokenEndpointAuthMethod *string, tokenEndpointAuthSigningAlgorithm *string, tosURI *string, userinfoSignedResponseAlgorithm *string, loginBindings *model.LoginBindingsInput) (*model.OAuth2Client, error) {
 	log := c.Log.WithName("CreateOAuth2Client").WithValues("Name", clientName, "ID", clientID, "Mode", mode)
@@ -314,7 +314,7 @@ func (c *ClientWrapper) DeleteOAuth2ClientInKeto(ctx context.Context, id string)
 
 // function that determines which users or groups to add or remove from the login bindings of an oauth2 client
 func (c *ClientWrapper) LoginBindingsChangeset(ctx context.Context, clientId string, bindings *model.LoginBindingsInput) (usersToAdd []string, usersToRemove []string, groupsToAdd []string, groupsToRemove []string, err error) {
-	currentUsers, currentGroups, err := c.GetLoginBindingsInKeto(ctx, clientId)
+	currentUsers, currentGroups, err := c.GetLoginBindingsInKeto(ctx, clientId) // TODO: replace with GetOAuth2ClientLoginBindings
 
 	if err != nil {
 		return nil, nil, nil, nil, fmt.Errorf("failed to get current members: %w", err)
@@ -512,6 +512,8 @@ func (c *ClientWrapper) RemoveGroupFromLoginBindings(ctx context.Context, client
 // function that get the current users and groups in the login bindings of an oauth2 client
 func (c *ClientWrapper) GetLoginBindingsInKeto(ctx context.Context, clientID string) ([]string, []string, error) {
 	log := c.Log.WithName("GetLoginBindingsInKeto").WithValues("ClientID", clientID)
+
+	// TODO: remove since it is a duplicate of GetOAuth2ClientLoginBindings
 
 	query := rts.RelationQuery{
 		Namespace: px.Ptr("OAuth2Client"),
