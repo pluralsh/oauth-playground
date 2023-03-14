@@ -1,0 +1,39 @@
+import { useEffect } from 'react';
+import { Box, CircularProgress, Alert } from '@mui/material';
+import { useMutation } from '@apollo/client';
+import { useLocation } from 'react-router-dom';
+import qs from 'query-string';
+import { setToken } from '../helpers/auth';
+import { localized } from '../helpers/hostname';
+import { Mutation, MutationOauthCallbackArgs } from '../generated/graphql';
+import { CALLBACK } from '../graphql/mutations';
+
+type QueryString = {
+  code: string;
+};
+
+export function OAuthCallback() {
+  const location = useLocation();
+  const { code } = qs.parse(location.search) as QueryString;
+  const [mutation, { error, loading }] = useMutation<
+    Mutation,
+    MutationOauthCallbackArgs
+  >(CALLBACK, {
+    variables: { host: localized('/oidc/callback'), code },
+    onCompleted: (result: Mutation) => {
+      setToken(result.oauthCallback.idToken);
+      window.location.href = '/';
+    }
+  });
+
+  useEffect(() => {
+    mutation();
+  }, [code]);
+
+  return (
+    <Box height="100vh" width="100vw">
+      {loading && <CircularProgress />}
+      {error && <Alert severity="error">{error}</Alert>}
+    </Box>
+  );
+}

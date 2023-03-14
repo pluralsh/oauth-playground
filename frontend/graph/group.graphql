@@ -1,0 +1,25 @@
+query ListGroups {
+  listGroups{
+    name
+    members{
+      id
+      email
+      name{
+        first
+        last
+      }
+      # organization{
+      #   name
+      # }
+    }
+    # organization{
+    #   name
+    # }
+  }
+}
+
+mutation DeleteGroup($name: String!) {
+  deleteGroup(name: $name){
+    name
+  }
+}
