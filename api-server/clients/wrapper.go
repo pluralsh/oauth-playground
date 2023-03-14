@@ -7,8 +7,9 @@ import (
 )
 
 type ClientWrapper struct {
-	KratosClient *kratos.APIClient
-	KetoClient   *KetoGrpcClient
-	HydraClient  *hydra.APIClient
-	Log          logr.Logger
+	KratosAdminClient  *kratos.APIClient
+	KratosPublicClient *kratos.APIClient
+	KetoClient         *KetoGrpcClient
+	HydraClient        *hydra.APIClient
+	Log                logr.Logger
 }

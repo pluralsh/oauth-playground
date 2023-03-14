@@ -47,7 +47,7 @@ func (a *AuthenticationSessionRequest) Render(w http.ResponseWriter, r *http.Req
 }
 
 func (h *Handler) HydrateObservabilityTenants(w http.ResponseWriter, r *http.Request) {
-	log := h.C.Log.WithName("HydrateObservabilityTenants")
+	log := h.Log.WithName("HydrateObservabilityTenants")
 	data := &AuthenticationSessionRequest{}
 	if err := render.Bind(r, data); err != nil {
 		render.Render(w, r, ErrInvalidRequest(err))
@@ -65,7 +65,7 @@ func (h *Handler) HydrateObservabilityTenants(w http.ResponseWriter, r *http.Req
 }
 
 func (h *Handler) NewAuthenticationSessionResponse(session *AuthenticationSessionRequest) *AuthenticationSessionRequest {
-	log := h.C.Log.WithName("NewAuthenticationSessionResponse")
+	log := h.Log.WithName("NewAuthenticationSessionResponse")
 	tenants, err := h.getUserTenants(session.Subject)
 	if err != nil {
 		log.Error(err, "Error getting tenants")

@@ -21,7 +21,6 @@ import (
 
 	_ "github.com/mattn/go-sqlite3"
 
-	kratos "github.com/ory/kratos-client-go"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
 )
@@ -52,6 +51,12 @@ func main() {
 		panic(err)
 	}
 
+	kratosPublicClient, err := clients.NewKratosPublicClient()
+	if err != nil {
+		setupLog.Error(err, "An admin address for kratos must be configured")
+		panic(err)
+	}
+
 	conndetails := clients.NewKetoConnectionDetailsFromEnv()
 	ketoClient, err := clients.NewKetoGrpcClient(context.Background(), conndetails)
 	if err != nil {
@@ -66,10 +71,11 @@ func main() {
 	}
 
 	clientWrapper := &clients.ClientWrapper{
-		KratosClient: kratosAdminClient,
-		KetoClient:   ketoClient,
-		HydraClient:  hydraAdminClient,
-		Log:          ctrl.Log.WithName("clients"),
+		KratosAdminClient:  kratosAdminClient,
+		KratosPublicClient: kratosPublicClient,
+		KetoClient:         ketoClient,
+		HydraClient:        hydraAdminClient,
+		Log:                ctrl.Log.WithName("clients"),
 	}
 
 	resolver := &resolvers.Resolver{
@@ -81,15 +87,16 @@ func main() {
 	}
 
 	handlers := &handlers.Handler{
-		C: clientWrapper,
+		C:   clientWrapper,
+		Log: ctrl.Log.WithName("handlers"),
 	}
 
-	if err := serve(ctx, kratosAdminClient, resolver, directives, handlers); err != nil {
+	if err := serve(ctx, resolver, directives, handlers); err != nil {
 		setupLog.Error(err, "failed to serve")
 	}
 }
 
-func serve(ctx context.Context, kratosClient *kratos.APIClient, resolver *resolvers.Resolver, directives *directives.Directive, handlers *handlers.Handler) (err error) {
+func serve(ctx context.Context, resolver *resolvers.Resolver, directives *directives.Directive, handlers *handlers.Handler) (err error) {
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = defaultPort
@@ -97,7 +104,7 @@ func serve(ctx context.Context, kratosClient *kratos.APIClient, resolver *resolv
 
 	router := chi.NewRouter()
 
-	router.Use(handlers.Middleware(ctrl.Log.WithName("auth").WithName("middleware")))
+	router.Use(handlers.Middleware())
 
 	// Add CORS middleware around every request
 	// See https://github.com/rs/cors for full option listing

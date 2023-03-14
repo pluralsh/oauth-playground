@@ -15,7 +15,7 @@ import (
 func (c *ClientWrapper) GetUserFromId(ctx context.Context, id string) (*model.User, error) {
 	log := c.Log.WithName("User").WithValues("ID", id)
 
-	user, resp, err := c.KratosClient.IdentityApi.GetIdentity(ctx, id).Execute()
+	user, resp, err := c.KratosAdminClient.IdentityApi.GetIdentity(ctx, id).Execute()
 	if err != nil || resp.StatusCode != 200 {
 		log.Error(err, "failed to get user")
 		return nil, err
@@ -35,7 +35,7 @@ func (c *ClientWrapper) GetUserFromId(ctx context.Context, id string) (*model.Us
 // function that will list all users using the kratos api
 func (c *ClientWrapper) ListUsers(ctx context.Context) ([]*model.User, error) {
 	log := c.Log.WithName("ListUsers")
-	users, resp, err := c.KratosClient.IdentityApi.ListIdentities(ctx).Execute()
+	users, resp, err := c.KratosAdminClient.IdentityApi.ListIdentities(ctx).Execute()
 	if err != nil || resp.StatusCode != 200 {
 		log.Error(err, "failed to list users")
 		return nil, fmt.Errorf("failed to list users: %w", err)
@@ -102,7 +102,7 @@ func (c *ClientWrapper) CreateUser(ctx context.Context, email string, name *mode
 		}
 	}
 
-	kratosUser, resp, err := c.KratosClient.IdentityApi.CreateIdentity(ctx).CreateIdentityBody(
+	kratosUser, resp, err := c.KratosAdminClient.IdentityApi.CreateIdentity(ctx).CreateIdentityBody(
 		kratos.CreateIdentityBody{
 			SchemaId: "person",
 			Traits:   traits,
@@ -163,7 +163,7 @@ func (c *ClientWrapper) CreateUser(ctx context.Context, email string, name *mode
 func (c *ClientWrapper) DeleteUser(ctx context.Context, id string) (*model.User, error) {
 	log := c.Log.WithName("DeleteUser").WithValues("ID", id)
 
-	resp, err := c.KratosClient.IdentityApi.DeleteIdentity(ctx, id).Execute()
+	resp, err := c.KratosAdminClient.IdentityApi.DeleteIdentity(ctx, id).Execute()
 
 	if err != nil || resp.StatusCode != 204 {
 		log.Error(err, "failed to delete user")
@@ -226,7 +226,7 @@ func (c *ClientWrapper) UserExistsInKeto(ctx context.Context, id string) (bool, 
 func (c *ClientWrapper) CreateRecoveryLinkForIdentity(ctx context.Context, id string) (*string, error) {
 	log := c.Log.WithName("CreateRecoveryLinkForIdentity").WithValues("ID", id)
 
-	link, resp, err := c.KratosClient.IdentityApi.CreateRecoveryLinkForIdentity(ctx).CreateRecoveryLinkForIdentityBody(
+	link, resp, err := c.KratosAdminClient.IdentityApi.CreateRecoveryLinkForIdentity(ctx).CreateRecoveryLinkForIdentityBody(
 		kratos.CreateRecoveryLinkForIdentityBody{
 			IdentityId: id,
 		},

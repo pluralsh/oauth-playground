@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/go-logr/logr"
-
 	kratosClient "github.com/ory/kratos-client-go"
 )
 
@@ -48,9 +46,10 @@ type User struct {
 }
 
 // Middleware decodes the share session cookie and packs the session into context
-func (h *Handler) Middleware(log logr.Logger) func(http.Handler) http.Handler {
+func (h *Handler) Middleware() func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			log := h.Log.WithName("Middleware")
 
 			cookie, err := r.Cookie("ory_kratos_session")
 			// Allow unauthenticated users in
@@ -61,7 +60,7 @@ func (h *Handler) Middleware(log logr.Logger) func(http.Handler) http.Handler {
 
 			// log.Info(fmt.Sprintf("Cookie: %s", cookie.String()))
 
-			resp, req, err := h.C.KratosClient.FrontendApi.ToSession(context.Background()).Cookie(cookie.String()).Execute()
+			resp, req, err := h.C.KratosPublicClient.FrontendApi.ToSession(context.Background()).Cookie(cookie.String()).Execute()
 			if err != nil {
 				// TODO: should we return here?
 				log.Error(err, fmt.Sprintf("Error when calling `V0alpha2Api.ToSession``: %v\n", err))

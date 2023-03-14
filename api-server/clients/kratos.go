@@ -28,3 +28,18 @@ func NewKratosAdminClient() (*kratos.APIClient, error) {
 	kratosAdminClient := kratos.NewAPIClient(kratosAdminConfiguration)
 	return kratosAdminClient, nil
 }
+
+func NewKratosPublicClient() (*kratos.APIClient, error) {
+	kratosPublicUrl := os.Getenv(KratosEnvPublic)
+	if kratosPublicUrl == "" {
+		return nil, fmt.Errorf("No public address configured for kratos")
+	}
+	kratosPublicConfiguration := kratos.NewConfiguration()
+	kratosPublicConfiguration.Servers = []kratos.ServerConfiguration{
+		{
+			URL: kratosPublicUrl, // Kratos Public API
+		},
+	}
+	kratosPublicClient := kratos.NewAPIClient(kratosPublicConfiguration)
+	return kratosPublicClient, nil
+}
