@@ -144,28 +144,28 @@ func (c *ClientWrapper) CreateOAuth2Client(ctx context.Context, allowedCorsOrigi
 		}
 	}
 
-	usersToAdd, usersToRemove, groupsToAdd, groupsToRemove, err := c.LoginBindingsChangeset(ctx, *client.ClientId, loginBindings)
+	usersToAdd, usersToRemove, groupsToAdd, groupsToRemove, err := c.LoginBindingsChangeset(ctx, *createdClient.ClientId, loginBindings)
 	if err != nil {
 		log.Error(err, "Failed to get oauth2 client changeset")
 		return nil, err
 	}
 
-	if err := c.AddUsersToLoginBindings(ctx, *client.ClientId, usersToAdd); err != nil {
+	if err := c.AddUsersToLoginBindings(ctx, *createdClient.ClientId, usersToAdd); err != nil {
 		log.Error(err, "Failed to add users to oauth2 client bindings in keto")
 		// return nil, err // TODO: add some way to wrap errors
 	}
 
-	if err := c.RemoveUsersFromLoginBindings(ctx, *client.ClientId, usersToRemove); err != nil {
+	if err := c.RemoveUsersFromLoginBindings(ctx, *createdClient.ClientId, usersToRemove); err != nil {
 		log.Error(err, "Failed to remove users from oauth2 client bindings in keto")
 		// return nil, err // TODO: add some way to wrap errors
 	}
 
-	if err := c.AddGroupsToLoginBindings(ctx, *client.ClientId, groupsToAdd); err != nil {
+	if err := c.AddGroupsToLoginBindings(ctx, *createdClient.ClientId, groupsToAdd); err != nil {
 		log.Error(err, "Failed to add groups to oauth2 client bindings in keto")
 		// return nil, err // TODO: add some way to wrap errors
 	}
 
-	if err := c.RemoveGroupsFromLoginBindings(ctx, *client.ClientId, groupsToRemove); err != nil {
+	if err := c.RemoveGroupsFromLoginBindings(ctx, *createdClient.ClientId, groupsToRemove); err != nil {
 		log.Error(err, "Failed to remove groups from oauth2 client bindings in keto")
 		// return nil, err // TODO: add some way to wrap errors
 	}
