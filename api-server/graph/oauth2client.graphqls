@@ -180,10 +180,119 @@ extend type Mutation {
     clientCredentialsGrantAccessTokenLifespan: String
 
     "OAuth 2.0 Client Name. The human-readable name of the client to be presented to the end-user during authorization."
-    clientName: String!
+    clientName: String
 
     "OAuth 2.0 Client Secret. The secret will be included in the create request as cleartext, and then never again. The secret is kept in hashed format and is not recoverable once lost."
-    clientSecret: String!
+    clientSecret: String
+
+    "OAuth 2.0 Client Secret Expires At. The field is currently not supported and its value is always 0."
+    ClientSecretExpiresAt: Int
+
+    "OAuth 2.0 Client URI. ClientURI is a URL string of a web page providing information about the client. If present, the server SHOULD display this URL to the end-user in a clickable fashion."
+    clientUri: String
+
+    "OAuth 2.0 Client Contacts. Contacts is an array of strings representing ways to contact people responsible for this client, typically email addresses."
+    contacts: [String!]
+
+    "OpenID Connect Front-Channel Logout Session Required. Boolean value specifying whether the RP requires that iss (issuer) and sid (session ID) query parameters be included to identify the RP session with the OP when the frontchannel_logout_uri is used. If omitted, the default value is false."
+    frontchannelLogoutSessionRequired: Boolean
+
+    "OpenID Connect Front-Channel Logout URI. RP URL that will cause the RP to log itself out when rendered in an iframe by the OP."
+    frontchannelLogoutUri: String
+
+    grantTypes: [String!]
+
+    "Specify a time duration in milliseconds, seconds, minutes, hours. For example, 1h, 1m, 1s, 1ms."
+    implicitGrantAccessTokenLifespan: String
+
+    "Specify a time duration in milliseconds, seconds, minutes, hours. For example, 1h, 1m, 1s, 1ms."
+    implicitGrantIdTokenLifespan: String
+
+    "OAuth 2.0 Client JSON Web Key Set. Client's JSON Web Key Set [JWK] document, passed by value. The semantics of the jwks parameter are the same as the jwks_uri parameter, other than that the JWK Set is passed by value, rather than by reference. This parameter is intended only to be used by Clients that, for some reason, are unable to use the jwks_uri parameter, for instance, by native applications that might not have a location to host the contents of the JWK Set. If a Client can use jwks_uri, it MUST NOT use jwks. One significant downside of jwks is that it does not enable key rotation (which jwks_uri does, as described in Section 10 of OpenID Connect Core 1.0 [OpenID.Core]). The jwks_uri and jwks parameters MUST NOT be used together."
+    jwks: Map
+
+    "OAuth 2.0 Client JSON Web Key Set URI. Client's JSON Web Key Set [JWK] document URI, passed by reference. The semantics of the jwks_uri parameter are the same as the jwks parameter, other than that the JWK Set is passed by reference, rather than by value. The jwks_uri and jwks parameters MUST NOT be used together."
+    jwksUri: String
+
+    "Specify a time duration in milliseconds, seconds, minutes, hours. For example, 1h, 1m, 1s, 1ms."
+    jwtBearerGrantAccessTokenLifespan: String
+
+    "OAuth 2.0 Client Logo URI. A URL string referencing the client's logo."
+    logoUri: String
+
+    "OAuth 2.0 Client Metadata. Metadata is a map of key-value pairs that contain additional information about the client."
+    metadata: Map
+
+    "OAuth 2.0 Client Policy URI. PolicyURI is a URL string that points to a human-readable privacy policy document that describes how the deployment organization collects, uses, retains, and discloses personal data."
+    policyUri: String
+
+    "OAuth 2.0 Client Post Logout Redirect URIs. PostLogoutRedirectUris is an array of allowed URLs to which the RP is allowed to redirect the End-User's User Agent after a logout has been performed."
+    postLogoutRedirectUris: [String!]
+
+    "OAuth 2.0 Client Redirect URIs. RedirectUris is an array of allowed redirect URLs for the OAuth 2.0 Client."
+    redirectUris: [String!]
+
+    "OAuth 2.0 Client Response Types. ResponseTypes is an array of the OAuth 2.0 response type strings that the client can use at the Authorization Endpoint."
+    responseTypes: [String!]
+
+    "OAuth 2.0 Client Scope. Scope is a string containing a space-separated list of scope values (as described in Section 3.3 of OAuth 2.0 [RFC6749]) that the client can use when requesting access tokens."
+    scope: String
+
+    "OAuth 2.0 Client Sector Identifier URI. SectorIdentifierURI is a URL string using the https scheme referencing a file with a single JSON array of redirect_uri values."
+    sectorIdentifierUri: String
+
+    "OAuth 2.0 Client Subject Type. SubjectType requested for responses to this Client. The subject_types_supported Discovery parameter contains a list of the supported subject_type values for this server. Valid types include pairwise and public."
+    subjectType: String
+
+    "OAuth 2.0 Client Token Endpoint Auth Method. TokenEndpointAuthMethod is the requested Client Authentication method for the Token Endpoint. The token_endpoint_auth_methods_supported Discovery parameter contains a list of the authentication methods supported by this server. Valid types include client_secret_post, client_secret_basic, private_key_jwt, and none."
+    tokenEndpointAuthMethod: String
+
+    "OAuth 2.0 Client Token Endpoint Auth Signing Algorithm. TokenEndpointAuthSigningAlgorithm is the requested Client Authentication signing algorithm for the Token Endpoint. The token_endpoint_auth_signing_alg_values_supported Discovery parameter contains a list of the supported signing algorithms for the token endpoint."
+    tokenEndpointAuthSigningAlgorithm: String
+
+    "OAuth 2.0 Client Terms of Service URI. A URL string pointing to a human-readable terms of service document for the client that describes a contractual relationship between the end-user and the client that the end-user accepts when authorizing the client."
+    tosUri: String
+
+    "OpenID Connect Userinfo Signed Response Algorithm. UserInfoSignedResponseAlg is a string containing the JWS signing algorithm (alg) parameter required for signing UserInfo Responses. The value none MAY be used, which indicates that the UserInfo Response will not be signed. The alg value RS256 MUST be used unless support for RS256 has been explicitly disabled. If support for RS256 has been disabled, the value none MUST be used."
+    userinfoSignedResponseAlgorithm: String
+
+    "The users and groups that are allowed to login with this OAuth2 Client."
+    loginBindings: LoginBindingsInput
+  ): OAuth2Client! @checkPermissions @isAuthenticated
+
+  updateOAuth2Client(
+    "OAuth 2.0 Client Allowed CORS Origins. AllowedCORSOrigins is an array of allowed CORS origins. If the array is empty, the value of the first element is considered valid."
+    allowedCorsOrigins: [String!]
+
+    "OAuth 2.0 Client Audience. Audience is an array of URLs that the OAuth 2.0 Client is allowed to request tokens for."
+    audience: [String!]
+
+    "Specify a time duration in milliseconds, seconds, minutes, hours. For example, 1h, 1m, 1s, 1ms."
+    authorizationCodeGrantAccessTokenLifespan: String
+
+    "Specify a time duration in milliseconds, seconds, minutes, hours. For example, 1h, 1m, 1s, 1ms."
+    authorizationCodeGrantIdTokenLifespan: String
+
+    "Specify a time duration in milliseconds, seconds, minutes, hours. For example, 1h, 1m, 1s, 1ms."
+    authorizationCodeGrantRefreshTokenLifespan: String
+
+    "OpenID Connect Back-Channel Logout Session Required  Boolean value specifying whether the RP requires that a sid (session ID) Claim be included in the Logout Token to identify the RP session with the OP when the backchannel_logout_uri is used. If omitted, the default value is false."
+    backChannelLogoutSessionRequired: Boolean
+
+    "OpenID Connect Back-Channel Logout URI. RP URL that will cause the RP to log itself out when sent a Logout Token by the OP."
+    backChannelLogoutUri: String
+
+    "Specify a time duration in milliseconds, seconds, minutes, hours. For example, 1h, 1m, 1s, 1ms."
+    clientCredentialsGrantAccessTokenLifespan: String
+
+    "OAuth 2.0 Client ID. The ID is autogenerated and immutable."
+    clientId: String!
+
+    "OAuth 2.0 Client Name. The human-readable name of the client to be presented to the end-user during authorization."
+    clientName: String
+
+    "OAuth 2.0 Client Secret. The secret will be included in the create request as cleartext, and then never again. The secret is kept in hashed format and is not recoverable once lost."
+    clientSecret: String
 
     "OAuth 2.0 Client Secret Expires At. The field is currently not supported and its value is always 0."
     ClientSecretExpiresAt: Int

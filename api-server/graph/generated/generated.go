@@ -63,12 +63,13 @@ type ComplexityRoot struct {
 	}
 
 	Mutation struct {
-		CreateOAuth2Client func(childComplexity int, allowedCorsOrigins []string, audience []string, authorizationCodeGrantAccessTokenLifespan *string, authorizationCodeGrantIDTokenLifespan *string, authorizationCodeGrantRefreshTokenLifespan *string, backChannelLogoutSessionRequired *bool, backChannelLogoutURI *string, clientCredentialsGrantAccessTokenLifespan *string, clientName string, clientSecret string, clientSecretExpiresAt *int64, clientURI *string, contacts []string, frontchannelLogoutSessionRequired *bool, frontchannelLogoutURI *string, grantTypes []string, implicitGrantAccessTokenLifespan *string, implicitGrantIDTokenLifespan *string, jwks map[string]interface{}, jwksURI *string, jwtBearerGrantAccessTokenLifespan *string, logoURI *string, metadata map[string]interface{}, policyURI *string, postLogoutRedirectUris []string, redirectUris []string, responseTypes []string, scope *string, sectorIdentifierURI *string, subjectType *string, tokenEndpointAuthMethod *string, tokenEndpointAuthSigningAlgorithm *string, tosURI *string, userinfoSignedResponseAlgorithm *string, loginBindings *model.LoginBindingsInput) int
+		CreateOAuth2Client func(childComplexity int, allowedCorsOrigins []string, audience []string, authorizationCodeGrantAccessTokenLifespan *string, authorizationCodeGrantIDTokenLifespan *string, authorizationCodeGrantRefreshTokenLifespan *string, backChannelLogoutSessionRequired *bool, backChannelLogoutURI *string, clientCredentialsGrantAccessTokenLifespan *string, clientName *string, clientSecret *string, clientSecretExpiresAt *int64, clientURI *string, contacts []string, frontchannelLogoutSessionRequired *bool, frontchannelLogoutURI *string, grantTypes []string, implicitGrantAccessTokenLifespan *string, implicitGrantIDTokenLifespan *string, jwks map[string]interface{}, jwksURI *string, jwtBearerGrantAccessTokenLifespan *string, logoURI *string, metadata map[string]interface{}, policyURI *string, postLogoutRedirectUris []string, redirectUris []string, responseTypes []string, scope *string, sectorIdentifierURI *string, subjectType *string, tokenEndpointAuthMethod *string, tokenEndpointAuthSigningAlgorithm *string, tosURI *string, userinfoSignedResponseAlgorithm *string, loginBindings *model.LoginBindingsInput) int
 		CreateUser         func(childComplexity int, email string, name *model.NameInput) int
 		DeleteGroup        func(childComplexity int, name string) int
 		DeleteUser         func(childComplexity int, id string) int
 		Group              func(childComplexity int, name string, members []string) int
 		Organization       func(childComplexity int, name string, admins []*model.Admin) int
+		UpdateOAuth2Client func(childComplexity int, allowedCorsOrigins []string, audience []string, authorizationCodeGrantAccessTokenLifespan *string, authorizationCodeGrantIDTokenLifespan *string, authorizationCodeGrantRefreshTokenLifespan *string, backChannelLogoutSessionRequired *bool, backChannelLogoutURI *string, clientCredentialsGrantAccessTokenLifespan *string, clientID string, clientName *string, clientSecret *string, clientSecretExpiresAt *int64, clientURI *string, contacts []string, frontchannelLogoutSessionRequired *bool, frontchannelLogoutURI *string, grantTypes []string, implicitGrantAccessTokenLifespan *string, implicitGrantIDTokenLifespan *string, jwks map[string]interface{}, jwksURI *string, jwtBearerGrantAccessTokenLifespan *string, logoURI *string, metadata map[string]interface{}, policyURI *string, postLogoutRedirectUris []string, redirectUris []string, responseTypes []string, scope *string, sectorIdentifierURI *string, subjectType *string, tokenEndpointAuthMethod *string, tokenEndpointAuthSigningAlgorithm *string, tosURI *string, userinfoSignedResponseAlgorithm *string, loginBindings *model.LoginBindingsInput) int
 	}
 
 	Name struct {
@@ -175,7 +176,8 @@ type MutationResolver interface {
 	DeleteUser(ctx context.Context, id string) (*model.User, error)
 	Group(ctx context.Context, name string, members []string) (*model.Group, error)
 	DeleteGroup(ctx context.Context, name string) (*model.Group, error)
-	CreateOAuth2Client(ctx context.Context, allowedCorsOrigins []string, audience []string, authorizationCodeGrantAccessTokenLifespan *string, authorizationCodeGrantIDTokenLifespan *string, authorizationCodeGrantRefreshTokenLifespan *string, backChannelLogoutSessionRequired *bool, backChannelLogoutURI *string, clientCredentialsGrantAccessTokenLifespan *string, clientName string, clientSecret string, clientSecretExpiresAt *int64, clientURI *string, contacts []string, frontchannelLogoutSessionRequired *bool, frontchannelLogoutURI *string, grantTypes []string, implicitGrantAccessTokenLifespan *string, implicitGrantIDTokenLifespan *string, jwks map[string]interface{}, jwksURI *string, jwtBearerGrantAccessTokenLifespan *string, logoURI *string, metadata map[string]interface{}, policyURI *string, postLogoutRedirectUris []string, redirectUris []string, responseTypes []string, scope *string, sectorIdentifierURI *string, subjectType *string, tokenEndpointAuthMethod *string, tokenEndpointAuthSigningAlgorithm *string, tosURI *string, userinfoSignedResponseAlgorithm *string, loginBindings *model.LoginBindingsInput) (*model.OAuth2Client, error)
+	CreateOAuth2Client(ctx context.Context, allowedCorsOrigins []string, audience []string, authorizationCodeGrantAccessTokenLifespan *string, authorizationCodeGrantIDTokenLifespan *string, authorizationCodeGrantRefreshTokenLifespan *string, backChannelLogoutSessionRequired *bool, backChannelLogoutURI *string, clientCredentialsGrantAccessTokenLifespan *string, clientName *string, clientSecret *string, clientSecretExpiresAt *int64, clientURI *string, contacts []string, frontchannelLogoutSessionRequired *bool, frontchannelLogoutURI *string, grantTypes []string, implicitGrantAccessTokenLifespan *string, implicitGrantIDTokenLifespan *string, jwks map[string]interface{}, jwksURI *string, jwtBearerGrantAccessTokenLifespan *string, logoURI *string, metadata map[string]interface{}, policyURI *string, postLogoutRedirectUris []string, redirectUris []string, responseTypes []string, scope *string, sectorIdentifierURI *string, subjectType *string, tokenEndpointAuthMethod *string, tokenEndpointAuthSigningAlgorithm *string, tosURI *string, userinfoSignedResponseAlgorithm *string, loginBindings *model.LoginBindingsInput) (*model.OAuth2Client, error)
+	UpdateOAuth2Client(ctx context.Context, allowedCorsOrigins []string, audience []string, authorizationCodeGrantAccessTokenLifespan *string, authorizationCodeGrantIDTokenLifespan *string, authorizationCodeGrantRefreshTokenLifespan *string, backChannelLogoutSessionRequired *bool, backChannelLogoutURI *string, clientCredentialsGrantAccessTokenLifespan *string, clientID string, clientName *string, clientSecret *string, clientSecretExpiresAt *int64, clientURI *string, contacts []string, frontchannelLogoutSessionRequired *bool, frontchannelLogoutURI *string, grantTypes []string, implicitGrantAccessTokenLifespan *string, implicitGrantIDTokenLifespan *string, jwks map[string]interface{}, jwksURI *string, jwtBearerGrantAccessTokenLifespan *string, logoURI *string, metadata map[string]interface{}, policyURI *string, postLogoutRedirectUris []string, redirectUris []string, responseTypes []string, scope *string, sectorIdentifierURI *string, subjectType *string, tokenEndpointAuthMethod *string, tokenEndpointAuthSigningAlgorithm *string, tosURI *string, userinfoSignedResponseAlgorithm *string, loginBindings *model.LoginBindingsInput) (*model.OAuth2Client, error)
 	Organization(ctx context.Context, name string, admins []*model.Admin) (*model.Organization, error)
 }
 type OAuth2ClientResolver interface {
@@ -256,7 +258,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateOAuth2Client(childComplexity, args["allowedCorsOrigins"].([]string), args["audience"].([]string), args["authorizationCodeGrantAccessTokenLifespan"].(*string), args["authorizationCodeGrantIdTokenLifespan"].(*string), args["authorizationCodeGrantRefreshTokenLifespan"].(*string), args["backChannelLogoutSessionRequired"].(*bool), args["backChannelLogoutUri"].(*string), args["clientCredentialsGrantAccessTokenLifespan"].(*string), args["clientName"].(string), args["clientSecret"].(string), args["ClientSecretExpiresAt"].(*int64), args["clientUri"].(*string), args["contacts"].([]string), args["frontchannelLogoutSessionRequired"].(*bool), args["frontchannelLogoutUri"].(*string), args["grantTypes"].([]string), args["implicitGrantAccessTokenLifespan"].(*string), args["implicitGrantIdTokenLifespan"].(*string), args["jwks"].(map[string]interface{}), args["jwksUri"].(*string), args["jwtBearerGrantAccessTokenLifespan"].(*string), args["logoUri"].(*string), args["metadata"].(map[string]interface{}), args["policyUri"].(*string), args["postLogoutRedirectUris"].([]string), args["redirectUris"].([]string), args["responseTypes"].([]string), args["scope"].(*string), args["sectorIdentifierUri"].(*string), args["subjectType"].(*string), args["tokenEndpointAuthMethod"].(*string), args["tokenEndpointAuthSigningAlgorithm"].(*string), args["tosUri"].(*string), args["userinfoSignedResponseAlgorithm"].(*string), args["loginBindings"].(*model.LoginBindingsInput)), true
+		return e.complexity.Mutation.CreateOAuth2Client(childComplexity, args["allowedCorsOrigins"].([]string), args["audience"].([]string), args["authorizationCodeGrantAccessTokenLifespan"].(*string), args["authorizationCodeGrantIdTokenLifespan"].(*string), args["authorizationCodeGrantRefreshTokenLifespan"].(*string), args["backChannelLogoutSessionRequired"].(*bool), args["backChannelLogoutUri"].(*string), args["clientCredentialsGrantAccessTokenLifespan"].(*string), args["clientName"].(*string), args["clientSecret"].(*string), args["ClientSecretExpiresAt"].(*int64), args["clientUri"].(*string), args["contacts"].([]string), args["frontchannelLogoutSessionRequired"].(*bool), args["frontchannelLogoutUri"].(*string), args["grantTypes"].([]string), args["implicitGrantAccessTokenLifespan"].(*string), args["implicitGrantIdTokenLifespan"].(*string), args["jwks"].(map[string]interface{}), args["jwksUri"].(*string), args["jwtBearerGrantAccessTokenLifespan"].(*string), args["logoUri"].(*string), args["metadata"].(map[string]interface{}), args["policyUri"].(*string), args["postLogoutRedirectUris"].([]string), args["redirectUris"].([]string), args["responseTypes"].([]string), args["scope"].(*string), args["sectorIdentifierUri"].(*string), args["subjectType"].(*string), args["tokenEndpointAuthMethod"].(*string), args["tokenEndpointAuthSigningAlgorithm"].(*string), args["tosUri"].(*string), args["userinfoSignedResponseAlgorithm"].(*string), args["loginBindings"].(*model.LoginBindingsInput)), true
 
 	case "Mutation.createUser":
 		if e.complexity.Mutation.CreateUser == nil {
@@ -317,6 +319,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.Organization(childComplexity, args["name"].(string), args["admins"].([]*model.Admin)), true
+
+	case "Mutation.updateOAuth2Client":
+		if e.complexity.Mutation.UpdateOAuth2Client == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateOAuth2Client_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateOAuth2Client(childComplexity, args["allowedCorsOrigins"].([]string), args["audience"].([]string), args["authorizationCodeGrantAccessTokenLifespan"].(*string), args["authorizationCodeGrantIdTokenLifespan"].(*string), args["authorizationCodeGrantRefreshTokenLifespan"].(*string), args["backChannelLogoutSessionRequired"].(*bool), args["backChannelLogoutUri"].(*string), args["clientCredentialsGrantAccessTokenLifespan"].(*string), args["clientId"].(string), args["clientName"].(*string), args["clientSecret"].(*string), args["ClientSecretExpiresAt"].(*int64), args["clientUri"].(*string), args["contacts"].([]string), args["frontchannelLogoutSessionRequired"].(*bool), args["frontchannelLogoutUri"].(*string), args["grantTypes"].([]string), args["implicitGrantAccessTokenLifespan"].(*string), args["implicitGrantIdTokenLifespan"].(*string), args["jwks"].(map[string]interface{}), args["jwksUri"].(*string), args["jwtBearerGrantAccessTokenLifespan"].(*string), args["logoUri"].(*string), args["metadata"].(map[string]interface{}), args["policyUri"].(*string), args["postLogoutRedirectUris"].([]string), args["redirectUris"].([]string), args["responseTypes"].([]string), args["scope"].(*string), args["sectorIdentifierUri"].(*string), args["subjectType"].(*string), args["tokenEndpointAuthMethod"].(*string), args["tokenEndpointAuthSigningAlgorithm"].(*string), args["tosUri"].(*string), args["userinfoSignedResponseAlgorithm"].(*string), args["loginBindings"].(*model.LoginBindingsInput)), true
 
 	case "Name.first":
 		if e.complexity.Name.First == nil {
@@ -1094,10 +1108,119 @@ extend type Mutation {
     clientCredentialsGrantAccessTokenLifespan: String
 
     "OAuth 2.0 Client Name. The human-readable name of the client to be presented to the end-user during authorization."
-    clientName: String!
+    clientName: String
 
     "OAuth 2.0 Client Secret. The secret will be included in the create request as cleartext, and then never again. The secret is kept in hashed format and is not recoverable once lost."
-    clientSecret: String!
+    clientSecret: String
+
+    "OAuth 2.0 Client Secret Expires At. The field is currently not supported and its value is always 0."
+    ClientSecretExpiresAt: Int
+
+    "OAuth 2.0 Client URI. ClientURI is a URL string of a web page providing information about the client. If present, the server SHOULD display this URL to the end-user in a clickable fashion."
+    clientUri: String
+
+    "OAuth 2.0 Client Contacts. Contacts is an array of strings representing ways to contact people responsible for this client, typically email addresses."
+    contacts: [String!]
+
+    "OpenID Connect Front-Channel Logout Session Required. Boolean value specifying whether the RP requires that iss (issuer) and sid (session ID) query parameters be included to identify the RP session with the OP when the frontchannel_logout_uri is used. If omitted, the default value is false."
+    frontchannelLogoutSessionRequired: Boolean
+
+    "OpenID Connect Front-Channel Logout URI. RP URL that will cause the RP to log itself out when rendered in an iframe by the OP."
+    frontchannelLogoutUri: String
+
+    grantTypes: [String!]
+
+    "Specify a time duration in milliseconds, seconds, minutes, hours. For example, 1h, 1m, 1s, 1ms."
+    implicitGrantAccessTokenLifespan: String
+
+    "Specify a time duration in milliseconds, seconds, minutes, hours. For example, 1h, 1m, 1s, 1ms."
+    implicitGrantIdTokenLifespan: String
+
+    "OAuth 2.0 Client JSON Web Key Set. Client's JSON Web Key Set [JWK] document, passed by value. The semantics of the jwks parameter are the same as the jwks_uri parameter, other than that the JWK Set is passed by value, rather than by reference. This parameter is intended only to be used by Clients that, for some reason, are unable to use the jwks_uri parameter, for instance, by native applications that might not have a location to host the contents of the JWK Set. If a Client can use jwks_uri, it MUST NOT use jwks. One significant downside of jwks is that it does not enable key rotation (which jwks_uri does, as described in Section 10 of OpenID Connect Core 1.0 [OpenID.Core]). The jwks_uri and jwks parameters MUST NOT be used together."
+    jwks: Map
+
+    "OAuth 2.0 Client JSON Web Key Set URI. Client's JSON Web Key Set [JWK] document URI, passed by reference. The semantics of the jwks_uri parameter are the same as the jwks parameter, other than that the JWK Set is passed by reference, rather than by value. The jwks_uri and jwks parameters MUST NOT be used together."
+    jwksUri: String
+
+    "Specify a time duration in milliseconds, seconds, minutes, hours. For example, 1h, 1m, 1s, 1ms."
+    jwtBearerGrantAccessTokenLifespan: String
+
+    "OAuth 2.0 Client Logo URI. A URL string referencing the client's logo."
+    logoUri: String
+
+    "OAuth 2.0 Client Metadata. Metadata is a map of key-value pairs that contain additional information about the client."
+    metadata: Map
+
+    "OAuth 2.0 Client Policy URI. PolicyURI is a URL string that points to a human-readable privacy policy document that describes how the deployment organization collects, uses, retains, and discloses personal data."
+    policyUri: String
+
+    "OAuth 2.0 Client Post Logout Redirect URIs. PostLogoutRedirectUris is an array of allowed URLs to which the RP is allowed to redirect the End-User's User Agent after a logout has been performed."
+    postLogoutRedirectUris: [String!]
+
+    "OAuth 2.0 Client Redirect URIs. RedirectUris is an array of allowed redirect URLs for the OAuth 2.0 Client."
+    redirectUris: [String!]
+
+    "OAuth 2.0 Client Response Types. ResponseTypes is an array of the OAuth 2.0 response type strings that the client can use at the Authorization Endpoint."
+    responseTypes: [String!]
+
+    "OAuth 2.0 Client Scope. Scope is a string containing a space-separated list of scope values (as described in Section 3.3 of OAuth 2.0 [RFC6749]) that the client can use when requesting access tokens."
+    scope: String
+
+    "OAuth 2.0 Client Sector Identifier URI. SectorIdentifierURI is a URL string using the https scheme referencing a file with a single JSON array of redirect_uri values."
+    sectorIdentifierUri: String
+
+    "OAuth 2.0 Client Subject Type. SubjectType requested for responses to this Client. The subject_types_supported Discovery parameter contains a list of the supported subject_type values for this server. Valid types include pairwise and public."
+    subjectType: String
+
+    "OAuth 2.0 Client Token Endpoint Auth Method. TokenEndpointAuthMethod is the requested Client Authentication method for the Token Endpoint. The token_endpoint_auth_methods_supported Discovery parameter contains a list of the authentication methods supported by this server. Valid types include client_secret_post, client_secret_basic, private_key_jwt, and none."
+    tokenEndpointAuthMethod: String
+
+    "OAuth 2.0 Client Token Endpoint Auth Signing Algorithm. TokenEndpointAuthSigningAlgorithm is the requested Client Authentication signing algorithm for the Token Endpoint. The token_endpoint_auth_signing_alg_values_supported Discovery parameter contains a list of the supported signing algorithms for the token endpoint."
+    tokenEndpointAuthSigningAlgorithm: String
+
+    "OAuth 2.0 Client Terms of Service URI. A URL string pointing to a human-readable terms of service document for the client that describes a contractual relationship between the end-user and the client that the end-user accepts when authorizing the client."
+    tosUri: String
+
+    "OpenID Connect Userinfo Signed Response Algorithm. UserInfoSignedResponseAlg is a string containing the JWS signing algorithm (alg) parameter required for signing UserInfo Responses. The value none MAY be used, which indicates that the UserInfo Response will not be signed. The alg value RS256 MUST be used unless support for RS256 has been explicitly disabled. If support for RS256 has been disabled, the value none MUST be used."
+    userinfoSignedResponseAlgorithm: String
+
+    "The users and groups that are allowed to login with this OAuth2 Client."
+    loginBindings: LoginBindingsInput
+  ): OAuth2Client! @checkPermissions @isAuthenticated
+
+  updateOAuth2Client(
+    "OAuth 2.0 Client Allowed CORS Origins. AllowedCORSOrigins is an array of allowed CORS origins. If the array is empty, the value of the first element is considered valid."
+    allowedCorsOrigins: [String!]
+
+    "OAuth 2.0 Client Audience. Audience is an array of URLs that the OAuth 2.0 Client is allowed to request tokens for."
+    audience: [String!]
+
+    "Specify a time duration in milliseconds, seconds, minutes, hours. For example, 1h, 1m, 1s, 1ms."
+    authorizationCodeGrantAccessTokenLifespan: String
+
+    "Specify a time duration in milliseconds, seconds, minutes, hours. For example, 1h, 1m, 1s, 1ms."
+    authorizationCodeGrantIdTokenLifespan: String
+
+    "Specify a time duration in milliseconds, seconds, minutes, hours. For example, 1h, 1m, 1s, 1ms."
+    authorizationCodeGrantRefreshTokenLifespan: String
+
+    "OpenID Connect Back-Channel Logout Session Required  Boolean value specifying whether the RP requires that a sid (session ID) Claim be included in the Logout Token to identify the RP session with the OP when the backchannel_logout_uri is used. If omitted, the default value is false."
+    backChannelLogoutSessionRequired: Boolean
+
+    "OpenID Connect Back-Channel Logout URI. RP URL that will cause the RP to log itself out when sent a Logout Token by the OP."
+    backChannelLogoutUri: String
+
+    "Specify a time duration in milliseconds, seconds, minutes, hours. For example, 1h, 1m, 1s, 1ms."
+    clientCredentialsGrantAccessTokenLifespan: String
+
+    "OAuth 2.0 Client ID. The ID is autogenerated and immutable."
+    clientId: String!
+
+    "OAuth 2.0 Client Name. The human-readable name of the client to be presented to the end-user during authorization."
+    clientName: String
+
+    "OAuth 2.0 Client Secret. The secret will be included in the create request as cleartext, and then never again. The secret is kept in hashed format and is not recoverable once lost."
+    clientSecret: String
 
     "OAuth 2.0 Client Secret Expires At. The field is currently not supported and its value is always 0."
     ClientSecretExpiresAt: Int
@@ -1396,19 +1519,19 @@ func (ec *executionContext) field_Mutation_createOAuth2Client_args(ctx context.C
 		}
 	}
 	args["clientCredentialsGrantAccessTokenLifespan"] = arg7
-	var arg8 string
+	var arg8 *string
 	if tmp, ok := rawArgs["clientName"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clientName"))
-		arg8, err = ec.unmarshalNString2string(ctx, tmp)
+		arg8, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
 	args["clientName"] = arg8
-	var arg9 string
+	var arg9 *string
 	if tmp, ok := rawArgs["clientSecret"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clientSecret"))
-		arg9, err = ec.unmarshalNString2string(ctx, tmp)
+		arg9, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1741,6 +1864,336 @@ func (ec *executionContext) field_Mutation_organization_args(ctx context.Context
 		}
 	}
 	args["admins"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_updateOAuth2Client_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 []string
+	if tmp, ok := rawArgs["allowedCorsOrigins"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("allowedCorsOrigins"))
+		arg0, err = ec.unmarshalOString2ᚕstringᚄ(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["allowedCorsOrigins"] = arg0
+	var arg1 []string
+	if tmp, ok := rawArgs["audience"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("audience"))
+		arg1, err = ec.unmarshalOString2ᚕstringᚄ(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["audience"] = arg1
+	var arg2 *string
+	if tmp, ok := rawArgs["authorizationCodeGrantAccessTokenLifespan"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("authorizationCodeGrantAccessTokenLifespan"))
+		arg2, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["authorizationCodeGrantAccessTokenLifespan"] = arg2
+	var arg3 *string
+	if tmp, ok := rawArgs["authorizationCodeGrantIdTokenLifespan"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("authorizationCodeGrantIdTokenLifespan"))
+		arg3, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["authorizationCodeGrantIdTokenLifespan"] = arg3
+	var arg4 *string
+	if tmp, ok := rawArgs["authorizationCodeGrantRefreshTokenLifespan"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("authorizationCodeGrantRefreshTokenLifespan"))
+		arg4, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["authorizationCodeGrantRefreshTokenLifespan"] = arg4
+	var arg5 *bool
+	if tmp, ok := rawArgs["backChannelLogoutSessionRequired"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("backChannelLogoutSessionRequired"))
+		arg5, err = ec.unmarshalOBoolean2ᚖbool(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["backChannelLogoutSessionRequired"] = arg5
+	var arg6 *string
+	if tmp, ok := rawArgs["backChannelLogoutUri"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("backChannelLogoutUri"))
+		arg6, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["backChannelLogoutUri"] = arg6
+	var arg7 *string
+	if tmp, ok := rawArgs["clientCredentialsGrantAccessTokenLifespan"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clientCredentialsGrantAccessTokenLifespan"))
+		arg7, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["clientCredentialsGrantAccessTokenLifespan"] = arg7
+	var arg8 string
+	if tmp, ok := rawArgs["clientId"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clientId"))
+		arg8, err = ec.unmarshalNString2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["clientId"] = arg8
+	var arg9 *string
+	if tmp, ok := rawArgs["clientName"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clientName"))
+		arg9, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["clientName"] = arg9
+	var arg10 *string
+	if tmp, ok := rawArgs["clientSecret"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clientSecret"))
+		arg10, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["clientSecret"] = arg10
+	var arg11 *int64
+	if tmp, ok := rawArgs["ClientSecretExpiresAt"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ClientSecretExpiresAt"))
+		arg11, err = ec.unmarshalOInt2ᚖint64(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["ClientSecretExpiresAt"] = arg11
+	var arg12 *string
+	if tmp, ok := rawArgs["clientUri"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clientUri"))
+		arg12, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["clientUri"] = arg12
+	var arg13 []string
+	if tmp, ok := rawArgs["contacts"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("contacts"))
+		arg13, err = ec.unmarshalOString2ᚕstringᚄ(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["contacts"] = arg13
+	var arg14 *bool
+	if tmp, ok := rawArgs["frontchannelLogoutSessionRequired"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("frontchannelLogoutSessionRequired"))
+		arg14, err = ec.unmarshalOBoolean2ᚖbool(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["frontchannelLogoutSessionRequired"] = arg14
+	var arg15 *string
+	if tmp, ok := rawArgs["frontchannelLogoutUri"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("frontchannelLogoutUri"))
+		arg15, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["frontchannelLogoutUri"] = arg15
+	var arg16 []string
+	if tmp, ok := rawArgs["grantTypes"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("grantTypes"))
+		arg16, err = ec.unmarshalOString2ᚕstringᚄ(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["grantTypes"] = arg16
+	var arg17 *string
+	if tmp, ok := rawArgs["implicitGrantAccessTokenLifespan"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("implicitGrantAccessTokenLifespan"))
+		arg17, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["implicitGrantAccessTokenLifespan"] = arg17
+	var arg18 *string
+	if tmp, ok := rawArgs["implicitGrantIdTokenLifespan"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("implicitGrantIdTokenLifespan"))
+		arg18, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["implicitGrantIdTokenLifespan"] = arg18
+	var arg19 map[string]interface{}
+	if tmp, ok := rawArgs["jwks"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("jwks"))
+		arg19, err = ec.unmarshalOMap2map(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["jwks"] = arg19
+	var arg20 *string
+	if tmp, ok := rawArgs["jwksUri"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("jwksUri"))
+		arg20, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["jwksUri"] = arg20
+	var arg21 *string
+	if tmp, ok := rawArgs["jwtBearerGrantAccessTokenLifespan"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("jwtBearerGrantAccessTokenLifespan"))
+		arg21, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["jwtBearerGrantAccessTokenLifespan"] = arg21
+	var arg22 *string
+	if tmp, ok := rawArgs["logoUri"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("logoUri"))
+		arg22, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["logoUri"] = arg22
+	var arg23 map[string]interface{}
+	if tmp, ok := rawArgs["metadata"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("metadata"))
+		arg23, err = ec.unmarshalOMap2map(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["metadata"] = arg23
+	var arg24 *string
+	if tmp, ok := rawArgs["policyUri"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("policyUri"))
+		arg24, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["policyUri"] = arg24
+	var arg25 []string
+	if tmp, ok := rawArgs["postLogoutRedirectUris"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("postLogoutRedirectUris"))
+		arg25, err = ec.unmarshalOString2ᚕstringᚄ(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["postLogoutRedirectUris"] = arg25
+	var arg26 []string
+	if tmp, ok := rawArgs["redirectUris"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("redirectUris"))
+		arg26, err = ec.unmarshalOString2ᚕstringᚄ(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["redirectUris"] = arg26
+	var arg27 []string
+	if tmp, ok := rawArgs["responseTypes"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("responseTypes"))
+		arg27, err = ec.unmarshalOString2ᚕstringᚄ(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["responseTypes"] = arg27
+	var arg28 *string
+	if tmp, ok := rawArgs["scope"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("scope"))
+		arg28, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["scope"] = arg28
+	var arg29 *string
+	if tmp, ok := rawArgs["sectorIdentifierUri"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sectorIdentifierUri"))
+		arg29, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["sectorIdentifierUri"] = arg29
+	var arg30 *string
+	if tmp, ok := rawArgs["subjectType"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("subjectType"))
+		arg30, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["subjectType"] = arg30
+	var arg31 *string
+	if tmp, ok := rawArgs["tokenEndpointAuthMethod"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("tokenEndpointAuthMethod"))
+		arg31, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["tokenEndpointAuthMethod"] = arg31
+	var arg32 *string
+	if tmp, ok := rawArgs["tokenEndpointAuthSigningAlgorithm"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("tokenEndpointAuthSigningAlgorithm"))
+		arg32, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["tokenEndpointAuthSigningAlgorithm"] = arg32
+	var arg33 *string
+	if tmp, ok := rawArgs["tosUri"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("tosUri"))
+		arg33, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["tosUri"] = arg33
+	var arg34 *string
+	if tmp, ok := rawArgs["userinfoSignedResponseAlgorithm"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userinfoSignedResponseAlgorithm"))
+		arg34, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["userinfoSignedResponseAlgorithm"] = arg34
+	var arg35 *model.LoginBindingsInput
+	if tmp, ok := rawArgs["loginBindings"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("loginBindings"))
+		arg35, err = ec.unmarshalOLoginBindingsInput2ᚖgithubᚗcomᚋpluralshᚋoauthᚑplaygroundᚋapiᚑserverᚋgraphᚋmodelᚐLoginBindingsInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["loginBindings"] = arg35
 	return args, nil
 }
 
@@ -2536,7 +2989,7 @@ func (ec *executionContext) _Mutation_createOAuth2Client(ctx context.Context, fi
 	resTmp := ec._fieldMiddleware(ctx, nil, func(rctx context.Context) (interface{}, error) {
 		directive0 := func(rctx context.Context) (interface{}, error) {
 			ctx = rctx // use context from middleware stack in children
-			return ec.resolvers.Mutation().CreateOAuth2Client(rctx, fc.Args["allowedCorsOrigins"].([]string), fc.Args["audience"].([]string), fc.Args["authorizationCodeGrantAccessTokenLifespan"].(*string), fc.Args["authorizationCodeGrantIdTokenLifespan"].(*string), fc.Args["authorizationCodeGrantRefreshTokenLifespan"].(*string), fc.Args["backChannelLogoutSessionRequired"].(*bool), fc.Args["backChannelLogoutUri"].(*string), fc.Args["clientCredentialsGrantAccessTokenLifespan"].(*string), fc.Args["clientName"].(string), fc.Args["clientSecret"].(string), fc.Args["ClientSecretExpiresAt"].(*int64), fc.Args["clientUri"].(*string), fc.Args["contacts"].([]string), fc.Args["frontchannelLogoutSessionRequired"].(*bool), fc.Args["frontchannelLogoutUri"].(*string), fc.Args["grantTypes"].([]string), fc.Args["implicitGrantAccessTokenLifespan"].(*string), fc.Args["implicitGrantIdTokenLifespan"].(*string), fc.Args["jwks"].(map[string]interface{}), fc.Args["jwksUri"].(*string), fc.Args["jwtBearerGrantAccessTokenLifespan"].(*string), fc.Args["logoUri"].(*string), fc.Args["metadata"].(map[string]interface{}), fc.Args["policyUri"].(*string), fc.Args["postLogoutRedirectUris"].([]string), fc.Args["redirectUris"].([]string), fc.Args["responseTypes"].([]string), fc.Args["scope"].(*string), fc.Args["sectorIdentifierUri"].(*string), fc.Args["subjectType"].(*string), fc.Args["tokenEndpointAuthMethod"].(*string), fc.Args["tokenEndpointAuthSigningAlgorithm"].(*string), fc.Args["tosUri"].(*string), fc.Args["userinfoSignedResponseAlgorithm"].(*string), fc.Args["loginBindings"].(*model.LoginBindingsInput))
+			return ec.resolvers.Mutation().CreateOAuth2Client(rctx, fc.Args["allowedCorsOrigins"].([]string), fc.Args["audience"].([]string), fc.Args["authorizationCodeGrantAccessTokenLifespan"].(*string), fc.Args["authorizationCodeGrantIdTokenLifespan"].(*string), fc.Args["authorizationCodeGrantRefreshTokenLifespan"].(*string), fc.Args["backChannelLogoutSessionRequired"].(*bool), fc.Args["backChannelLogoutUri"].(*string), fc.Args["clientCredentialsGrantAccessTokenLifespan"].(*string), fc.Args["clientName"].(*string), fc.Args["clientSecret"].(*string), fc.Args["ClientSecretExpiresAt"].(*int64), fc.Args["clientUri"].(*string), fc.Args["contacts"].([]string), fc.Args["frontchannelLogoutSessionRequired"].(*bool), fc.Args["frontchannelLogoutUri"].(*string), fc.Args["grantTypes"].([]string), fc.Args["implicitGrantAccessTokenLifespan"].(*string), fc.Args["implicitGrantIdTokenLifespan"].(*string), fc.Args["jwks"].(map[string]interface{}), fc.Args["jwksUri"].(*string), fc.Args["jwtBearerGrantAccessTokenLifespan"].(*string), fc.Args["logoUri"].(*string), fc.Args["metadata"].(map[string]interface{}), fc.Args["policyUri"].(*string), fc.Args["postLogoutRedirectUris"].([]string), fc.Args["redirectUris"].([]string), fc.Args["responseTypes"].([]string), fc.Args["scope"].(*string), fc.Args["sectorIdentifierUri"].(*string), fc.Args["subjectType"].(*string), fc.Args["tokenEndpointAuthMethod"].(*string), fc.Args["tokenEndpointAuthSigningAlgorithm"].(*string), fc.Args["tosUri"].(*string), fc.Args["userinfoSignedResponseAlgorithm"].(*string), fc.Args["loginBindings"].(*model.LoginBindingsInput))
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
 			if ec.directives.CheckPermissions == nil {
@@ -2675,6 +3128,166 @@ func (ec *executionContext) fieldContext_Mutation_createOAuth2Client(ctx context
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_createOAuth2Client_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updateOAuth2Client(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_updateOAuth2Client(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, nil, func(rctx context.Context) (interface{}, error) {
+		directive0 := func(rctx context.Context) (interface{}, error) {
+			ctx = rctx // use context from middleware stack in children
+			return ec.resolvers.Mutation().UpdateOAuth2Client(rctx, fc.Args["allowedCorsOrigins"].([]string), fc.Args["audience"].([]string), fc.Args["authorizationCodeGrantAccessTokenLifespan"].(*string), fc.Args["authorizationCodeGrantIdTokenLifespan"].(*string), fc.Args["authorizationCodeGrantRefreshTokenLifespan"].(*string), fc.Args["backChannelLogoutSessionRequired"].(*bool), fc.Args["backChannelLogoutUri"].(*string), fc.Args["clientCredentialsGrantAccessTokenLifespan"].(*string), fc.Args["clientId"].(string), fc.Args["clientName"].(*string), fc.Args["clientSecret"].(*string), fc.Args["ClientSecretExpiresAt"].(*int64), fc.Args["clientUri"].(*string), fc.Args["contacts"].([]string), fc.Args["frontchannelLogoutSessionRequired"].(*bool), fc.Args["frontchannelLogoutUri"].(*string), fc.Args["grantTypes"].([]string), fc.Args["implicitGrantAccessTokenLifespan"].(*string), fc.Args["implicitGrantIdTokenLifespan"].(*string), fc.Args["jwks"].(map[string]interface{}), fc.Args["jwksUri"].(*string), fc.Args["jwtBearerGrantAccessTokenLifespan"].(*string), fc.Args["logoUri"].(*string), fc.Args["metadata"].(map[string]interface{}), fc.Args["policyUri"].(*string), fc.Args["postLogoutRedirectUris"].([]string), fc.Args["redirectUris"].([]string), fc.Args["responseTypes"].([]string), fc.Args["scope"].(*string), fc.Args["sectorIdentifierUri"].(*string), fc.Args["subjectType"].(*string), fc.Args["tokenEndpointAuthMethod"].(*string), fc.Args["tokenEndpointAuthSigningAlgorithm"].(*string), fc.Args["tosUri"].(*string), fc.Args["userinfoSignedResponseAlgorithm"].(*string), fc.Args["loginBindings"].(*model.LoginBindingsInput))
+		}
+		directive1 := func(ctx context.Context) (interface{}, error) {
+			if ec.directives.CheckPermissions == nil {
+				return nil, errors.New("directive checkPermissions is not implemented")
+			}
+			return ec.directives.CheckPermissions(ctx, nil, directive0)
+		}
+		directive2 := func(ctx context.Context) (interface{}, error) {
+			if ec.directives.IsAuthenticated == nil {
+				return nil, errors.New("directive isAuthenticated is not implemented")
+			}
+			return ec.directives.IsAuthenticated(ctx, nil, directive1)
+		}
+
+		tmp, err := directive2(rctx)
+		if err != nil {
+			return nil, graphql.ErrorOnPath(ctx, err)
+		}
+		if tmp == nil {
+			return nil, nil
+		}
+		if data, ok := tmp.(*model.OAuth2Client); ok {
+			return data, nil
+		}
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/pluralsh/oauth-playground/api-server/graph/model.OAuth2Client`, tmp)
+	})
+
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.OAuth2Client)
+	fc.Result = res
+	return ec.marshalNOAuth2Client2ᚖgithubᚗcomᚋpluralshᚋoauthᚑplaygroundᚋapiᚑserverᚋgraphᚋmodelᚐOAuth2Client(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updateOAuth2Client(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "allowedCorsOrigins":
+				return ec.fieldContext_OAuth2Client_allowedCorsOrigins(ctx, field)
+			case "audience":
+				return ec.fieldContext_OAuth2Client_audience(ctx, field)
+			case "authorizationCodeGrantAccessTokenLifespan":
+				return ec.fieldContext_OAuth2Client_authorizationCodeGrantAccessTokenLifespan(ctx, field)
+			case "authorizationCodeGrantIdTokenLifespan":
+				return ec.fieldContext_OAuth2Client_authorizationCodeGrantIdTokenLifespan(ctx, field)
+			case "authorizationCodeGrantRefreshTokenLifespan":
+				return ec.fieldContext_OAuth2Client_authorizationCodeGrantRefreshTokenLifespan(ctx, field)
+			case "backChannelLogoutSessionRequired":
+				return ec.fieldContext_OAuth2Client_backChannelLogoutSessionRequired(ctx, field)
+			case "backChannelLogoutUri":
+				return ec.fieldContext_OAuth2Client_backChannelLogoutUri(ctx, field)
+			case "clientCredentialsGrantAccessTokenLifespan":
+				return ec.fieldContext_OAuth2Client_clientCredentialsGrantAccessTokenLifespan(ctx, field)
+			case "clientId":
+				return ec.fieldContext_OAuth2Client_clientId(ctx, field)
+			case "clientName":
+				return ec.fieldContext_OAuth2Client_clientName(ctx, field)
+			case "clientSecret":
+				return ec.fieldContext_OAuth2Client_clientSecret(ctx, field)
+			case "ClientSecretExpiresAt":
+				return ec.fieldContext_OAuth2Client_ClientSecretExpiresAt(ctx, field)
+			case "clientUri":
+				return ec.fieldContext_OAuth2Client_clientUri(ctx, field)
+			case "contacts":
+				return ec.fieldContext_OAuth2Client_contacts(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_OAuth2Client_createdAt(ctx, field)
+			case "frontchannelLogoutSessionRequired":
+				return ec.fieldContext_OAuth2Client_frontchannelLogoutSessionRequired(ctx, field)
+			case "frontchannelLogoutUri":
+				return ec.fieldContext_OAuth2Client_frontchannelLogoutUri(ctx, field)
+			case "grantTypes":
+				return ec.fieldContext_OAuth2Client_grantTypes(ctx, field)
+			case "implicitGrantAccessTokenLifespan":
+				return ec.fieldContext_OAuth2Client_implicitGrantAccessTokenLifespan(ctx, field)
+			case "implicitGrantIdTokenLifespan":
+				return ec.fieldContext_OAuth2Client_implicitGrantIdTokenLifespan(ctx, field)
+			case "jwks":
+				return ec.fieldContext_OAuth2Client_jwks(ctx, field)
+			case "jwksUri":
+				return ec.fieldContext_OAuth2Client_jwksUri(ctx, field)
+			case "jwtBearerGrantAccessTokenLifespan":
+				return ec.fieldContext_OAuth2Client_jwtBearerGrantAccessTokenLifespan(ctx, field)
+			case "logoUri":
+				return ec.fieldContext_OAuth2Client_logoUri(ctx, field)
+			case "metadata":
+				return ec.fieldContext_OAuth2Client_metadata(ctx, field)
+			case "owner":
+				return ec.fieldContext_OAuth2Client_owner(ctx, field)
+			case "policyUri":
+				return ec.fieldContext_OAuth2Client_policyUri(ctx, field)
+			case "postLogoutRedirectUris":
+				return ec.fieldContext_OAuth2Client_postLogoutRedirectUris(ctx, field)
+			case "redirectUris":
+				return ec.fieldContext_OAuth2Client_redirectUris(ctx, field)
+			case "responseTypes":
+				return ec.fieldContext_OAuth2Client_responseTypes(ctx, field)
+			case "scope":
+				return ec.fieldContext_OAuth2Client_scope(ctx, field)
+			case "sectorIdentifierUri":
+				return ec.fieldContext_OAuth2Client_sectorIdentifierUri(ctx, field)
+			case "subjectType":
+				return ec.fieldContext_OAuth2Client_subjectType(ctx, field)
+			case "tokenEndpointAuthMethod":
+				return ec.fieldContext_OAuth2Client_tokenEndpointAuthMethod(ctx, field)
+			case "tokenEndpointAuthSigningAlgorithm":
+				return ec.fieldContext_OAuth2Client_tokenEndpointAuthSigningAlgorithm(ctx, field)
+			case "tosUri":
+				return ec.fieldContext_OAuth2Client_tosUri(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_OAuth2Client_updatedAt(ctx, field)
+			case "userinfoSignedResponseAlgorithm":
+				return ec.fieldContext_OAuth2Client_userinfoSignedResponseAlgorithm(ctx, field)
+			case "organization":
+				return ec.fieldContext_OAuth2Client_organization(ctx, field)
+			case "loginBindings":
+				return ec.fieldContext_OAuth2Client_loginBindings(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type OAuth2Client", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateOAuth2Client_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return
 	}
@@ -8013,6 +8626,12 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_createOAuth2Client(ctx, field)
+			})
+
+		case "updateOAuth2Client":
+
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateOAuth2Client(ctx, field)
 			})
 
 		case "organization":

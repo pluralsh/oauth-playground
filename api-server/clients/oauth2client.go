@@ -3,7 +3,9 @@ package clients
 import (
 	"context"
 	"fmt"
+	"net/http"
 
+	hydra "github.com/ory/hydra-client-go/v2"
 	rts "github.com/ory/keto/proto/ory/keto/relation_tuples/v1alpha2"
 	px "github.com/ory/x/pointerx"
 	"github.com/pluralsh/oauth-playground/api-server/format"
@@ -116,17 +118,39 @@ func (c *ClientWrapper) GetOAuth2ClientLoginBindings(ctx context.Context, id str
 	return outputLoginBindings, nil
 }
 
-func (c *ClientWrapper) CreateOAuth2Client(ctx context.Context, allowedCorsOrigins []string, audience []string, authorizationCodeGrantAccessTokenLifespan *string, authorizationCodeGrantIDTokenLifespan *string, authorizationCodeGrantRefreshTokenLifespan *string, backChannelLogoutSessionRequired *bool, backChannelLogoutURI *string, clientCredentialsGrantAccessTokenLifespan *string, clientName string, clientSecret string, clientSecretExpiresAt *int64, clientURI *string, contacts []string, frontchannelLogoutSessionRequired *bool, frontchannelLogoutURI *string, grantTypes []string, implicitGrantAccessTokenLifespan *string, implicitGrantIDTokenLifespan *string, jwks map[string]interface{}, jwksURI *string, jwtBearerGrantAccessTokenLifespan *string, logoURI *string, metadata map[string]interface{}, policyURI *string, postLogoutRedirectUris []string, redirectUris []string, responseTypes []string, scope *string, sectorIdentifierURI *string, subjectType *string, tokenEndpointAuthMethod *string, tokenEndpointAuthSigningAlgorithm *string, tosURI *string, userinfoSignedResponseAlgorithm *string, loginBindings *model.LoginBindingsInput) (*model.OAuth2Client, error) {
+type HydraOperation string
+
+const (
+	HydraOperationCreate HydraOperation = "create"
+	HydraOperationUpdate HydraOperation = "update"
+)
+
+func (c *ClientWrapper) CreateOAuth2Client(ctx context.Context, mode HydraOperation, allowedCorsOrigins []string, audience []string, authorizationCodeGrantAccessTokenLifespan *string, authorizationCodeGrantIDTokenLifespan *string, authorizationCodeGrantRefreshTokenLifespan *string, backChannelLogoutSessionRequired *bool, backChannelLogoutURI *string, clientCredentialsGrantAccessTokenLifespan *string, clientID *string, clientName *string, clientSecret *string, clientSecretExpiresAt *int64, clientURI *string, contacts []string, frontchannelLogoutSessionRequired *bool, frontchannelLogoutURI *string, grantTypes []string, implicitGrantAccessTokenLifespan *string, implicitGrantIDTokenLifespan *string, jwks map[string]interface{}, jwksURI *string, jwtBearerGrantAccessTokenLifespan *string, logoURI *string, metadata map[string]interface{}, policyURI *string, postLogoutRedirectUris []string, redirectUris []string, responseTypes []string, scope *string, sectorIdentifierURI *string, subjectType *string, tokenEndpointAuthMethod *string, tokenEndpointAuthSigningAlgorithm *string, tosURI *string, userinfoSignedResponseAlgorithm *string, loginBindings *model.LoginBindingsInput) (*model.OAuth2Client, error) {
 	log := c.Log.WithName("CreateOAuth2Client").WithValues("Name", clientName)
 
-	client := format.GraphQLNewOAuth2ClientToHydra(allowedCorsOrigins, audience, authorizationCodeGrantAccessTokenLifespan, authorizationCodeGrantIDTokenLifespan, authorizationCodeGrantRefreshTokenLifespan, backChannelLogoutSessionRequired, backChannelLogoutURI, clientCredentialsGrantAccessTokenLifespan, clientName, clientSecret, clientSecretExpiresAt, clientURI, contacts, frontchannelLogoutSessionRequired, frontchannelLogoutURI, grantTypes, implicitGrantAccessTokenLifespan, implicitGrantIDTokenLifespan, jwks, jwksURI, jwtBearerGrantAccessTokenLifespan, logoURI, metadata, policyURI, postLogoutRedirectUris, redirectUris, responseTypes, scope, sectorIdentifierURI, subjectType, tokenEndpointAuthMethod, tokenEndpointAuthSigningAlgorithm, tosURI, userinfoSignedResponseAlgorithm, loginBindings)
+	client := format.GraphQLNewOAuth2ClientToHydra(allowedCorsOrigins, audience, authorizationCodeGrantAccessTokenLifespan, authorizationCodeGrantIDTokenLifespan, authorizationCodeGrantRefreshTokenLifespan, backChannelLogoutSessionRequired, backChannelLogoutURI, clientCredentialsGrantAccessTokenLifespan, clientID, clientName, clientSecret, clientSecretExpiresAt, clientURI, contacts, frontchannelLogoutSessionRequired, frontchannelLogoutURI, grantTypes, implicitGrantAccessTokenLifespan, implicitGrantIDTokenLifespan, jwks, jwksURI, jwtBearerGrantAccessTokenLifespan, logoURI, metadata, policyURI, postLogoutRedirectUris, redirectUris, responseTypes, scope, sectorIdentifierURI, subjectType, tokenEndpointAuthMethod, tokenEndpointAuthSigningAlgorithm, tosURI, userinfoSignedResponseAlgorithm, loginBindings)
 
 	// TODO: add current user as owner to client before creating it
 
-	createdClient, resp, err := c.HydraClient.OAuth2Api.CreateOAuth2Client(ctx).OAuth2Client(client).Execute()
-	if err != nil || resp.StatusCode != 201 {
-		log.Error(err, "failed to create oauth2 client")
-		return nil, fmt.Errorf("failed to create oauth2 client: %w", err)
+	var createdClient *hydra.OAuth2Client
+	var resp *http.Response
+	var err error
+
+	if mode == HydraOperationCreate {
+		createdClient, resp, err = c.HydraClient.OAuth2Api.CreateOAuth2Client(ctx).OAuth2Client(client).Execute()
+		if err != nil || resp.StatusCode != 201 {
+			log.Error(err, "failed to create oauth2 client")
+			return nil, fmt.Errorf("failed to create oauth2 client: %w", err)
+		}
+	} else if mode == HydraOperationUpdate {
+		if clientID == nil || *clientID == "" {
+			return nil, fmt.Errorf("clientID is required for update")
+		}
+		createdClient, resp, err = c.HydraClient.OAuth2Api.SetOAuth2Client(ctx, *clientID).OAuth2Client(client).Execute()
+		if err != nil || resp.StatusCode != 200 {
+			log.Error(err, "failed to update oauth2 client")
+			return nil, fmt.Errorf("failed to update oauth2 client: %w", err)
+		}
 	}
 
 	if createdClient == nil {

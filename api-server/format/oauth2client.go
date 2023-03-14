@@ -54,7 +54,7 @@ func HydraOAuth2ClientToGraphQL(oauth2Client hydra.OAuth2Client) *model.OAuth2Cl
 	}
 }
 
-func GraphQLNewOAuth2ClientToHydra(allowedCorsOrigins []string, audience []string, authorizationCodeGrantAccessTokenLifespan *string, authorizationCodeGrantIDTokenLifespan *string, authorizationCodeGrantRefreshTokenLifespan *string, backChannelLogoutSessionRequired *bool, backChannelLogoutURI *string, clientCredentialsGrantAccessTokenLifespan *string, clientName string, clientSecret string, clientSecretExpiresAt *int64, clientURI *string, contacts []string, frontchannelLogoutSessionRequired *bool, frontchannelLogoutURI *string, grantTypes []string, implicitGrantAccessTokenLifespan *string, implicitGrantIDTokenLifespan *string, jwks map[string]interface{}, jwksURI *string, jwtBearerGrantAccessTokenLifespan *string, logoURI *string, metadata map[string]interface{}, policyURI *string, postLogoutRedirectUris []string, redirectUris []string, responseTypes []string, scope *string, sectorIdentifierURI *string, subjectType *string, tokenEndpointAuthMethod *string, tokenEndpointAuthSigningAlgorithm *string, tosURI *string, userinfoSignedResponseAlgorithm *string, loginBindings *model.LoginBindingsInput) hydra.OAuth2Client {
+func GraphQLNewOAuth2ClientToHydra(allowedCorsOrigins []string, audience []string, authorizationCodeGrantAccessTokenLifespan *string, authorizationCodeGrantIDTokenLifespan *string, authorizationCodeGrantRefreshTokenLifespan *string, backChannelLogoutSessionRequired *bool, backChannelLogoutURI *string, clientCredentialsGrantAccessTokenLifespan *string, clientID *string, clientName *string, clientSecret *string, clientSecretExpiresAt *int64, clientURI *string, contacts []string, frontchannelLogoutSessionRequired *bool, frontchannelLogoutURI *string, grantTypes []string, implicitGrantAccessTokenLifespan *string, implicitGrantIDTokenLifespan *string, jwks map[string]interface{}, jwksURI *string, jwtBearerGrantAccessTokenLifespan *string, logoURI *string, metadata map[string]interface{}, policyURI *string, postLogoutRedirectUris []string, redirectUris []string, responseTypes []string, scope *string, sectorIdentifierURI *string, subjectType *string, tokenEndpointAuthMethod *string, tokenEndpointAuthSigningAlgorithm *string, tosURI *string, userinfoSignedResponseAlgorithm *string, loginBindings *model.LoginBindingsInput) hydra.OAuth2Client {
 	return hydra.OAuth2Client{
 		AllowedCorsOrigins: allowedCorsOrigins,
 		Audience:           audience,
@@ -64,8 +64,9 @@ func GraphQLNewOAuth2ClientToHydra(allowedCorsOrigins []string, audience []strin
 		BackchannelLogoutSessionRequired:           backChannelLogoutSessionRequired,
 		BackchannelLogoutUri:                       backChannelLogoutURI,
 		ClientCredentialsGrantAccessTokenLifespan:  clientCredentialsGrantAccessTokenLifespan,
-		ClientName:                        &clientName,
-		ClientSecret:                      &clientSecret,
+		ClientId:                          clientID,
+		ClientName:                        clientName,
+		ClientSecret:                      clientSecret,
 		ClientSecretExpiresAt:             clientSecretExpiresAt,
 		ClientUri:                         clientURI,
 		Contacts:                          contacts,
