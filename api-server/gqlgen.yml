@@ -82,3 +82,7 @@ models:
         resolver: true
       groups:
         resolver: true
+  Organization:
+    fields:
+      admins:
+        resolver: true

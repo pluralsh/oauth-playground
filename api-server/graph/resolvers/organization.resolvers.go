@@ -6,89 +6,27 @@ package resolvers
 
 import (
 	"context"
-	"fmt"
 
-	"github.com/google/uuid"
-	rts "github.com/ory/keto/proto/ory/keto/relation_tuples/v1alpha2"
-	px "github.com/ory/x/pointerx"
+	"github.com/pluralsh/oauth-playground/api-server/graph/generated"
 	"github.com/pluralsh/oauth-playground/api-server/graph/model"
 )
 
 // Organization is the resolver for the organization field.
-func (r *mutationResolver) Organization(ctx context.Context, name string, admins []*model.Admin) (*model.Organization, error) {
-	org, err := r.C.DbClient.Organization.Create().SetName(name).SetID(uuid.New()).Save(ctx)
-	if err != nil {
-		return nil, fmt.Errorf("failed to create organization: %w", err)
-	}
+func (r *mutationResolver) Organization(ctx context.Context, name string, admins []string) (*model.Organization, error) {
+	return r.C.UpdateOrganization(ctx, name, admins)
+}
 
-	var adminTuples []*rts.RelationTuple
-
-	for _, admin := range admins {
-		adminTuples = append(adminTuples, &rts.RelationTuple{
-			Namespace: "Organization",
-			Object:    org.ID.String(),
-			Relation:  "admins",
-			Subject: rts.NewSubjectSet(
-				"User",
-				admin.ID,
-				"",
-			),
-		})
-	}
-
-	err = r.C.KetoClient.CreateTuples(ctx, adminTuples)
-	if err != nil {
-		return nil, fmt.Errorf("failed to create tuple: %w", err)
-	}
-
-	query := rts.RelationQuery{
-		Namespace: px.Ptr("Organization"),
-		Object:    px.Ptr(org.ID.String()),
-		Relation:  px.Ptr("admins"),
-		Subject:   nil,
-	}
-
-	respTuples, err := r.C.KetoClient.QueryAllTuples(context.Background(), &query, 100)
-	if err != nil {
-		return nil, fmt.Errorf("failed to query tuples: %w", err)
-	}
-
-	var outputAdmins []*model.User
-
-	for _, tuple := range respTuples {
-		subjectSet := tuple.Subject.GetSet()
-		if subjectSet.Namespace == "User" {
-			user, err := r.C.GetUserFromId(ctx, subjectSet.Object)
-			if err != nil {
-				continue
-			}
-			outputAdmins = append(outputAdmins, user)
-		} else {
-			continue
-		}
-
-	}
-
-	return &model.Organization{
-		// ID:     org.ID.String(),
-		Name:   org.Name,
-		Admins: outputAdmins,
-	}, nil
+// Admins is the resolver for the admins field.
+func (r *organizationResolver) Admins(ctx context.Context, obj *model.Organization) ([]*model.User, error) {
+	return r.C.GetOrganizationAdmins(ctx, obj.Name)
 }
 
 // ListOrganizations is the resolver for the listOrganizations field.
 func (r *queryResolver) ListOrganizations(ctx context.Context) ([]*model.Organization, error) {
-	orgs, err := r.C.DbClient.Organization.Query().All(ctx)
-	if err != nil {
-		return nil, fmt.Errorf("failed to list organizations: %w", err)
-	}
-	var output []*model.Organization
-	for _, org := range orgs {
-		output = append(output, &model.Organization{
-			// ID:     org.ID.String(),
-			Name:   org.Name,
-			Admins: []*model.User{},
-		})
-	}
-	return output, nil
+	return r.C.ListOrganizations(ctx)
 }
+
+// Organization returns generated.OrganizationResolver implementation.
+func (r *Resolver) Organization() generated.OrganizationResolver { return &organizationResolver{r} }
+
+type organizationResolver struct{ *Resolver }

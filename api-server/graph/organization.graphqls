@@ -24,7 +24,7 @@ extend type Mutation {
     "The name of the organization."
     name: String!,
 
-    "The users to add as admins."
-    admins: [Admin!]!
+    "The IDs of the users that are organization admins."
+    admins: [String!]!
     ): Organization! @checkPermissions @isAuthenticated
 }

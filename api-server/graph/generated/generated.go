@@ -41,6 +41,7 @@ type ResolverRoot interface {
 	LoginBindings() LoginBindingsResolver
 	Mutation() MutationResolver
 	OAuth2Client() OAuth2ClientResolver
+	Organization() OrganizationResolver
 	Query() QueryResolver
 	User() UserResolver
 }
@@ -69,7 +70,7 @@ type ComplexityRoot struct {
 		DeleteOAuth2Client func(childComplexity int, clientID string) int
 		DeleteUser         func(childComplexity int, id string) int
 		Group              func(childComplexity int, name string, members []string) int
-		Organization       func(childComplexity int, name string, admins []*model.Admin) int
+		Organization       func(childComplexity int, name string, admins []string) int
 		UpdateOAuth2Client func(childComplexity int, allowedCorsOrigins []string, audience []string, authorizationCodeGrantAccessTokenLifespan *string, authorizationCodeGrantIDTokenLifespan *string, authorizationCodeGrantRefreshTokenLifespan *string, backChannelLogoutSessionRequired *bool, backChannelLogoutURI *string, clientCredentialsGrantAccessTokenLifespan *string, clientID string, clientName *string, clientSecret *string, clientSecretExpiresAt *int64, clientURI *string, contacts []string, frontchannelLogoutSessionRequired *bool, frontchannelLogoutURI *string, grantTypes []string, implicitGrantAccessTokenLifespan *string, implicitGrantIDTokenLifespan *string, jwks map[string]interface{}, jwksURI *string, jwtBearerGrantAccessTokenLifespan *string, logoURI *string, metadata map[string]interface{}, policyURI *string, postLogoutRedirectUris []string, redirectUris []string, responseTypes []string, scope *string, sectorIdentifierURI *string, subjectType *string, tokenEndpointAuthMethod *string, tokenEndpointAuthSigningAlgorithm *string, tosURI *string, userinfoSignedResponseAlgorithm *string, loginBindings *model.LoginBindingsInput) int
 	}
 
@@ -180,12 +181,15 @@ type MutationResolver interface {
 	CreateOAuth2Client(ctx context.Context, allowedCorsOrigins []string, audience []string, authorizationCodeGrantAccessTokenLifespan *string, authorizationCodeGrantIDTokenLifespan *string, authorizationCodeGrantRefreshTokenLifespan *string, backChannelLogoutSessionRequired *bool, backChannelLogoutURI *string, clientCredentialsGrantAccessTokenLifespan *string, clientName *string, clientSecret *string, clientSecretExpiresAt *int64, clientURI *string, contacts []string, frontchannelLogoutSessionRequired *bool, frontchannelLogoutURI *string, grantTypes []string, implicitGrantAccessTokenLifespan *string, implicitGrantIDTokenLifespan *string, jwks map[string]interface{}, jwksURI *string, jwtBearerGrantAccessTokenLifespan *string, logoURI *string, metadata map[string]interface{}, policyURI *string, postLogoutRedirectUris []string, redirectUris []string, responseTypes []string, scope *string, sectorIdentifierURI *string, subjectType *string, tokenEndpointAuthMethod *string, tokenEndpointAuthSigningAlgorithm *string, tosURI *string, userinfoSignedResponseAlgorithm *string, loginBindings *model.LoginBindingsInput) (*model.OAuth2Client, error)
 	UpdateOAuth2Client(ctx context.Context, allowedCorsOrigins []string, audience []string, authorizationCodeGrantAccessTokenLifespan *string, authorizationCodeGrantIDTokenLifespan *string, authorizationCodeGrantRefreshTokenLifespan *string, backChannelLogoutSessionRequired *bool, backChannelLogoutURI *string, clientCredentialsGrantAccessTokenLifespan *string, clientID string, clientName *string, clientSecret *string, clientSecretExpiresAt *int64, clientURI *string, contacts []string, frontchannelLogoutSessionRequired *bool, frontchannelLogoutURI *string, grantTypes []string, implicitGrantAccessTokenLifespan *string, implicitGrantIDTokenLifespan *string, jwks map[string]interface{}, jwksURI *string, jwtBearerGrantAccessTokenLifespan *string, logoURI *string, metadata map[string]interface{}, policyURI *string, postLogoutRedirectUris []string, redirectUris []string, responseTypes []string, scope *string, sectorIdentifierURI *string, subjectType *string, tokenEndpointAuthMethod *string, tokenEndpointAuthSigningAlgorithm *string, tosURI *string, userinfoSignedResponseAlgorithm *string, loginBindings *model.LoginBindingsInput) (*model.OAuth2Client, error)
 	DeleteOAuth2Client(ctx context.Context, clientID string) (*model.OAuth2Client, error)
-	Organization(ctx context.Context, name string, admins []*model.Admin) (*model.Organization, error)
+	Organization(ctx context.Context, name string, admins []string) (*model.Organization, error)
 }
 type OAuth2ClientResolver interface {
 	Owner(ctx context.Context, obj *model.OAuth2Client) (*string, error)
 
 	LoginBindings(ctx context.Context, obj *model.OAuth2Client) (*model.LoginBindings, error)
+}
+type OrganizationResolver interface {
+	Admins(ctx context.Context, obj *model.Organization) ([]*model.User, error)
 }
 type QueryResolver interface {
 	ListUsers(ctx context.Context) ([]*model.User, error)
@@ -332,7 +336,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.Organization(childComplexity, args["name"].(string), args["admins"].([]*model.Admin)), true
+		return e.complexity.Mutation.Organization(childComplexity, args["name"].(string), args["admins"].([]string)), true
 
 	case "Mutation.updateOAuth2Client":
 		if e.complexity.Mutation.UpdateOAuth2Client == nil {
@@ -1389,8 +1393,8 @@ extend type Mutation {
     "The name of the organization."
     name: String!,
 
-    "The users to add as admins."
-    admins: [Admin!]!
+    "The IDs of the users that are organization admins."
+    admins: [String!]!
     ): Organization! @checkPermissions @isAuthenticated
 }
 `, BuiltIn: false},
@@ -1891,10 +1895,10 @@ func (ec *executionContext) field_Mutation_organization_args(ctx context.Context
 		}
 	}
 	args["name"] = arg0
-	var arg1 []*model.Admin
+	var arg1 []string
 	if tmp, ok := rawArgs["admins"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("admins"))
-		arg1, err = ec.unmarshalNAdmin2ᚕᚖgithubᚗcomᚋpluralshᚋoauthᚑplaygroundᚋapiᚑserverᚋgraphᚋmodelᚐAdminᚄ(ctx, tmp)
+		arg1, err = ec.unmarshalNString2ᚕstringᚄ(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -3505,7 +3509,7 @@ func (ec *executionContext) _Mutation_organization(ctx context.Context, field gr
 	resTmp := ec._fieldMiddleware(ctx, nil, func(rctx context.Context) (interface{}, error) {
 		directive0 := func(rctx context.Context) (interface{}, error) {
 			ctx = rctx // use context from middleware stack in children
-			return ec.resolvers.Mutation().Organization(rctx, fc.Args["name"].(string), fc.Args["admins"].([]*model.Admin))
+			return ec.resolvers.Mutation().Organization(rctx, fc.Args["name"].(string), fc.Args["admins"].([]string))
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
 			if ec.directives.CheckPermissions == nil {
@@ -5772,7 +5776,7 @@ func (ec *executionContext) _Organization_admins(ctx context.Context, field grap
 	}()
 	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Admins, nil
+		return ec.resolvers.Organization().Admins(rctx, obj)
 	})
 
 	if resTmp == nil {
@@ -5787,8 +5791,8 @@ func (ec *executionContext) fieldContext_Organization_admins(ctx context.Context
 	fc = &graphql.FieldContext{
 		Object:     "Organization",
 		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
+		IsMethod:   true,
+		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
 			case "id":
@@ -9213,12 +9217,25 @@ func (ec *executionContext) _Organization(ctx context.Context, sel ast.Selection
 			out.Values[i] = ec._Organization_name(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
 		case "admins":
+			field := field
 
-			out.Values[i] = ec._Organization_admins(ctx, field, obj)
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Organization_admins(ctx, field, obj)
+				return res
+			}
 
+			out.Concurrently(i, func() graphql.Marshaler {
+				return innerFunc(ctx)
+
+			})
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -9793,28 +9810,6 @@ func (ec *executionContext) ___Type(ctx context.Context, sel ast.SelectionSet, o
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) unmarshalNAdmin2ᚕᚖgithubᚗcomᚋpluralshᚋoauthᚑplaygroundᚋapiᚑserverᚋgraphᚋmodelᚐAdminᚄ(ctx context.Context, v interface{}) ([]*model.Admin, error) {
-	var vSlice []interface{}
-	if v != nil {
-		vSlice = graphql.CoerceList(v)
-	}
-	var err error
-	res := make([]*model.Admin, len(vSlice))
-	for i := range vSlice {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNAdmin2ᚖgithubᚗcomᚋpluralshᚋoauthᚑplaygroundᚋapiᚑserverᚋgraphᚋmodelᚐAdmin(ctx, vSlice[i])
-		if err != nil {
-			return nil, err
-		}
-	}
-	return res, nil
-}
-
-func (ec *executionContext) unmarshalNAdmin2ᚖgithubᚗcomᚋpluralshᚋoauthᚑplaygroundᚋapiᚑserverᚋgraphᚋmodelᚐAdmin(ctx context.Context, v interface{}) (*model.Admin, error) {
-	res, err := ec.unmarshalInputAdmin(ctx, v)
-	return &res, graphql.ErrorOnPath(ctx, err)
-}
-
 func (ec *executionContext) unmarshalNBoolean2bool(ctx context.Context, v interface{}) (bool, error) {
 	res, err := graphql.UnmarshalBoolean(v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -10042,6 +10037,38 @@ func (ec *executionContext) marshalNString2string(ctx context.Context, sel ast.S
 		}
 	}
 	return res
+}
+
+func (ec *executionContext) unmarshalNString2ᚕstringᚄ(ctx context.Context, v interface{}) ([]string, error) {
+	var vSlice []interface{}
+	if v != nil {
+		vSlice = graphql.CoerceList(v)
+	}
+	var err error
+	res := make([]string, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNString2string(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) marshalNString2ᚕstringᚄ(ctx context.Context, sel ast.SelectionSet, v []string) graphql.Marshaler {
+	ret := make(graphql.Array, len(v))
+	for i := range v {
+		ret[i] = ec.marshalNString2string(ctx, sel, v[i])
+	}
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
 }
 
 func (ec *executionContext) marshalNUser2githubᚗcomᚋpluralshᚋoauthᚑplaygroundᚋapiᚑserverᚋgraphᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v model.User) graphql.Marshaler {
