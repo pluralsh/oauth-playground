@@ -8,15 +8,15 @@ import (
 	"os/signal"
 	"time"
 
-	"github.com/99designs/gqlgen/graphql"
-	"github.com/99designs/gqlgen/graphql/handler"
+	gqlHandler "github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/handler/apollotracing"
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/go-chi/chi/v5"
-	"github.com/pluralsh/oauth-playground/api-server/auth"
 	"github.com/pluralsh/oauth-playground/api-server/clients"
+	"github.com/pluralsh/oauth-playground/api-server/graph/directives"
 	"github.com/pluralsh/oauth-playground/api-server/graph/generated"
 	"github.com/pluralsh/oauth-playground/api-server/graph/resolvers"
+	"github.com/pluralsh/oauth-playground/api-server/handlers"
 	"github.com/rs/cors"
 
 	_ "github.com/mattn/go-sqlite3"
@@ -65,21 +65,31 @@ func main() {
 		panic(err)
 	}
 
-	resolver := &resolvers.Resolver{
-		C: &clients.ClientWrapper{
-			KratosClient: kratosAdminClient,
-			KetoClient:   ketoClient,
-			HydraClient:  hydraAdminClient,
-			Log:          ctrl.Log.WithName("clients"),
-		},
+	clientWrapper := &clients.ClientWrapper{
+		KratosClient: kratosAdminClient,
+		KetoClient:   ketoClient,
+		HydraClient:  hydraAdminClient,
+		Log:          ctrl.Log.WithName("clients"),
 	}
 
-	if err := serve(ctx, kratosAdminClient, resolver); err != nil {
+	resolver := &resolvers.Resolver{
+		C: clientWrapper,
+	}
+
+	directives := &directives.Directive{
+		C: clientWrapper,
+	}
+
+	handlers := &handlers.Handler{
+		C: clientWrapper,
+	}
+
+	if err := serve(ctx, kratosAdminClient, resolver, directives, handlers); err != nil {
 		setupLog.Error(err, "failed to serve")
 	}
 }
 
-func serve(ctx context.Context, kratosClient *kratos.APIClient, resolver *resolvers.Resolver) (err error) {
+func serve(ctx context.Context, kratosClient *kratos.APIClient, resolver *resolvers.Resolver, directives *directives.Directive, handlers *handlers.Handler) (err error) {
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = defaultPort
@@ -87,7 +97,7 @@ func serve(ctx context.Context, kratosClient *kratos.APIClient, resolver *resolv
 
 	router := chi.NewRouter()
 
-	router.Use(auth.Middleware(kratosClient, ctrl.Log.WithName("auth").WithName("middleware")))
+	router.Use(handlers.Middleware(ctrl.Log.WithName("auth").WithName("middleware")))
 
 	// Add CORS middleware around every request
 	// See https://github.com/rs/cors for full option listing
@@ -99,122 +109,12 @@ func serve(ctx context.Context, kratosClient *kratos.APIClient, resolver *resolv
 
 	gqlConfig := generated.Config{Resolvers: resolver}
 
-	gqlConfig.Directives.IsAuthenticated = func(ctx context.Context, obj interface{}, next graphql.Resolver) (interface{}, error) {
-		// userCtx := auth.ForContext(ctx)
-		// if userCtx != nil {
-
-		// 	if userCtx.KratosSession != nil {
-
-		// 		session := userCtx.KratosSession
-
-		// 		if !session.GetActive() || session.ExpiresAt.Before(time.Now()) {
-		// 			return nil, fmt.Errorf("Access denied: User session not active or has expired.")
-		// 		}
-		// 	} else {
-		// 		// TODO: remove debug log message
-		// 		setupLog.Info("auth directive failed")
-		// 		return nil, fmt.Errorf("Access denied: User must be logged in.")
-		// 	}
-		// } else {
-		// 	// TODO: remove debug log message
-		// 	setupLog.Info("auth directive failed")
-		// 	return nil, fmt.Errorf("Access denied: User must be logged in.")
-		// }
-
-		// TODO: remove debug log message
-		setupLog.Info("auth directive successful")
-
-		// let it pass through if user is authenticated
-		return next(ctx)
-	}
+	gqlConfig.Directives.IsAuthenticated = directives.IsAuthenticated
 
 	//TODO: change all create and delete mutations so that name and namespace are used directly rather than the wrapped in the input
-	gqlConfig.Directives.CheckPermissions = func(ctx context.Context, obj interface{}, next graphql.Resolver) (interface{}, error) {
+	gqlConfig.Directives.CheckPermissions = directives.CheckPermissions
 
-		// setupLog.Info("Scope directive", "object", graphql.GetFieldContext(ctx).Parent)
-
-		// var namespace string
-
-		// namespace = ""
-
-		// // TODO: check that this still works when no variables are used
-		// if graphql.GetFieldContext(ctx).Field.Arguments.ForName("namespace") != nil {
-		// 	namespaceArg := graphql.GetFieldContext(ctx).Field.Arguments.ForName("namespace")
-		// 	namespaceValue, err := namespaceArg.Value.Value(graphql.GetOperationContext(ctx).Variables)
-		// 	if err != nil {
-		// 		return nil, err
-		// 	}
-		// 	namespace = namespaceValue.(string)
-		// }
-
-		// var operation string
-
-		// if graphql.GetFieldContext(ctx).Object == "Query" || graphql.GetFieldContext(ctx).Object == "Mutation" {
-
-		// 	operation = graphql.GetFieldContext(ctx).Field.Name
-		// } else if graphql.GetFieldContext(ctx).Parent != nil {
-		// 	// this is for nested objects
-		// 	operation = graphql.GetFieldContext(ctx).Object
-		// } else {
-		// 	return nil, fmt.Errorf("Access denied: The SubjectAccessReview has not yet been implemented for this scenario")
-		// }
-
-		// // get the verb and type by splitting the camelCase
-		// // for example, `getStorageClass` becomes `get` and `StorageClass`
-		// splitOperation := splitCamelCase(operation)
-
-		// if len(splitOperation) != 2 {
-		// 	return nil, fmt.Errorf("Access denied: Something went wrong when parsing the operation for Kubernetes RBAC")
-		// }
-
-		// var verb, ObjectType string
-
-		// ObjectType = splitOperation[1]
-
-		// // check if first string is empty
-		// if splitOperation[0] == "" {
-		// 	verb = "get"
-		// } else {
-		// 	verb = splitOperation[0]
-		// }
-
-		// // check if the ObjectType is a plural
-		// // if it is, we need to convert it to a singular
-		// // for example, `StorageClasses` becomes `StorageClass`
-		// pluralize := pluralize.NewClient()
-		// if pluralize.IsPlural(ObjectType) {
-		// 	ObjectType = pluralize.Singular(ObjectType)
-		// }
-
-		// // get the TypeSar from the ObjectType
-		// TypeSar, err := sarLookupFunc(ObjectType)
-		// if err != nil {
-		// 	return nil, fmt.Errorf("Access denied: Failed to check user permissions. %s", err)
-		// }
-
-		// if err := auth.UserAuthz(
-		// 	ctx,
-		// 	kubeClient,
-		// 	setupLog,
-		// 	TypeSar.Group,
-		// 	verb,
-		// 	TypeSar.Resource,
-		// 	TypeSar.Version,
-		// 	namespace); err != nil {
-
-		// 	// TODO: remove debug log message
-		// 	setupLog.Info("scope directive failed")
-		// 	return nil, fmt.Errorf("Access denied: User is not allowed to '%s' '%s' in namespace '%s'. Error: %s", verb, TypeSar.Resource, namespace, err)
-		// }
-
-		// TODO: remove debug log message
-		setupLog.Info("scope directive successful")
-
-		// or let it pass through
-		return next(ctx)
-	}
-
-	gqlSrv := handler.NewDefaultServer(generated.NewExecutableSchema(gqlConfig))
+	gqlSrv := gqlHandler.NewDefaultServer(generated.NewExecutableSchema(gqlConfig))
 	gqlSrv.Use(apollotracing.Tracer{})
 	// gqlSrv.AddTransport(&transport.Websocket{
 	//     Upgrader: websocket.Upgrader{
@@ -230,6 +130,7 @@ func serve(ctx context.Context, kratosClient *kratos.APIClient, resolver *resolv
 
 	router.Handle("/", playground.Handler("GraphQL playground", "/graphql"))
 	router.Handle("/graphql", gqlSrv)
+	router.Post("/tenant-hydrator", handlers.HydrateObservabilityTenants)
 
 	srv := &http.Server{
 		Addr:    ":" + port,
