@@ -414,7 +414,7 @@ func (c *ClientWrapper) AddGroupToTenantInKeto(ctx context.Context, name string,
 		Subject: rts.NewSubjectSet(
 			"Group",
 			group,
-			"",
+			"members",
 		),
 	}
 
@@ -455,7 +455,7 @@ func (c *ClientWrapper) RemoveGroupFromTenantInKeto(ctx context.Context, name st
 		Subject: rts.NewSubjectSet(
 			"Group",
 			group,
-			"",
+			"members",
 		),
 	}
 
