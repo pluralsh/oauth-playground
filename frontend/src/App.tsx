@@ -10,7 +10,7 @@ import Login from './pages/Login';
 import Settings from './pages/Settings';
 import './App.css';
 import Layout from './components/Layout';
-// import Users from './pages/Users';
+import Users from './pages/Users';
 import Groups from './pages/Groups';
 import Registration from './pages/Registration';
 import Recovery from './pages/Recovery';
@@ -56,7 +56,7 @@ function App() {
               <Route path=":name" element={<WorkspaceDetails />} />
               <Route path="create" element={<CreateWorkspaceForm />} />
             </Route> */}
-            {/* <Route path="users" element={<Users />} /> */}
+            <Route path="users" element={<Users />} />
             <Route path="groups" element={<Groups />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Route>

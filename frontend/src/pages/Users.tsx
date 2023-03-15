@@ -15,9 +15,9 @@ import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import { LIST_USERS } from '../graphql/queries';
+import { useListUsersQuery, UserInfoFragment, UserGroupInfoFragment } from '../generated/graphql';
 
-function Row(props: { user: any }) {
+function Row(props: { user: UserInfoFragment }) {
   const { user } = props;
   const [open, setOpen] = useState(false);
 
@@ -36,7 +36,7 @@ function Row(props: { user: any }) {
         <TableCell component="th" scope="row">
           {user.email}
         </TableCell>
-        <TableCell>{user.name}</TableCell>
+        <TableCell>{user.name?.first} {user.name?.last}</TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
@@ -54,7 +54,7 @@ function Row(props: { user: any }) {
                 </TableHead>
                 <TableBody>
                   {user.groups
-                    ? user.groups.map((group: any) => (
+                    ? user.groups.map((group: UserGroupInfoFragment) => (
                         <TableRow key={group.name}>
                           <TableCell component="th" scope="row">
                             {group.name}
@@ -74,7 +74,7 @@ function Row(props: { user: any }) {
 }
 
 function Users() {
-  const { loading, error, data } = useQuery(LIST_USERS);
+  const { loading, error, data } = useListUsersQuery();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
@@ -91,7 +91,7 @@ function Users() {
 
   const emptyRows =
     page > 0 && data
-      ? Math.max(0, (1 + page) * rowsPerPage - data.users.length)
+      ? Math.max(0, (1 + page) * rowsPerPage - data.listUsers.length)
       : 0;
 
   if (loading) {
@@ -117,7 +117,7 @@ function Users() {
             <TableBody>
               {data.listUsers
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((user: any) => (
+                .map((user: UserInfoFragment) => (
                   <Row key={user.email} user={user} />
                 ))}
             </TableBody>
