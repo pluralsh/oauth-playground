@@ -406,6 +406,10 @@ export type User = {
   recoveryLink?: Maybe<Scalars['String']>;
 };
 
+export type GroupInfoFragment = { __typename?: 'Group', name: string, members?: Array<{ __typename?: 'User', id: string, email: string, name?: { __typename?: 'Name', first?: string | null | undefined, last?: string | null | undefined } | null | undefined }> | null | undefined };
+
+export type GroupUserInfoFragment = { __typename?: 'User', id: string, email: string, name?: { __typename?: 'Name', first?: string | null | undefined, last?: string | null | undefined } | null | undefined };
+
 export type ListGroupsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -418,22 +422,66 @@ export type DeleteGroupMutationVariables = Exact<{
 
 export type DeleteGroupMutation = { __typename?: 'Mutation', deleteGroup: { __typename?: 'Group', name: string } };
 
+export type GroupMutationVariables = Exact<{
+  name: Scalars['String'];
+  members?: Maybe<Array<Scalars['String']> | Scalars['String']>;
+}>;
 
-export const ListGroupsDocument = gql`
-    query ListGroups {
-  listGroups {
-    name
-    members {
-      id
-      email
-      name {
-        first
-        last
-      }
-    }
+
+export type GroupMutation = { __typename?: 'Mutation', group: { __typename?: 'Group', name: string, members?: Array<{ __typename?: 'User', id: string, email: string, name?: { __typename?: 'Name', first?: string | null | undefined, last?: string | null | undefined } | null | undefined }> | null | undefined } };
+
+export type UserInfoFragment = { __typename?: 'User', id: string, email: string, name?: { __typename?: 'Name', first?: string | null | undefined, last?: string | null | undefined } | null | undefined, groups?: Array<{ __typename?: 'Group', name: string }> | null | undefined };
+
+export type UserGroupInfoFragment = { __typename?: 'Group', name: string };
+
+export type ListUsersQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ListUsersQuery = { __typename?: 'Query', listUsers: Array<{ __typename?: 'User', id: string, email: string, name?: { __typename?: 'Name', first?: string | null | undefined, last?: string | null | undefined } | null | undefined, groups?: Array<{ __typename?: 'Group', name: string }> | null | undefined }> };
+
+export const GroupUserInfoFragmentDoc = gql`
+    fragment GroupUserInfo on User {
+  id
+  email
+  name {
+    first
+    last
   }
 }
     `;
+export const GroupInfoFragmentDoc = gql`
+    fragment GroupInfo on Group {
+  name
+  members {
+    ...GroupUserInfo
+  }
+}
+    ${GroupUserInfoFragmentDoc}`;
+export const UserGroupInfoFragmentDoc = gql`
+    fragment UserGroupInfo on Group {
+  name
+}
+    `;
+export const UserInfoFragmentDoc = gql`
+    fragment UserInfo on User {
+  id
+  email
+  name {
+    first
+    last
+  }
+  groups {
+    ...UserGroupInfo
+  }
+}
+    ${UserGroupInfoFragmentDoc}`;
+export const ListGroupsDocument = gql`
+    query ListGroups {
+  listGroups {
+    ...GroupInfo
+  }
+}
+    ${GroupInfoFragmentDoc}`;
 
 /**
  * __useListGroupsQuery__
@@ -494,3 +542,87 @@ export function useDeleteGroupMutation(baseOptions?: Apollo.MutationHookOptions<
 export type DeleteGroupMutationHookResult = ReturnType<typeof useDeleteGroupMutation>;
 export type DeleteGroupMutationResult = Apollo.MutationResult<DeleteGroupMutation>;
 export type DeleteGroupMutationOptions = Apollo.BaseMutationOptions<DeleteGroupMutation, DeleteGroupMutationVariables>;
+export const GroupDocument = gql`
+    mutation Group($name: String!, $members: [String!]) {
+  group(name: $name, members: $members) {
+    ...GroupInfo
+  }
+}
+    ${GroupInfoFragmentDoc}`;
+export type GroupMutationFn = Apollo.MutationFunction<GroupMutation, GroupMutationVariables>;
+
+/**
+ * __useGroupMutation__
+ *
+ * To run a mutation, you first call `useGroupMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useGroupMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [groupMutation, { data, loading, error }] = useGroupMutation({
+ *   variables: {
+ *      name: // value for 'name'
+ *      members: // value for 'members'
+ *   },
+ * });
+ */
+export function useGroupMutation(baseOptions?: Apollo.MutationHookOptions<GroupMutation, GroupMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<GroupMutation, GroupMutationVariables>(GroupDocument, options);
+      }
+export type GroupMutationHookResult = ReturnType<typeof useGroupMutation>;
+export type GroupMutationResult = Apollo.MutationResult<GroupMutation>;
+export type GroupMutationOptions = Apollo.BaseMutationOptions<GroupMutation, GroupMutationVariables>;
+export const ListUsersDocument = gql`
+    query ListUsers {
+  listUsers {
+    ...UserInfo
+  }
+}
+    ${UserInfoFragmentDoc}`;
+
+/**
+ * __useListUsersQuery__
+ *
+ * To run a query within a React component, call `useListUsersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useListUsersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useListUsersQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useListUsersQuery(baseOptions?: Apollo.QueryHookOptions<ListUsersQuery, ListUsersQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ListUsersQuery, ListUsersQueryVariables>(ListUsersDocument, options);
+      }
+export function useListUsersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ListUsersQuery, ListUsersQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ListUsersQuery, ListUsersQueryVariables>(ListUsersDocument, options);
+        }
+export type ListUsersQueryHookResult = ReturnType<typeof useListUsersQuery>;
+export type ListUsersLazyQueryHookResult = ReturnType<typeof useListUsersLazyQuery>;
+export type ListUsersQueryResult = Apollo.QueryResult<ListUsersQuery, ListUsersQueryVariables>;
+export const namedOperations = {
+  Query: {
+    ListGroups: 'ListGroups',
+    ListUsers: 'ListUsers'
+  },
+  Mutation: {
+    DeleteGroup: 'DeleteGroup',
+    Group: 'Group'
+  },
+  Fragment: {
+    GroupInfo: 'GroupInfo',
+    GroupUserInfo: 'GroupUserInfo',
+    UserInfo: 'UserInfo',
+    UserGroupInfo: 'UserGroupInfo'
+  }
+}

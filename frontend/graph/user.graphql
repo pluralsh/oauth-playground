@@ -1,0 +1,21 @@
+fragment UserInfo on User {
+  id
+  email
+  name{
+    first
+    last
+  }
+  groups{
+    ...UserGroupInfo
+  }
+}
+
+fragment UserGroupInfo on Group {
+  name
+}
+
+query ListUsers{
+  listUsers{
+    ...UserInfo
+  }
+}

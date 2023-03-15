@@ -16,15 +16,15 @@ import {
   KeyboardArrowUp,
   Delete
 } from '@mui/icons-material';
-import { Group as GroupT, useListGroupsQuery, useDeleteGroupMutation, User } from '../generated/graphql';
+import { namedOperations, GroupInfoFragment, useDeleteGroupMutation, User } from '../generated/graphql';
 
-function GroupRow({ group }: { group: Partial<GroupT> }) { // TODO: fix type
+function GroupRow({ group }: { group: GroupInfoFragment }) {
   const [open, setOpen] = useState(false);
   const [deleteGroup, { loading, error }] = useDeleteGroupMutation({
     variables: {
       name: group.name || ''
     },
-    // refetchQueries: [useListGroupsQuery()] // TODD: fix refetch
+    refetchQueries: [namedOperations.Query.ListGroups]
   });
 
   return (

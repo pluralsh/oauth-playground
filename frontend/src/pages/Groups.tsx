@@ -10,16 +10,16 @@ import {
   TableRow,
   Paper
 } from '@mui/material';
-// import CreateGroupDialog from '../components/CreateGroupDialog'; // TODO: add back
+import CreateGroupDialog from '../components/CreateGroupDialog';
 import GroupRow from '../components/GroupRow';
-import { Group as GroupT, useListGroupsQuery } from '../generated/graphql';
+import { GroupInfoFragment, useListGroupsQuery } from '../generated/graphql';
 
 function Groups() {
   const { loading, error, data } = useListGroupsQuery();
 
   return (
     <Box sx={{ padding: 2, backgroundColor: 'white' }}>
-      {/* <CreateGroupDialog /> */}
+      <CreateGroupDialog />
       {loading ? <CircularProgress /> : null}
       {error ? <div>{error.message}</div> : null}
       {data ? (
@@ -36,7 +36,7 @@ function Groups() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {data.listGroups?.map((group: any ) => ( // TODO: fix type
+              {data.listGroups?.map((group: GroupInfoFragment ) => (
                   <GroupRow key={group.name} group={group} />
                 ))}
             </TableBody>

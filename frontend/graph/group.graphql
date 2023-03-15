@@ -1,25 +1,33 @@
+fragment GroupInfo on Group {
+  name
+  members{
+    ...GroupUserInfo
+  }
+}
+
+fragment GroupUserInfo on User {
+  id
+  email
+  name{
+    first
+    last
+  }
+}
+
 query ListGroups {
   listGroups{
-    name
-    members{
-      id
-      email
-      name{
-        first
-        last
-      }
-      # organization{
-      #   name
-      # }
-    }
-    # organization{
-    #   name
-    # }
+    ...GroupInfo
   }
 }
 
 mutation DeleteGroup($name: String!) {
   deleteGroup(name: $name){
     name
+  }
+}
+
+mutation Group($name: String!, $members: [String!]) {
+  group(name: $name, members: $members){
+    ...GroupInfo
   }
 }
