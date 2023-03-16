@@ -28,7 +28,7 @@ kratos:
   config:
     serve:
       public:
-        base_url: https://kratos.mimir-cloud.pluraldev.sh/.ory/kratos/public/
+        base_url: http://localhost:4455/.ory/kratos/public/
         cors:
           enabled: true
           allowed_origins:
@@ -37,7 +37,7 @@ kratos:
     oauth2_provider:
       url: http://oauth-stack-hydra-admin:4445
     selfservice:
-      default_browser_return_url: https://kratos.mimir-cloud.pluraldev.sh/
+      default_browser_return_url: http://localhost:4455/
 
       methods:
         password:
@@ -45,33 +45,33 @@ kratos:
 
       flows:
         error:
-          ui_url: https://kratos.mimir-cloud.pluraldev.sh/error
+          ui_url: http://localhost:4455/error
 
         settings:
-          ui_url: https://kratos.mimir-cloud.pluraldev.sh/settings
+          ui_url: http://localhost:4455/settings
           privileged_session_max_age: 15m
 
         recovery:
           enabled: true
-          ui_url: https://kratos.mimir-cloud.pluraldev.sh/recovery
+          ui_url: http://localhost:4455/recovery
 
         verification:
           enabled: true
-          ui_url: https://kratos.mimir-cloud.pluraldev.sh/verification
+          ui_url: http://localhost:4455/verification
           after:
-            default_browser_return_url: https://kratos.mimir-cloud.pluraldev.sh/
+            default_browser_return_url: http://localhost:4455/
 
         logout:
           after:
-            default_browser_return_url: https://kratos.mimir-cloud.pluraldev.sh/login
+            default_browser_return_url: http://localhost:4455/login
 
         login:
-          ui_url: https://kratos.mimir-cloud.pluraldev.sh/login
+          ui_url: http://localhost:4455/login
           lifespan: 10m
 
         registration:
           lifespan: 10m
-          ui_url: https://kratos.mimir-cloud.pluraldev.sh/registration
+          ui_url: http://localhost:4455/registration
           after:
             password:
               hooks:

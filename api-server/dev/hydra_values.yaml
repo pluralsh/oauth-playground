@@ -3,6 +3,7 @@ maester:
 hydra:
   automigration:
     enabled: true
+  dev: true
   config:
     dsn: postgres://hydra:hydrapassword@postgresql-hydra:5432/hydra
     secrets:
@@ -12,9 +13,9 @@ hydra:
 
     urls:
       self:
-        issuer: https://hydra.mimir-cloud.pluraldev.sh
-      login: https://kratos.mimir-cloud.pluraldev.sh/login
-      consent: https://kratos.mimir-cloud.pluraldev.sh/consent
+        issuer: http://localhost:4455/hydra
+      login: http://localhost:4455/login
+      consent: http://localhost:4455/consent
     serve:
       admin:
         tls:
