@@ -183,6 +183,8 @@ export default function Layout() {
     }
   ];
 
+// TODO: add back admin check
+
   return (
     <div>
       <Box sx={{ display: 'flex' }}>
@@ -246,7 +248,7 @@ export default function Layout() {
               </ListItemButton>
             ))}
           </List>
-          {/* {data && data.me && data.me.admin ? (
+          {/* {data && data.me && data.me.admin ? ( */}
             <Box>
               <Divider />
               <List>
@@ -263,7 +265,7 @@ export default function Layout() {
                 ))}
               </List>
             </Box>
-          ) : null} */}
+          {/* ) : null} */}
         </Drawer>
         <Box component="main" sx={{ flexGrow: 1 }}>
           <DrawerHeader />

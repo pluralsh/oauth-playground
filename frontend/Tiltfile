@@ -1,0 +1,31 @@
+## Frontend
+
+docker_build(
+  'frontend-image',
+  '.',
+  entrypoint=["yarn", "start"],
+  dockerfile='./Dockerfile.dev',
+  live_update=[
+    # when package.json changes, we need to do a full build
+    fall_back_on(['package.json', 'yarn.lock']),
+    # Map the local source code into the container under /src
+    sync('.', '/app'),
+  ]
+#  only=[
+#    './build',
+#    './web',
+#  ],
+#  live_update=[
+#    sync('./build', '/app/build'),
+#    sync('./web', '/app/web'),
+#  ],
+)
+
+k8s_yaml(
+    './dev/frontend-deployment.yaml'
+    )
+
+k8s_resource(
+    'frontend',
+    labels=['frontend'],
+    )

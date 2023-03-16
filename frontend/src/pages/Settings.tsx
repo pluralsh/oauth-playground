@@ -1,190 +1,103 @@
+import { SettingsFlow, UpdateSettingsFlowBody } from "@ory/client"
 import {
-  SelfServiceSettingsFlow,
-  SubmitSelfServiceSettingsFlowBody
-} from '@ory/client';
-import { AxiosError } from 'axios';
-import { ReactNode, useEffect, useState } from 'react';
-import { Typography, Box } from '@mui/material';
+  gridStyle,
+  NodeMessages,
+  UserSettingsCard,
+  UserSettingsFlowType,
+} from "@ory/elements"
+import { useCallback, useEffect, useState } from "react"
+import { useNavigate, useSearchParams } from "react-router-dom"
+import { sdk, sdkError } from "../apis/ory"
 
-import { Flow, Methods, Messages } from '../pkg/ui';
-import { handleFlowError } from '../pkg/errors';
-import ory from '../apis/ory';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+export const Settings = () => {
+  const [flow, setFlow] = useState<SettingsFlow | null>(null)
+  const [searchParams, setSearchParams] = useSearchParams()
 
-interface Props {
-  flow?: SelfServiceSettingsFlow;
-  only?: Methods;
-}
+  const navigate = useNavigate()
 
-function SettingsCard({
-  flow,
-  only,
-  children
-}: Props & { children: ReactNode }) {
-  if (!flow) {
-    return null;
+  // Get the flow based on the flowId in the URL (.e.g redirect to this page after flow initialized)
+  const getFlow = useCallback(
+    (flowId: string) =>
+      sdk
+        // the flow data contains the form fields, error messages and csrf token
+        .getSettingsFlow({ id: flowId })
+        .then(({ data: flow }) => setFlow(flow))
+        .catch(sdkErrorHandler),
+    [],
+  )
+
+  // initialize the sdkError for generic handling of errors
+  const sdkErrorHandler = sdkError(getFlow, setFlow, "/settings", true)
+
+  const createFlow = () => {
+    sdk
+      // create a new settings flow
+      // the flow contains the form fields, error messages and csrf token
+      // depending on the Ory Network project settings, the form fields returned may vary
+      .createBrowserSettingsFlow()
+      .then(({ data: flow }) => {
+        // Update URI query params to include flow id
+        setSearchParams({ ["flow"]: flow.id })
+        // Set the flow data
+        setFlow(flow)
+      })
+      .catch(sdkErrorHandler)
   }
 
-  const nodes = only
-    ? flow.ui.nodes.filter(({ group }) => group === only)
-    : flow.ui.nodes;
+  // submit any of the settings form data to Ory
+  const onSubmit = (body: UpdateSettingsFlowBody) => {
+    // something unexpected went wrong and the flow was not set
+    if (!flow) return navigate("/settings", { replace: true })
 
-  if (nodes.length === 0) {
-    return null;
+    sdk
+      // submit the form data the user provided to Ory
+      .updateSettingsFlow({ flow: flow.id, updateSettingsFlowBody: body })
+      .then(({ data: flow }) => {
+        setFlow(flow)
+      })
+      .catch(sdkErrorHandler)
   }
-
-  return <Box mb={2}>{children}</Box>;
-}
-
-function Settings() {
-  const [flow, setFlow] = useState<SelfServiceSettingsFlow>();
-
-  // Get ?flow=... from the URL
-  const navigate = useNavigate();
-  const [searchParams, setSearchParams] = useSearchParams();
-
-  const flowId = searchParams.get('flow');
-  const returnTo = searchParams.get('return_to');
 
   useEffect(() => {
-    if (flow) {
-      return;
-    }
-
-    // If ?flow=.. was in the URL, we fetch it
+    // we might redirect to this page after the flow is initialized, so we check for the flowId in the URL
+    const flowId = searchParams.get("flow")
+    // the flow already exists
     if (flowId) {
-      ory
-        .getSelfServiceSettingsFlow(String(flowId))
-        .then(({ data }) => {
-          setFlow(data);
-        })
-        .catch(handleFlowError(navigate, 'settings', setFlow));
-      return;
+      getFlow(flowId).catch(createFlow) // if for some reason the flow has expired, we need to get a new one
+      return
     }
+    createFlow()
+  }, [])
 
-    // Otherwise we initialize it
-    ory
-      .initializeSelfServiceSettingsFlowForBrowsers(
-        returnTo ? String(returnTo) : undefined
-      )
-      .then(({ data }) => {
-        setFlow(data);
-      })
-      .catch(handleFlowError(navigate, 'settings', setFlow));
-  }, [flowId, returnTo, flow]);
-
-  const onSubmit = (values: SubmitSelfServiceSettingsFlowBody) => {
-    navigate(`/settings?flow=${flow?.id}`, undefined);
-    // On submission, add the flow ID to the URL but do not navigate. This prevents the user loosing
-    // his data when she/he reloads the page.
-
-    ory
-      .submitSelfServiceSettingsFlow(String(flow?.id), values, undefined)
-      .then(({ data }) => {
-        // The settings have been saved and the flow was updated. Let's show it to the user!
-        setFlow(data);
-      })
-      .catch(handleFlowError(navigate, 'settings', setFlow))
-      .catch((err: AxiosError<SelfServiceSettingsFlow>) => {
-        // If the previous handler did not catch the error it's most likely a form validation error
-        if (err.response?.status === 400) {
-          // Yup, it is!
-          setFlow(err.response?.data);
-          return;
-        }
-
-        return Promise.reject(err);
-      });
-  };
-
-  return (
-    <Box sx={{ margin: 4, marginBottom: 0 }}>
-      <SettingsCard only="profile" flow={flow}>
-        <Typography variant="h4">Profile Settings</Typography>
-        <Messages messages={flow?.ui.messages} />
-        <Flow
-          hideGlobalMessages
-          onSubmit={onSubmit}
-          only="profile"
+  // if the flow is not set, we show a loading indicator
+  return flow ? (
+    <div className={gridStyle({ gap: 16 })}>
+      <NodeMessages uiMessages={flow.ui.messages} />
+      {/* here we simply map all of the settings flows we could have. These flows won't render if they aren't enabled inside your Ory Network project */}
+      {(
+        [
+          "profile",
+          "password",
+          "totp",
+          "webauthn",
+          "lookupSecret",
+          "oidc",
+        ] as UserSettingsFlowType[]
+      ).map((flowType: UserSettingsFlowType, index) => (
+        // here we render the settings flow using Ory Elements
+        <UserSettingsCard
+          key={index}
+          // we always need to pass the component the flow since it contains the form fields, error messages and csrf token
           flow={flow}
+          flowType={flowType}
+          // include scripts for webauthn support
+          includeScripts={true}
+          // submit the form data the user provides to Ory
+          onSubmit={({ body }) => onSubmit(body)}
         />
-      </SettingsCard>
-      <SettingsCard only="password" flow={flow}>
-        <Typography variant="h4">Change Password</Typography>
-        <Messages messages={flow?.ui.messages} />
-        <Flow
-          hideGlobalMessages
-          onSubmit={onSubmit}
-          only="password"
-          flow={flow}
-        />
-      </SettingsCard>
-      <SettingsCard only="oidc" flow={flow}>
-        <Typography variant="h4">Manage Social Sign In</Typography>
-        <Messages messages={flow?.ui.messages} />
-        <Flow hideGlobalMessages onSubmit={onSubmit} only="oidc" flow={flow} />
-      </SettingsCard>
-      <SettingsCard only="lookup_secret" flow={flow}>
-        <Typography variant="h4">Manage 2FA Backup Recovery Codes</Typography>
-        <Messages messages={flow?.ui.messages} />
-        <Typography paragraph>
-          Recovery codes can be used in panic situations where you have lost
-          access to your 2FA device.
-        </Typography>
-        <Flow
-          hideGlobalMessages
-          onSubmit={onSubmit}
-          only="lookup_secret"
-          flow={flow}
-        />
-      </SettingsCard>
-      <SettingsCard only="totp" flow={flow}>
-        <Typography variant="h4">Manage 2FA TOTP Authenticator App</Typography>
-        <Typography paragraph>
-          Add a TOTP Authenticator App to your account to improve your account
-          security. Popular Authenticator Apps are{' '}
-          <a href="https://www.lastpass.com" rel="noreferrer" target="_blank">
-            LastPass
-          </a>{' '}
-          and Google Authenticator (
-          <a
-            href="https://apps.apple.com/us/app/google-authenticator/id388497605"
-            target="_blank"
-            rel="noreferrer"
-          >
-            iOS
-          </a>
-          ,{' '}
-          <a
-            href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&hl=en&gl=US"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Android
-          </a>
-          ).
-        </Typography>
-        <Messages messages={flow?.ui.messages} />
-        <Flow hideGlobalMessages onSubmit={onSubmit} only="totp" flow={flow} />
-      </SettingsCard>
-      <SettingsCard only="webauthn" flow={flow}>
-        <Typography variant="h4">
-          Manage Hardware Tokens and Biometrics
-        </Typography>
-        <Messages messages={flow?.ui.messages} />
-        <Typography paragraph>
-          Use Hardware Tokens (e.g. YubiKey) or Biometrics (e.g. FaceID,
-          TouchID) to enhance your account security.
-        </Typography>
-        <Flow
-          hideGlobalMessages
-          onSubmit={onSubmit}
-          only="webauthn"
-          flow={flow}
-        />
-      </SettingsCard>
-    </Box>
-  );
+      ))}
+    </div>
+  ) : (
+    <div>Loading...</div>
+  )
 }
-
-export default Settings;

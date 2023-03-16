@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import {
@@ -9,6 +9,19 @@ import {
   ApolloProvider
 } from '@apollo/client';
 import { RecoilRoot } from 'recoil';
+
+import { ThemeProvider } from "@ory/elements"
+import "@ory/elements/style.css"
+
+// // Ory Elements
+// // optional fontawesome icons
+// import "@ory/elements/assets/fa-brands.min.css"
+// import "@ory/elements/assets/fa-solid.min.css"
+// import "@ory/elements/assets/fontawesome.min.css"
+
+// // optional fonts
+// import "@ory/elements/assets/inter-font.css"
+// import "@ory/elements/assets/jetbrains-mono-font.css"
 
 const httpLink = createHttpLink({
   uri: '/graphql',
@@ -26,13 +39,16 @@ const client = new ApolloClient({
   }
 });
 
-ReactDOM.render(
+ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <ApolloProvider client={client}>
-      <RecoilRoot>
-        <App />
-      </RecoilRoot>
+      {/* <RecoilRoot> */}
+        <ThemeProvider themeOverrides={{
+          fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
+          }}>
+          <App />
+        </ThemeProvider>
+      {/* </RecoilRoot> */}
     </ApolloProvider>
   </React.StrictMode>,
-  document.getElementById('root')
 );

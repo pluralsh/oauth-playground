@@ -1,3 +1,22 @@
+- id: frontend:public
+  upstream:
+    url: http://frontend.default.svc.cluster.local
+    preserve_host: true
+  match:
+    url: <http|https>://<127.0.0.1|localhost>:4455</|/registration|/welcome|/recovery|/verification|/login.*|/consent.*|/error|/404|/500|/*.css|/*.js|/*.png|/*.svg|/assets/.*|/static/.*|/users|/groups|/settings.*>
+    methods:
+      - GET
+      - POST
+      - PUT
+      - DELETE
+      - PATCH
+      - OPTIONS
+  authenticators:
+    - handler: noop
+  authorizer:
+    handler: allow
+  mutators:
+    - handler: noop
 - id: api-server:graphiql:public
   upstream:
     url: http://api-server.default.svc.cluster.local:8082

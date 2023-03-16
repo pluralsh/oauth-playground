@@ -1,113 +1,90 @@
-import { useState, useEffect, Dispatch, SetStateAction } from 'react';
-import { useNavigate, useSearchParams, Link } from 'react-router-dom';
-import {
-  SelfServiceRegistrationFlow,
-  SubmitSelfServiceRegistrationFlowBody
-} from '@ory/client';
-import {
-  Avatar,
-  CssBaseline,
-  Grid,
-  Box,
-  Typography,
-  Container
-} from '@mui/material';
-import { LockOutlined } from '@mui/icons-material';
-import ory from '../apis/ory';
-import { Flow } from '../pkg/ui';
-import { handleFlowError } from '../pkg/errors';
-import { AxiosError } from 'axios';
+import { RegistrationFlow, UpdateRegistrationFlowBody } from "@ory/client"
+import { UserAuthCard } from "@ory/elements"
+import { useCallback, useEffect, useState } from "react"
+import { useNavigate, useSearchParams } from "react-router-dom"
+import { sdk, sdkError } from "../apis/ory"
 
-function Registration() {
-  const [flow, setFlow] = useState<SelfServiceRegistrationFlow>();
+export const Registration = () => {
+  const [flow, setFlow] = useState<RegistrationFlow | null>(null)
+  const [searchParams, setSearchParams] = useSearchParams()
 
-  const navigate = useNavigate();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate()
 
-  const flowId = searchParams.get('flow');
-  const returnTo = searchParams.get('return_to');
+  // Get the flow based on the flowId in the URL (.e.g redirect to this page after flow initialized)
+  const getFlow = useCallback(
+    (flowId: string) =>
+      sdk
+        // the flow data contains the form fields, error messages and csrf token
+        .getRegistrationFlow({ id: flowId })
+        .then(({ data: flow }) => setFlow(flow))
+        .catch(sdkErrorHandler),
+    [],
+  )
+
+  // initialize the sdkError for generic handling of errors
+  const sdkErrorHandler = sdkError(getFlow, setFlow, "/registration", true)
+
+  // create a new registration flow
+  const createFlow = () => {
+    sdk
+      // we don't need to specify the return_to here since we are building an SPA. In server-side browser flows we would need to specify the return_to
+      .createBrowserRegistrationFlow()
+      .then(({ data: flow }) => {
+        // Update URI query params to include flow id
+        setSearchParams({ ["flow"]: flow.id })
+        // Set the flow data
+        setFlow(flow)
+      })
+      .catch(sdkErrorHandler)
+  }
+
+  // submit the registration form data to Ory
+  const submitFlow = (body: UpdateRegistrationFlowBody) => {
+    // something unexpected went wrong and the flow was not set
+    if (!flow) return navigate("/registration", { replace: true })
+
+    sdk
+      .updateRegistrationFlow({
+        flow: flow.id,
+        updateRegistrationFlowBody: body,
+      })
+      .then(() => {
+        // we successfully submitted the login flow, so lets redirect to the dashboard
+        navigate("/", { replace: true })
+      })
+      .catch(sdkErrorHandler)
+  }
 
   useEffect(() => {
-    if (flow) {
-      return;
-    }
-
+    // we might redirect to this page after the flow is initialized, so we check for the flowId in the URL
+    const flowId = searchParams.get("flow")
+    // the flow already exists
     if (flowId) {
-      ory
-        .getSelfServiceRegistrationFlow(String(flowId))
-        .then(({ data }: any) => {
-          setFlow(data);
-        })
-        .catch(handleFlowError(navigate, 'registration', setFlow));
-
-      return;
+      getFlow(flowId).catch(createFlow) // if for some reason the flow has expired, we need to get a new one
+      return
     }
+    // we assume there was no flow, so we create a new one
+    createFlow()
+  }, [navigate])
 
-    ory
-      .initializeSelfServiceRegistrationFlowForBrowsers(
-        returnTo ? String(returnTo) : undefined
-      )
-      .then(({ data }: any) => {
-        setFlow(data);
-      })
-      .catch(handleFlowError(navigate, 'registration', setFlow));
-  }, [flowId, returnTo, flow]);
-
-  const onSubmit = (values: SubmitSelfServiceRegistrationFlowBody) => {
-    navigate(`/registration?flow=${flow?.id}`);
-    ory
-      .submitSelfServiceRegistrationFlow(String(flow?.id), values)
-      .then(({ data }) => {
-        if (flow?.return_to) {
-          window.location.href = flow?.return_to;
-          return;
-        }
-
-        window.location.replace('/');
-      })
-      .catch(handleFlowError(navigate, 'registration', setFlow))
-      .catch((err: AxiosError<SelfServiceRegistrationFlow>) => {
-        // If the previous handler did not catch the error it's most likely a form validation error
-        if (err.response?.status === 400) {
-          // Yup, it is!
-          setFlow(err.response?.data);
-          return;
-        }
-
-        return Promise.reject(err);
-      });
-  };
-
-  return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <Box
-        sx={{
-          marginTop: 8,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center'
-        }}
-      >
-        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-          <LockOutlined />
-        </Avatar>
-        <Typography component="h1" variant="h5" mb={1}>
-          Sign up
-        </Typography>
-        <Flow onSubmit={onSubmit} flow={flow} />
-        <Grid container justifyContent="flex-end">
-          <Grid item>
-            <Link to="/login">
-              <Typography variant="body2">
-                Already have an account? Sign in
-              </Typography>
-            </Link>
-          </Grid>
-        </Grid>
-      </Box>
-    </Container>
-  );
+  // the flow is not set yet, so we show a loading indicator
+  return flow ? (
+    // create a registration form that dynamically renders based on the flow data using Ory Elements
+    <UserAuthCard
+      title={"Registration"}
+      flowType={"registration"}
+      // we always need to pass the flow to the card since it contains the form fields, error messages and csrf token
+      flow={flow}
+      // the registration card needs a way to navigate to the login page
+      additionalProps={{
+        loginURL: "/login",
+      }}
+      // include the necessary scripts for webauthn to work
+      includeScripts={true}
+      // submit the registration form data to Ory
+      onSubmit={({ body }) => submitFlow(body as UpdateRegistrationFlowBody)}
+    />
+  ) : (
+    <div>Loading...</div>
+  )
 }
-
-export default Registration;

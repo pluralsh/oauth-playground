@@ -143,3 +143,7 @@ k8s_resource(
     'api-server',
     labels=['api-server'],
     )
+
+# frontend
+
+include('../frontend/Tiltfile')

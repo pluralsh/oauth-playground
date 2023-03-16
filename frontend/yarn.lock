@@ -3886,12 +3886,28 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ory/client@npm:0.2.0-alpha.48, @ory/client@npm:^0.2.0-alpha.16":
+"@ory/client@npm:1.1.21":
+  version: 1.1.21
+  resolution: "@ory/client@npm:1.1.21"
+  dependencies:
+    axios: ^0.21.4
+  checksum: 57b7267ef1fd90bccda5d2578f9584b66841a22ba637b2659da3c3f72871a77e980a8fdfc075e7c35175ec449b066d86ba800043b5c81ab7fe543b82f1cc3316
+  languageName: node
+  linkType: hard
+
+"@ory/client@npm:^0.2.0-alpha.16":
   version: 0.2.0-alpha.48
   resolution: "@ory/client@npm:0.2.0-alpha.48"
   dependencies:
     axios: ^0.21.4
   checksum: b568b5a5bc00575f12ffaf5ec1079bc854f17fd84851faf394426ce45e66ad7965db1ebacba02ab537081fc6cfeb5321f6c31591f989fd241ff1c45d0698f165
+  languageName: node
+  linkType: hard
+
+"@ory/elements@npm:^0.0.1-beta.4":
+  version: 0.0.1-beta.4
+  resolution: "@ory/elements@npm:0.0.1-beta.4"
+  checksum: 2522c4ddfbb50700e11111b64259e3b6e36076994473c043fd05fdb59eeca8254aa6e8c0ae99da3981eba71024110d58d78e372af82fe95d4bbbd61cc4dc94c7
   languageName: node
   linkType: hard
 
@@ -3916,12 +3932,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ory/kratos-client@npm:^0.0.0-next.a36dda23f209":
-  version: 0.0.0-next.ffe42eb0cc58
-  resolution: "@ory/kratos-client@npm:0.0.0-next.ffe42eb0cc58"
+"@ory/kratos-client@npm:0.11.1":
+  version: 0.11.1
+  resolution: "@ory/kratos-client@npm:0.11.1"
   dependencies:
-    axios: ^0.21.1
-  checksum: cd86ce0b2906f6049ce1396c779d60bf26729a461a7e4a901b07b6e17b157a12ed2a08bc0ea47b9b0de0d19049974255d598a7f5ec951338bb277743ab16fe66
+    axios: ^0.21.4
+  checksum: 9555afc20b759a6c958e6611e96203659fc50f9b3998297a7a72908001afd882b36cb204a65aabca807f254d5f10ce7745c272b28b933580031d21a46a11af08
   languageName: node
   linkType: hard
 
@@ -4746,12 +4762,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-dom@npm:^17.0.0":
-  version: 17.0.17
-  resolution: "@types/react-dom@npm:17.0.17"
+"@types/react-dom@npm:18.0.10":
+  version: 18.0.10
+  resolution: "@types/react-dom@npm:18.0.10"
   dependencies:
-    "@types/react": ^17
-  checksum: 23caf98aa03e968811560f92a2c8f451694253ebe16b670929b24eaf0e7fa62ba549abe9db0ac028a9d8a9086acd6ab9c6c773f163fa21224845edbc00ba6232
+    "@types/react": "*"
+  checksum: ff8282d5005a0b1cd95fb65bf79d3d8485e4cfe2aaf052129033a178684b940014a3f4536bc20d573f8a01cf4c6f4770c74988cef7c2b5cac3041d9f172647e3
   languageName: node
   linkType: hard
 
@@ -4784,14 +4800,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:^17, @types/react@npm:^17.0.0":
-  version: 17.0.49
-  resolution: "@types/react@npm:17.0.49"
+"@types/react@npm:18.0.27":
+  version: 18.0.27
+  resolution: "@types/react@npm:18.0.27"
   dependencies:
     "@types/prop-types": "*"
     "@types/scheduler": "*"
     csstype: ^3.0.2
-  checksum: e2e8001bb16fdf52dc92dbc2f64c8e49b1c6ab5d5da4725c0f27e3d925939e42b835554fecc306ca6b0951801eb784288b63c924bd703834662bbaccf89cb68a
+  checksum: 600fdbc39a92ea4a77047db3e12f05f67776a710f5918248c0189a59ac2a38900c9db5a5d2e433a16df528a3ecab1aa114b322cacea573bb1ca2fc0b094c52d1
   languageName: node
   linkType: hard
 
@@ -6155,7 +6171,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:^0.21.1, axios@npm:^0.21.4":
+"axios@npm:^0.21.4":
   version: 0.21.4
   resolution: "axios@npm:0.21.4"
   dependencies:
@@ -12262,9 +12278,10 @@ __metadata:
     "@mui/system": ^5.0.6
     "@mui/x-data-grid": ^4.0.1
     "@mui/x-data-grid-generator": ^4.0.1
-    "@ory/client": 0.2.0-alpha.48
+    "@ory/client": 1.1.21
+    "@ory/elements": ^0.0.1-beta.4
     "@ory/integrations": 0.2.8
-    "@ory/kratos-client": ^0.0.0-next.a36dda23f209
+    "@ory/kratos-client": 0.11.1
     "@testing-library/jest-dom": ^5.11.4
     "@testing-library/react": ^11.1.0
     "@testing-library/user-event": ^12.1.10
@@ -12272,8 +12289,8 @@ __metadata:
     "@types/graphql": ^14.5.0
     "@types/jest": ^26.0.15
     "@types/node": ^12.0.0
-    "@types/react": ^17.0.0
-    "@types/react-dom": ^17.0.0
+    "@types/react": 18.0.27
+    "@types/react-dom": 18.0.10
     "@types/testing-library__jest-dom": ^5.14.3
     "@typescript-eslint/eslint-plugin": ^5.27.0
     "@typescript-eslint/parser": ^5.27.0
@@ -12285,8 +12302,8 @@ __metadata:
     moment: ^2.29.1
     prettier: ^2.6.2
     query-string: 7.1.1
-    react: ^17.0.2
-    react-dom: ^17.0.2
+    react: 18.2.0
+    react-dom: 18.2.0
     react-router-dom: ^6.2.2
     react-scripts: 5.0.1
     recoil: ^0.6.1
@@ -15274,16 +15291,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-dom@npm:^17.0.2":
-  version: 17.0.2
-  resolution: "react-dom@npm:17.0.2"
+"react-dom@npm:18.2.0":
+  version: 18.2.0
+  resolution: "react-dom@npm:18.2.0"
   dependencies:
     loose-envify: ^1.1.0
-    object-assign: ^4.1.1
-    scheduler: ^0.20.2
+    scheduler: ^0.23.0
   peerDependencies:
-    react: 17.0.2
-  checksum: 1c1eaa3bca7c7228d24b70932e3d7c99e70d1d04e13bb0843bbf321582bc25d7961d6b8a6978a58a598af2af496d1cedcfb1bf65f6b0960a0a8161cb8dab743c
+    react: ^18.2.0
+  checksum: 7d323310bea3a91be2965f9468d552f201b1c27891e45ddc2d6b8f717680c95a75ae0bc1e3f5cf41472446a2589a75aed4483aee8169287909fcd59ad149e8cc
   languageName: node
   linkType: hard
 
@@ -15428,13 +15444,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@npm:^17.0.2":
-  version: 17.0.2
-  resolution: "react@npm:17.0.2"
+"react@npm:18.2.0":
+  version: 18.2.0
+  resolution: "react@npm:18.2.0"
   dependencies:
     loose-envify: ^1.1.0
-    object-assign: ^4.1.1
-  checksum: b254cc17ce3011788330f7bbf383ab653c6848902d7936a87b09d835d091e3f295f7e9dd1597c6daac5dc80f90e778c8230218ba8ad599f74adcc11e33b9d61b
+  checksum: 88e38092da8839b830cda6feef2e8505dec8ace60579e46aa5490fc3dc9bba0bd50336507dc166f43e3afc1c42939c09fe33b25fae889d6f402721dcd78fca1b
   languageName: node
   linkType: hard
 
@@ -16069,13 +16084,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"scheduler@npm:^0.20.2":
-  version: 0.20.2
-  resolution: "scheduler@npm:0.20.2"
+"scheduler@npm:^0.23.0":
+  version: 0.23.0
+  resolution: "scheduler@npm:0.23.0"
   dependencies:
     loose-envify: ^1.1.0
-    object-assign: ^4.1.1
-  checksum: c4b35cf967c8f0d3e65753252d0f260271f81a81e427241295c5a7b783abf4ea9e905f22f815ab66676f5313be0a25f47be582254db8f9241b259213e999b8fc
+  checksum: d79192eeaa12abef860c195ea45d37cbf2bbf5f66e3c4dcd16f54a7da53b17788a70d109ee3d3dde1a0fd50e6a8fc171f4300356c5aee4fc0171de526bf35f8a
   languageName: node
   linkType: hard
 

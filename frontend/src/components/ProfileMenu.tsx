@@ -2,13 +2,35 @@ import React, { useEffect, useState } from 'react';
 import { IconButton, MenuItem, Menu } from '@mui/material';
 import { AccountCircle } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
-import { useLogoutHandler } from '../pkg/hooks';
+// import { useLogoutHandler } from '../pkg/hooks';
+import ory from '../apis/ory';
+import { AxiosError } from 'axios';
 
 function ProfileMenu() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const navigate = useNavigate();
 
-  const logout = useLogoutHandler();
+  const [logoutUrl, setLogoutUrl] = useState<string | undefined>()
+
+  useEffect(() => {
+    ory
+      .createBrowserLogoutFlow()
+      .then(({ data }) => {
+        setLogoutUrl(data.logout_token);
+      })
+      .catch((err: AxiosError) => {
+        switch (err.response?.status) {
+          case 401:
+            // do nothing, the user is not logged in
+            return;
+        }
+
+        // Something else happened!
+        return Promise.reject(err);
+      });
+  });
+
+  // const logout = useLogoutHandler();
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -25,7 +47,7 @@ function ProfileMenu() {
 
   const handleLogout = () => {
     handleClose();
-    logout();
+    // logout();
   };
 
   return (
