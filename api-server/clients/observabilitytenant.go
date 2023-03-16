@@ -578,6 +578,7 @@ func (c *ClientWrapper) RemoveOauthClientFromTenantInKeto(ctx context.Context, n
 func (c *ClientWrapper) ListTenantsInKeto(ctx context.Context) ([]*model.ObservabilityTenant, error) {
 	log := c.Log.WithName("ListTenantsInKeto")
 
+	// TODO: decide if this endpoint should pre-filter groups that the user can access
 	query := rts.RelationQuery{
 		Namespace: px.Ptr("ObservabilityTenant"),
 		Object:    nil,

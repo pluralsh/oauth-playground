@@ -12,6 +12,10 @@ import (
 	"github.com/pluralsh/oauth-playground/api-server/graph/model"
 )
 
+// TODO: deleting a group might not be deleting all the relationships in keto. This is probably a problem elsewhere too.
+// Getting the group bound to a user fails with the below error. Indicating that the user has a relation to this group but the group itself does not exists in the organization in keto.
+// ERROR   clients.GetUserGroups   failed to get group     {"ID": "acb80a94-75b2-4378-b72e-ae6d1181f4c9", "Name": "test5", "error": "group does not exist in keto"}
+
 // Members is the resolver for the members field.
 func (r *groupResolver) Members(ctx context.Context, obj *model.Group) ([]*model.User, error) {
 	return r.C.GetGroupMembersInKeto(ctx, obj.Name)
