@@ -1,0 +1,5 @@
+auth:
+  postgresPassword: postgrespassword
+  username: kratos
+  password: kratospassword
+  database: kratos

@@ -1,0 +1,37 @@
+maester:
+  enabled: false
+hydra:
+  automigration:
+    enabled: true
+  config:
+    dsn: postgres://hydra:hydrapassword@postgresql-hydra:5432/hydra
+    secrets:
+      system:
+      - OG5XbmxXa3dYeGplQXpQanYxeEFuRUFa
+      cookie: dummytest12345678901234567890
+
+    urls:
+      self:
+        issuer: https://hydra.mimir-cloud.pluraldev.sh
+      login: https://kratos.mimir-cloud.pluraldev.sh/login
+      consent: https://kratos.mimir-cloud.pluraldev.sh/consent
+    serve:
+      admin:
+        tls:
+          enabled: false
+      public:
+        tls:
+          enabled: false
+      cookies:
+        same_site_mode: None
+        secure: true
+    ttl:
+      id_token: 12h
+      access_token: 12h
+      refresh_token: 96h
+
+pdb:
+  enabled: true
+deployment:
+  autoscaling:
+    enabled: false

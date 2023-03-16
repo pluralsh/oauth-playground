@@ -1,0 +1,88 @@
+job:
+  annotations:
+    helm.sh/hook-weight: "1"
+    helm.sh/hook: "post-install, post-upgrade"
+    helm.sh/hook-delete-policy: "before-hook-creation,hook-succeeded"
+ingress:
+  public:
+    enabled: false
+    className: nginx
+    annotations:
+      kubernetes.io/tls-acme: "true"
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+      nginx.ingress.kubernetes.io/force-ssl-redirect: 'true'
+      nginx.ingress.kubernetes.io/use-regex: "true"
+      # nginx.ingress.kubernetes.io/rewrite-target: /$2
+    hosts:
+      - host: kratos.mimir-cloud.pluraldev.sh
+        paths: 
+          - path: /.*
+            pathType: ImplementationSpecific
+    tls:
+    - secretName: kratos-tls
+      hosts:
+        - kratos.mimir-cloud.pluraldev.sh
+kratos:
+  automigration:
+    enabled: true
+  config:
+    serve:
+      public:
+        base_url: https://kratos.mimir-cloud.pluraldev.sh/.ory/kratos/public/
+        cors:
+          enabled: true
+          allowed_origins:
+          - http://localhost:3000
+    dsn: postgres://kratos:kratospassword@postgresql-kratos:5432/kratos
+    oauth2_provider:
+      url: http://oauth-stack-hydra-admin:4445
+    selfservice:
+      default_browser_return_url: https://kratos.mimir-cloud.pluraldev.sh/
+
+      methods:
+        password:
+          enabled: true
+
+      flows:
+        error:
+          ui_url: https://kratos.mimir-cloud.pluraldev.sh/error
+
+        settings:
+          ui_url: https://kratos.mimir-cloud.pluraldev.sh/settings
+          privileged_session_max_age: 15m
+
+        recovery:
+          enabled: true
+          ui_url: https://kratos.mimir-cloud.pluraldev.sh/recovery
+
+        verification:
+          enabled: true
+          ui_url: https://kratos.mimir-cloud.pluraldev.sh/verification
+          after:
+            default_browser_return_url: https://kratos.mimir-cloud.pluraldev.sh/
+
+        logout:
+          after:
+            default_browser_return_url: https://kratos.mimir-cloud.pluraldev.sh/login
+
+        login:
+          ui_url: https://kratos.mimir-cloud.pluraldev.sh/login
+          lifespan: 10m
+
+        registration:
+          lifespan: 10m
+          ui_url: https://kratos.mimir-cloud.pluraldev.sh/registration
+          after:
+            password:
+              hooks:
+                - hook: session
+
+    courier:
+      smtp:
+        connection_uri: smtps://SMTP_USER:SMTP_PASSWORD@SMTP_SERVER:59867/?skip_ssl_verify=true
+        from_address: test@example.com
+    identity:
+      default_schema_id: person
+      schemas:
+        - id: person
+          url: file:///etc/config/identity.person.schema.json

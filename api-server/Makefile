@@ -7,3 +7,6 @@ generate:
 
 generate-db:
 	go generate ./ent
+
+setup-tilt-cluster:
+	ctlptl create cluster kind --registry=ctlptl-registry

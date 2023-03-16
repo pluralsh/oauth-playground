@@ -1,0 +1,5 @@
+auth:
+  postgresPassword: postgrespassword
+  username: keto
+  password: ketopassword
+  database: keto

@@ -1,0 +1,118 @@
+load('ext://helm_resource', 'helm_resource', 'helm_repo')
+load('ext://configmap', 'configmap_create')
+
+helm_repo('bitnami', 'https://charts.bitnami.com/bitnami')
+helm_repo('ory', 'https://k8s.ory.sh/helm/charts')
+
+## Kraots
+
+helm_resource(
+    'postgresql-kratos',
+    'bitnami/postgresql',
+    namespace='kratos',
+    flags=['--create-namespace', '--values=./dev/postgres_kratos_values.yaml'],
+    deps=['./dev/postgres_kratos_values.yaml'],
+    labels=['kratos'],
+    resource_deps=['bitnami']
+    )
+
+helm_resource(
+    'kratos',
+    'ory/kratos',
+    namespace='kratos',
+    flags=[
+        '--create-namespace',
+        '--values=./dev/kratos_values.yaml',
+        "--set-file=kratos.identitySchemas.identity\\.person\\.schema\\.json=./configs/kratos/identity.person.schema.json",
+        ],
+    deps=['./dev/kratos_values.yaml', './configs/kratos/'],
+    labels=['kratos'],
+    resource_deps=['ory', 'postgres-kratos'],
+    )
+
+# needed so we get the kratos logs and not the courier logs. TODO: figure out how to show both
+k8s_resource(
+    workload='kratos',
+    extra_pod_selectors=[{'app.kubernetes.io/name': 'kratos'}],
+    discovery_strategy='selectors-only'
+)
+
+## Oathkeeper
+
+helm_resource(
+    'oathkeeper',
+    'ory/oathkeeper',
+    namespace='oathkeeper',
+    flags=[
+        '--create-namespace',
+        '--values=./dev/oathkeeper_values.yaml',
+        "--set-file=oathkeeper.accessRules=./configs/oathkeeper/access-rules.yaml",
+        ],
+    deps=['./dev/oathkeeper_values.yaml', './configs/oathkeeper/'],
+    labels=['oathkeeper'],
+    resource_deps=['ory'],
+    )
+
+k8s_resource(
+   workload='oathkeeper',
+   port_forwards=[
+      port_forward(4455, 4455, name='http-proxy'),
+   ]
+)
+
+## Hydra
+
+helm_resource(
+    'postgresql-hydra',
+    'bitnami/postgresql',
+    namespace='hydra',
+    flags=['--create-namespace', '--values=./dev/postgres_hydra_values.yaml'],
+    deps=['./dev/postgres_hydra_values.yaml'],
+    labels=['hydra'],
+    resource_deps=['bitnami']
+    )
+
+helm_resource(
+    'hydra',
+    'ory/hydra',
+    namespace='hydra',
+    flags=[
+        '--create-namespace',
+        '--values=./dev/hydra_values.yaml',
+        ],
+    deps=['./dev/hydra_values.yaml'],
+    labels=['hydra'],
+    resource_deps=['ory', 'postgres-hydra'],
+    )
+
+## Keto
+
+helm_resource(
+    'postgresql-keto',
+    'bitnami/postgresql',
+    namespace='keto',
+    flags=['--create-namespace', '--values=./dev/postgres_keto_values.yaml'],
+    deps=['./dev/postgres_keto_values.yaml'],
+    labels=['keto'],
+    resource_deps=['bitnami']
+    )
+
+helm_resource(
+    'keto',
+    'ory/keto',
+    namespace='keto',
+    flags=[
+        '--create-namespace',
+        '--values=./dev/keto_values.yaml',
+        ],
+    deps=['./dev/keto_values.yaml'],
+    labels=['keto'],
+    resource_deps=['ory', 'keto-namespaces-config', 'postgres-keto'],
+    )
+
+configmap_create(
+    'keto-namespaces-config',
+    namespace='keto',
+    from_file='namespaces.keto.ts=./configs/keto/opl_ts/src/observability.ts',
+    watch=True
+    )

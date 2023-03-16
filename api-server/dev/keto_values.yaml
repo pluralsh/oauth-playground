@@ -1,0 +1,22 @@
+keto:
+  image:
+    repository: oryd/keto
+    tag: v0.10.0-alpha.0
+  keto:
+    automigration:
+      enabled: true
+      type: initContainer
+    config:
+      namespaces:
+        location: file:///etc/config/namespaces/namespaces.keto.ts
+      dsn: postgres://keto:ketopassword@postgresql-keto:5432/keto
+  deployment:
+    extraVolumes:
+      - name: keto-namespaces-config
+        configMap:
+          name: keto-namespaces-config
+
+    extraVolumeMounts:
+      - name: keto-namespaces-config
+        mountPath: /etc/config/namespaces
+        readOnly: true

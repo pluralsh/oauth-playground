@@ -1,0 +1,5 @@
+auth:
+  postgresPassword: postgrespassword
+  username: hydra
+  password: hydrapassword
+  database: hydra
