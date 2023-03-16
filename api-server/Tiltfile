@@ -1,5 +1,5 @@
 load('ext://helm_resource', 'helm_resource', 'helm_repo')
-load('ext://configmap', 'configmap_create')
+load('ext://configmap', 'configmap_create', 'configmap_yaml')
 load('ext://restart_process', 'docker_build_with_restart')
 
 helm_repo('bitnami', 'https://charts.bitnami.com/bitnami')
@@ -15,7 +15,7 @@ helm_resource(
     deps=['./dev/postgres_kratos_values.yaml'],
     labels=['kratos'],
     resource_deps=['bitnami']
-    )
+)
 
 helm_resource(
     'kratos',
@@ -29,7 +29,7 @@ helm_resource(
     deps=['./dev/kratos_values.yaml', './configs/kratos/'],
     labels=['kratos'],
     resource_deps=['ory', 'postgres-kratos'],
-    )
+)
 
 # needed so we get the kratos logs and not the courier logs. TODO: figure out how to show both
 k8s_resource(
@@ -71,7 +71,7 @@ helm_resource(
     deps=['./dev/postgres_hydra_values.yaml'],
     labels=['hydra'],
     resource_deps=['bitnami']
-    )
+)
 
 helm_resource(
     'hydra',
@@ -84,7 +84,7 @@ helm_resource(
     deps=['./dev/hydra_values.yaml'],
     labels=['hydra'],
     resource_deps=['ory', 'postgres-hydra'],
-    )
+)
 
 ## Keto
 
@@ -96,7 +96,7 @@ helm_resource(
     deps=['./dev/postgres_keto_values.yaml'],
     labels=['keto'],
     resource_deps=['bitnami']
-    )
+)
 
 helm_resource(
     'keto',
@@ -109,14 +109,20 @@ helm_resource(
     deps=['./dev/keto_values.yaml'],
     labels=['keto'],
     resource_deps=['ory', 'postgres-keto'],
-    )
+)
 
 configmap_create(
     'keto-namespaces-config',
     namespace='keto',
     from_file='namespaces.keto.ts=./configs/keto/opl_ts/src/observability.ts',
     watch=True
-    )
+)
+
+k8s_resource(
+    new_name='keto-namespace-config',
+    objects=['keto-namespaces-config'],
+    labels=['keto'],
+)
 
 ## API Server
 
@@ -137,12 +143,12 @@ docker_build(
 
 k8s_yaml(
     './dev/api-deployment.yaml'
-    )
+)
 
 k8s_resource(
     'api-server',
     labels=['api-server'],
-    )
+)
 
 # frontend
 
