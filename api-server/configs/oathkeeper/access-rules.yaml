@@ -3,7 +3,7 @@
     url: http://frontend.default.svc.cluster.local
     preserve_host: true
   match:
-    url: <http|https>://<127.0.0.1|localhost>:4455</|/registration|/welcome|/recovery|/verification|/login.*|/consent.*|/error|/404|/500|/*.css|/*.js|/*.png|/*.svg|/assets/.*|/static/.*|/users|/groups|/settings.*>
+    url: <http|https>://<127.0.0.1|localhost>:4455</|/registration.*|/welcome.*|/recovery.*|/verification.*|/login.*|/consent.*|/error|/404|/500|/*.css|/*.js|/*.png|/*.svg|/assets/.*|/static/.*|/users|/groups|/settings.*|manifest.json>
     methods:
       - GET
       - POST

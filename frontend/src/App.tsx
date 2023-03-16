@@ -60,6 +60,11 @@ function App() {
               </Route> */}
               <Route path="users" element={<Users />} />
               <Route path="groups" element={<Groups />} />
+              <Route path="/registration" element={<Registration />} />
+              <Route path="/verification" element={<Verification />} />
+              <Route path="/error" element={<Error />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/recovery" element={<Recovery />} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Route>
           </Routes>

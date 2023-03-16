@@ -16,6 +16,9 @@
                         "credentials": {
                             "password": {
                                 "identifier": true
+                            },
+                            "webauthn": {
+                                "identifier": true
                             }
                         },
                         "verification": {
@@ -24,6 +27,9 @@
                         "recovery": {
                             "via": "email"
                         }
+                    },
+                    "website": {
+                        "type": "object"
                     }
                 },
                 "name": {
