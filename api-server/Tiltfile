@@ -1,5 +1,6 @@
 load('ext://helm_resource', 'helm_resource', 'helm_repo')
 load('ext://configmap', 'configmap_create')
+load('ext://restart_process', 'docker_build_with_restart')
 
 helm_repo('bitnami', 'https://charts.bitnami.com/bitnami')
 helm_repo('ory', 'https://k8s.ory.sh/helm/charts')
@@ -107,7 +108,7 @@ helm_resource(
         ],
     deps=['./dev/keto_values.yaml'],
     labels=['keto'],
-    resource_deps=['ory', 'keto-namespaces-config', 'postgres-keto'],
+    resource_deps=['ory', 'postgres-keto'],
     )
 
 configmap_create(
@@ -115,4 +116,30 @@ configmap_create(
     namespace='keto',
     from_file='namespaces.keto.ts=./configs/keto/opl_ts/src/observability.ts',
     watch=True
+    )
+
+## API Server
+
+docker_build(
+  'api-server-image',
+  '.',
+  entrypoint=['/server'],
+  dockerfile='./Dockerfile',
+#  only=[
+#    './build',
+#    './web',
+#  ],
+#  live_update=[
+#    sync('./build', '/app/build'),
+#    sync('./web', '/app/web'),
+#  ],
+)
+
+k8s_yaml(
+    './dev/api-deployment.yaml'
+    )
+
+k8s_resource(
+    'api-server',
+    labels=['api-server'],
     )

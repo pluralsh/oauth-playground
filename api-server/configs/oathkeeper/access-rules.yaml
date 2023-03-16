@@ -1,10 +1,49 @@
+- id: api-server:graphiql:public
+  upstream:
+    url: http://api-server.default.svc.cluster.local:8082
+    strip_path: /graphiql
+    preserve_host: true
+  match:
+    url: <http|https>://<127.0.0.1|localhost>:4455/graphiql
+    methods:
+      - GET
+      - POST
+      - PUT
+      - DELETE
+      - PATCH
+      - OPTIONS
+  authenticators:
+    - handler: noop
+  authorizer:
+    handler: allow
+  mutators:
+    - handler: noop
+- id: api-server:graphql:public
+  upstream:
+    url: http://api-server.default.svc.cluster.local:8082
+    preserve_host: true
+  match:
+    url: <http|https>://<127.0.0.1|localhost>:4455/graphql
+    methods:
+      - GET
+      - POST
+      - PUT
+      - DELETE
+      - PATCH
+      - OPTIONS
+  authenticators:
+    - handler: noop
+  authorizer:
+    handler: allow
+  mutators:
+    - handler: noop
 - id: ory:kratos:public
   upstream:
     url: http://kratos-public.kratos
     strip_path: /.ory/kratos/public
     preserve_host: true
   match:
-    url: https://kratos.mimir-cloud.pluraldev.sh/.ory/kratos/public/<**>
+    url: <http|https>://<127.0.0.1|localhost>:4455/.ory/kratos/public/<.*>
     methods:
       - GET
       - POST
@@ -18,47 +57,13 @@
     handler: allow
   mutators:
     - handler: noop
-- id: ory:kratos-selfservice-ui-node:anonymous
+- id: ory:hydra:public
   upstream:
-    url: http://oauth-stack-kratos-selfservice-ui-node # TODO: use proper templating
+    url: http://hydra-public.hydra:4444
+    strip_path: /hydra
     preserve_host: true
   match:
-    methods:
-      - GET
-      - POST # needed for consent
-    # TODO: cleanup templating
-    url: https://kratos.mimir-cloud.pluraldev.sh<{/,/registration,/welcome,/recovery,/verification,/login,/consent,/error,/404,/500,/**.css,/**.js,/**.png,/**.svg,/assets/**}>
-  authenticators:
-    - handler: noop
-  authorizer:
-    handler: allow
-  mutators:
-    - handler: noop
-      config: {}
-- id: ory:kratos-selfservice-ui-node:protected
-  upstream:
-    url: http://oauth-stack-kratos-selfservice-ui-node # TODO: use proper templating
-    preserve_host: true
-  match:
-    methods:
-      - GET
-    # TODO: cleanup templating
-    url: https://kratos.mimir-cloud.pluraldev.sh/<{debug,dashboard,settings,sessions}{/,}>
-  authenticators:
-    - handler: cookie_session
-  authorizer:
-    handler: allow
-  mutators:
-    - handler: id_token
-  errors:
-    - handler: redirect
-      config:
-        to: https://kratos.mimir-cloud.pluraldev.sh/login
-- id: grafana:mimir-api:protected
-  upstream:
-    url: http://mimir-nginx.mimir # TODO: use proper templating
-    preserve_host: true
-  match:
+    url: <http|https>://<127.0.0.1|localhost>:4455/hydra<.*>
     methods:
       - GET
       - POST
@@ -66,49 +71,103 @@
       - DELETE
       - PATCH
       - OPTIONS
-    # TODO: cleanup templating
-    url: https://mimir.mimir-cloud.pluraldev.sh/api<**>
   authenticators:
-    - handler: oauth2_introspection
-      # config:
-      #   required_scope:
-      #     - grafana:read
-      #     - grafana:write
+    - handler: noop
   authorizer:
     handler: allow
   mutators:
-    - handler: header
-      config:
-        headers:
-          X-Scope-OrgID: mimir-cloud-oauth2
-- id: grafana:mimir-prometheus:protected
-  upstream:
-    url: http://mimir-nginx.mimir # TODO: use proper templating
-    preserve_host: true
-  match:
-    methods:
-      - GET
-      - POST
-      - PUT
-      - DELETE
-      - PATCH
-      - OPTIONS
-    # TODO: cleanup templating
-    url: https://mimir.mimir-cloud.pluraldev.sh/prometheus<**>
-  authenticators:
-    - handler: oauth2_introspection
-      # config:
-      #   required_scope:
-      #     - grafana:read
-      #     - grafana:write
-  authorizer:
-    handler: allow
-  mutators:
-    - handler: header
-      config:
-        headers:
-          X-Scope-OrgID: mimir-cloud|mimir-cloud-2|mimir-cloud-oauth2
-  errors:
-    - handler: redirect
-      config:
-        to: https://kratos.mimir-cloud.pluraldev.sh/login
+    - handler: noop
+# - id: ory:kratos-selfservice-ui-node:anonymous
+#   upstream:
+#     url: http://oauth-stack-kratos-selfservice-ui-node # TODO: use proper templating
+#     preserve_host: true
+#   match:
+#     methods:
+#       - GET
+#       - POST # needed for consent
+#     # TODO: cleanup templating
+#     url: https://kratos.mimir-cloud.pluraldev.sh<{/,/registration,/welcome,/recovery,/verification,/login,/consent,/error,/404,/500,/**.css,/**.js,/**.png,/**.svg,/assets/**}>
+#   authenticators:
+#     - handler: noop
+#   authorizer:
+#     handler: allow
+#   mutators:
+#     - handler: noop
+#       config: {}
+# - id: ory:kratos-selfservice-ui-node:protected
+#   upstream:
+#     url: http://oauth-stack-kratos-selfservice-ui-node # TODO: use proper templating
+#     preserve_host: true
+#   match:
+#     methods:
+#       - GET
+#     # TODO: cleanup templating
+#     url: https://kratos.mimir-cloud.pluraldev.sh/<{debug,dashboard,settings,sessions}{/,}>
+#   authenticators:
+#     - handler: cookie_session
+#   authorizer:
+#     handler: allow
+#   mutators:
+#     - handler: id_token
+#   errors:
+#     - handler: redirect
+#       config:
+#         to: https://kratos.mimir-cloud.pluraldev.sh/login
+# - id: grafana:mimir-api:protected
+#   upstream:
+#     url: http://mimir-nginx.mimir # TODO: use proper templating
+#     preserve_host: true
+#   match:
+#     methods:
+#       - GET
+#       - POST
+#       - PUT
+#       - DELETE
+#       - PATCH
+#       - OPTIONS
+#     # TODO: cleanup templating
+#     url: https://mimir.mimir-cloud.pluraldev.sh/api<**>
+#   authenticators:
+#     - handler: oauth2_introspection
+#       # config:
+#       #   required_scope:
+#       #     - grafana:read
+#       #     - grafana:write
+#   authorizer:
+#     handler: allow
+#   mutators:
+#     - handler: header
+#       config:
+#         headers:
+#           X-Scope-OrgID: mimir-cloud-oauth2
+# - id: grafana:mimir-prometheus:protected
+#   upstream:
+#     url: http://mimir-nginx.mimir # TODO: use proper templating
+#     preserve_host: true
+#   match:
+#     methods:
+#       - GET
+#       - POST
+#       - PUT
+#       - DELETE
+#       - PATCH
+#       - OPTIONS
+#     # TODO: cleanup templating
+#     url: https://mimir.mimir-cloud.pluraldev.sh/prometheus<**>
+#   authenticators:
+#     - handler: oauth2_introspection
+#       # config:
+#       #   required_scope:
+#       #     - grafana:read
+#       #     - grafana:write
+#   authorizer:
+#     handler: allow
+#   mutators:
+#     - handler: header
+#       config:
+#         headers:
+#           X-Scope-OrgID: mimir-cloud|mimir-cloud-2|mimir-cloud-oauth2
+#   errors:
+#     - handler: redirect
+#       config:
+#         to: https://kratos.mimir-cloud.pluraldev.sh/login

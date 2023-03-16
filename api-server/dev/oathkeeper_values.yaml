@@ -34,8 +34,16 @@ oathkeeper:
   config:
     log:
       level: debug
+    serve:
+      proxy:
+        tls:
+          cert:
+            base64: ""
+          key:
+            base64: ""
+        port: 4455
     access_rules:
-      matching_strategy: glob
+      matching_strategy: regexp
     authenticators:
       anonymous:
         enabled: true
