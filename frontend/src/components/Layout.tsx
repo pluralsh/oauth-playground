@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import { useEffect, useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import { createStyles, makeStyles } from '@mui/styles';
 import { Theme, styled, useTheme, CSSObject } from '@mui/material/styles';
@@ -32,6 +32,8 @@ import {
 } from '@mui/icons-material';
 import { useNavigate, useLocation } from 'react-router-dom';
 import ProfileMenu from './ProfileMenu';
+import { sdk, sdkError } from "../apis/ory"
+import { Session } from '@ory/client';
 // import SelectNamespaceMenu from './SelectNamespaceMenu';
 // import { ME } from '../graphql/queries';
 import { useQuery } from '@apollo/client';
@@ -124,7 +126,47 @@ export default function Layout() {
   // const { data, loading, error } = useQuery(ME);
 
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+
+  const [session, setSession] = useState<Session | undefined>();
+  const [logoutUrl, setLogoutUrl] = useState<string>()
+
+  const createLogoutFlow = () => {
+    // here we create a new logout URL which we can use to log the user out
+    sdk
+      .createBrowserLogoutFlow(undefined, {
+        params: {
+          return_url: "/",
+        },
+      })
+      .then(({ data }) => setLogoutUrl(data.logout_url))
+      .catch(sdkErrorHandler)
+  }
+
+  const sdkErrorHandler = sdkError(undefined, undefined, "/login")
+
+  useEffect(() => {
+    sdk
+      .toSession()
+      .then(({ data: session }) => {
+        setSession(session);
+        createLogoutFlow()
+      })
+      .catch(sdkErrorHandler)
+      .catch((error) => {
+        // Handle all other errors like error.message "network error" if Kratos can not be connected etc.
+        if (error.message) {
+          return navigate(`/error?error=${encodeURIComponent(error.message)}`, {
+            replace: true,
+          })
+        }
+
+        // Just stringify error and print all data
+        navigate(`/error?error=${encodeURIComponent(JSON.stringify(error))}`, {
+          replace: true,
+        })
+      });
+  }, []);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -211,7 +253,7 @@ export default function Layout() {
                 {/* <SelectNamespaceMenu /> */}
               </Box>
             </Box>
-            <ProfileMenu />
+            <ProfileMenu logoutUrl={logoutUrl}/>
           </Toolbar>
         </AppBar>
         <Drawer variant="permanent" open={open}>

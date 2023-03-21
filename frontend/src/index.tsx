@@ -12,6 +12,7 @@ import { RecoilRoot } from 'recoil';
 
 import { ThemeProvider } from "@ory/elements"
 import "@ory/elements/style.css"
+import { BrowserRouter } from 'react-router-dom';
 
 // // Ory Elements
 // // optional fontawesome icons
@@ -42,13 +43,13 @@ const client = new ApolloClient({
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <ApolloProvider client={client}>
-      {/* <RecoilRoot> */}
+      <RecoilRoot>
         <ThemeProvider themeOverrides={{
           fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
           }}>
           <App />
         </ThemeProvider>
-      {/* </RecoilRoot> */}
+      </RecoilRoot>
     </ApolloProvider>
   </React.StrictMode>,
 );

@@ -6,29 +6,29 @@ import { useNavigate } from 'react-router-dom';
 import ory from '../apis/ory';
 import { AxiosError } from 'axios';
 
-function ProfileMenu() {
+function ProfileMenu({logoutUrl}: {logoutUrl: string | undefined}) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const navigate = useNavigate();
 
-  const [logoutUrl, setLogoutUrl] = useState<string | undefined>()
+  // const [logoutUrl, setLogoutUrl] = useState<string | undefined>()
 
-  useEffect(() => {
-    ory
-      .createBrowserLogoutFlow()
-      .then(({ data }) => {
-        setLogoutUrl(data.logout_token);
-      })
-      .catch((err: AxiosError) => {
-        switch (err.response?.status) {
-          case 401:
-            // do nothing, the user is not logged in
-            return;
-        }
+  // useEffect(() => {
+  //   ory
+  //     .createBrowserLogoutFlow()
+  //     .then(({ data }) => {
+  //       setLogoutUrl(data.logout_token);
+  //     })
+  //     .catch((err: AxiosError) => {
+  //       switch (err.response?.status) {
+  //         case 401:
+  //           // do nothing, the user is not logged in
+  //           return;
+  //       }
 
-        // Something else happened!
-        return Promise.reject(err);
-      });
-  });
+  //       // Something else happened!
+  //       return Promise.reject(err);
+  //     });
+  // });
 
   // const logout = useLogoutHandler();
 
@@ -47,7 +47,7 @@ function ProfileMenu() {
 
   const handleLogout = () => {
     handleClose();
-    // logout();
+    window.location.href = logoutUrl || '/';
   };
 
   return (
