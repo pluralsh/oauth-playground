@@ -1,0 +1,53 @@
+fragment OAuth2ConsentRequest on OAuth2ConsentRequest {
+  challenge
+  client {
+    ...OAuth2ConsentClient
+  }
+  context
+  loginChallenge
+  loginSessionId
+  oidcContext {
+    ...OAuthConsentOIDCContext
+  }
+  requestUrl
+  requestedAccessTokenAudience
+  requestedScope
+  skip
+  subject
+  redirectTo
+}
+
+fragment OAuthConsentOIDCContext on OidcContext {
+  acrValues
+  display
+  idTokenHintClaims
+  loginHint
+  uiLocales
+}
+
+fragment OAuth2ConsentClient on OAuth2Client {
+  clientId
+  clientName
+  logoUri
+  policyUri
+  scope
+  tosUri
+}
+
+query OAuth2ConsentRequest($challenge: String!) {
+  oauth2ConsentRequest(challenge: $challenge) {
+    ...OAuth2ConsentRequest
+  }
+}
+
+mutation AcceptOAuth2ConsentRequest($challenge: String!, $grantScope: [String!], $remember: Boolean, $rememberFor: Int, $session: AcceptOAuth2ConsentRequestSession) {
+  acceptOAuth2ConsentRequest(challenge: $challenge, grantScope: $grantScope, remember: $remember, rememberFor: $rememberFor, session: $session) {
+    redirectTo
+  }
+}
+
+mutation RejectOAuth2ConsentRequest($challenge: String!) {
+  rejectOAuth2ConsentRequest(challenge: $challenge) {
+    redirectTo
+  }
+}

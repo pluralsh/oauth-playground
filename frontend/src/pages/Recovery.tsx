@@ -2,6 +2,7 @@ import { RecoveryFlow, UpdateRecoveryFlowBody } from "@ory/client"
 import { UserAuthCard } from "@ory/elements"
 import { useCallback, useEffect, useState } from "react"
 import { useNavigate, useSearchParams } from "react-router-dom"
+import { CircularProgress } from '@mui/material'
 import { sdk, sdkError } from "../apis/ory"
 
 export const Recovery = () => {
@@ -75,6 +76,6 @@ export const Recovery = () => {
       onSubmit={({ body }) => submitFlow(body as UpdateRecoveryFlowBody)}
     />
   ) : (
-    <div>Loading...</div>
+    <CircularProgress />
   )
 }

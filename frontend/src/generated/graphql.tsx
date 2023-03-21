@@ -16,6 +16,13 @@ export type Scalars = {
   Time: any;
 };
 
+export type AcceptOAuth2ConsentRequestSession = {
+  /** AccessToken sets session data for the access and refresh token, as well as any future tokens issued by the refresh grant. Keep in mind that this data will be available to anyone performing OAuth 2.0 Challenge Introspection. If only your services can perform OAuth 2.0 Challenge Introspection, this is usually fine. But if third parties can access that endpoint as well, sensitive data from the session might be exposed to them. Use with care! */
+  accessToken?: Maybe<Scalars['Map']>;
+  /** IDToken sets session data for the OpenID Connect ID token. Keep in mind that the session'id payloads are readable by anyone that has access to the ID Challenge. Use with care! */
+  idToken?: Maybe<Scalars['Map']>;
+};
+
 /** Input for adding a user to an organization as an administrator. */
 export type Admin = {
   /** The ID of the user to add as an admin. */
@@ -51,6 +58,8 @@ export type LoginBindingsInput = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  /** AcceptOAuth2ConsentRequest accepts an OAuth 2.0 consent request. If the request was granted, a code or access token will be issued. If the request was denied, the request will be rejected. */
+  acceptOAuth2ConsentRequest: OAuth2RedirectTo;
   /** Create a new OAuth2 Client. */
   createOAuth2Client: OAuth2Client;
   /** Create a new user. */
@@ -69,8 +78,20 @@ export type Mutation = {
   observabilityTenant: ObservabilityTenant;
   /** Create a new organization. */
   organization: Organization;
+  /** RejectOAuth2ConsentRequest rejects an OAuth 2.0 consent request. */
+  rejectOAuth2ConsentRequest: OAuth2RedirectTo;
   /** Update an OAuth 2 Client. */
   updateOAuth2Client: OAuth2Client;
+};
+
+
+export type MutationAcceptOAuth2ConsentRequestArgs = {
+  challenge: Scalars['String'];
+  grantAccessTokenAudience?: Maybe<Array<Scalars['String']>>;
+  grantScope?: Maybe<Array<Scalars['String']>>;
+  remember?: Maybe<Scalars['Boolean']>;
+  rememberFor?: Maybe<Scalars['Int']>;
+  session?: Maybe<AcceptOAuth2ConsentRequestSession>;
 };
 
 
@@ -155,6 +176,11 @@ export type MutationObservabilityTenantArgs = {
 export type MutationOrganizationArgs = {
   admins: Array<Scalars['String']>;
   name: Scalars['String'];
+};
+
+
+export type MutationRejectOAuth2ConsentRequestArgs = {
+  challenge: Scalars['String'];
 };
 
 
@@ -297,6 +323,45 @@ export type OAuth2Client = {
   userinfoSignedResponseAlgorithm?: Maybe<Scalars['String']>;
 };
 
+/** OAuth2ConsentRequest represents an OAuth 2.0 consent request. */
+export type OAuth2ConsentRequest = {
+  __typename?: 'OAuth2ConsentRequest';
+  /** ACR represents the Authentication AuthorizationContext Class Reference value for this authentication session. You can use it to express that, for example, a user authenticated using two factor authentication. */
+  acr?: Maybe<Scalars['String']>;
+  /** AMR represents the Authentication Methods References. It lists the method used to authenticate the end-user. For instance, if the end-user authenticated using password and OTP, the AMR value would be ["pwd", "otp"]. */
+  amr?: Maybe<Array<Scalars['String']>>;
+  /** The challenge is a random string which is used to identify the consent request. */
+  challenge: Scalars['String'];
+  /** The client is the OAuth 2.0 Client requesting the OAuth 2.0 Authorization. */
+  client: OAuth2Client;
+  /** Context contains arbitrary context that is forwarded from the login request. This is useful if you want to pass data from the login request to the consent request. */
+  context?: Maybe<Scalars['Map']>;
+  /** LoginChallenge is the login challenge this consent challenge belongs to. It can be used to associate a login and consent request in the login & consent app. */
+  loginChallenge?: Maybe<Scalars['String']>;
+  /** LoginSessionID is the login session ID. If the user-agent reuses a login session (via cookie / remember flag) this ID will remain the same. If the user-agent did not have an existing authentication session (e.g. remember is false) this will be a new random value. This value is used as the "sid" parameter in the ID Token and in OIDC Front-/Back- channel logout. It's value can generally be used to associate consecutive login requests by a certain user. */
+  loginSessionId?: Maybe<Scalars['String']>;
+  /** OIDCContext contains the OIDC context of the request. If the OAuth 2.0 Authorization request was not an OpenID Connect request, this value will be nil. */
+  oidcContext?: Maybe<OidcContext>;
+  /** The URL to redirect to if an error occurred. */
+  redirectTo?: Maybe<Scalars['String']>;
+  /** RequestURL is the original OAuth 2.0 Authorization URL requested by the OAuth 2.0 client. It is the URL which initiates the OAuth 2.0 Authorization Code or OAuth 2.0 Implicit flow. This URL is typically not needed, but might come in handy if you want to deal with additional request parameters. */
+  requestUrl?: Maybe<Scalars['String']>;
+  /** RequestedAccessTokenAudience contains the audience (client) that the OAuth 2.0 Client requested the OAuth 2.0 Access Token to be issued for. */
+  requestedAccessTokenAudience?: Maybe<Array<Scalars['String']>>;
+  /** RequestedScope contains the OAuth 2.0 Scope requested by the OAuth 2.0 Client. */
+  requestedScope?: Maybe<Array<Scalars['String']>>;
+  /** Skip is true when the client has requested the same scopes from the same user before. If this is true, you can skip asking the user to grant the requested scopes, or you can force showing the UI by setting this value to false. */
+  skip?: Maybe<Scalars['Boolean']>;
+  /** Subject is the user ID of the end-user that authenticated. This value will be set to the "sub" claim in the ID Token. */
+  subject: Scalars['String'];
+};
+
+export type OAuth2RedirectTo = {
+  __typename?: 'OAuth2RedirectTo';
+  /** RedirectTo can be used to redirect the user-agent to a specific location. This is useful if you want to redirect the user-agent to a specific location after the consent flow has been completed. */
+  redirectTo: Scalars['String'];
+};
+
 /** Representation a tenant in the Grafana observability stack where metrics, logs and traces can be sent to or retrieved from. */
 export type ObservabilityTenant = {
   __typename?: 'ObservabilityTenant';
@@ -346,6 +411,21 @@ export type ObservabilityTenantViewersInput = {
   users?: Maybe<Array<Scalars['String']>>;
 };
 
+/** OIDC Context for a consent request. */
+export type OidcContext = {
+  __typename?: 'OidcContext';
+  /** ACRValues is the Authentication AuthorizationContext Class Reference requested in the OAuth 2.0 Authorization request. It is a parameter defined by OpenID Connect and expresses which level of authentication (e.g. 2FA) is required.  OpenID Connect defines it as follows: > Requested Authentication AuthorizationContext Class Reference values. Space-separated string that specifies the acr values that the Authorization Server is being requested to use for processing this Authentication Request, with the values appearing in order of preference. The Authentication AuthorizationContext Class satisfied by the authentication performed is returned as the acr Claim Value, as specified in Section 2. The acr Claim is requested as a Voluntary Claim by this parameter. */
+  acrValues?: Maybe<Array<Scalars['String']>>;
+  /** Display is the display mode requested in the OAuth 2.0 Authorization request. It is a parameter defined by OpenID Connect and expresses how the Authorization Server displays authentication and consent user interfaces to the End-User.  OpenID Connect defines it as follows: > ASCII string value that specifies how the Authorization Server displays the authentication and consent user interface pages to the End-User. The defined values are: page: The Authorization Server SHOULD display the authentication and consent UI consistent with a full User Agent page view. If the display parameter is not specified, this is the default display mode. popup: The Authorization Server SHOULD display the authentication and consent UI consistent with a popup User Agent window. The popup User Agent window should be of an appropriate size for a login-focused dialog and should not obscure the entire window that it is popping up over. touch: The Authorization Server SHOULD display the authentication and consent UI consistent with a device that leverages a touch interface. > The display parameter is used only if the prompt parameter value is not none. If the prompt parameter value is none, the display parameter is ignored. */
+  display?: Maybe<Scalars['String']>;
+  /** IDTokenHintClaims contains the claims from the ID Token hint if it was present in the OAuth 2.0 Authorization request. */
+  idTokenHintClaims?: Maybe<Scalars['Map']>;
+  /** LoginHint is the login hint requested in the OAuth 2.0 Authorization request. It is a parameter defined by OpenID Connect and expresses the preferred login identifier the End-User might use to log in (if necessary).  OpenID Connect defines it as follows: > Hint to the Authorization Server about the login identifier the End-User might use to log in (if necessary). > This hint can be used by an RP if it first asks the End-User for their e-mail address (or other identifier) and then wants to pass that value as a hint to the discovered authorization service. > It is RECOMMENDED that the hint value match the value used for discovery. > This value MAY also be a phone number in the format specified for the phone_number Claim. > The use of this parameter is left to the OP's discretion. */
+  loginHint?: Maybe<Scalars['String']>;
+  /** UILocales is the End-User'id preferred languages and scripts for the user interface, represented as a space-separated list of BCP47 [RFC5646] language tag values, ordered by preference. For instance, the value "fr-CA fr en" represents a preference for French as spoken in Canada, then French (without a region designation), followed by English (without a region designation). An error SHOULD NOT result if some or all of the requested locales are not supported by the OpenID Provider. */
+  uiLocales?: Maybe<Array<Scalars['String']>>;
+};
+
 /** Representation an Organization in the auth stack. */
 export type Organization = {
   __typename?: 'Organization';
@@ -357,6 +437,8 @@ export type Organization = {
 
 export type Query = {
   __typename?: 'Query';
+  /** Get a single OAuth2 Client by ID. */
+  getOAuth2Client?: Maybe<OAuth2Client>;
   getObservabilityTenant: ObservabilityTenant;
   /** Get a user by ID. */
   getUser: User;
@@ -370,8 +452,13 @@ export type Query = {
   listOrganizations: Array<Organization>;
   /** Get a list of all users. */
   listUsers: Array<User>;
-  /** Get a single OAuth2 Client by ID. */
-  oAuth2Client?: Maybe<OAuth2Client>;
+  /** OAuth2ConsentRequest returns the OAuth 2.0 consent request information. */
+  oauth2ConsentRequest?: Maybe<OAuth2ConsentRequest>;
+};
+
+
+export type QueryGetOAuth2ClientArgs = {
+  clientId: Scalars['ID'];
 };
 
 
@@ -385,8 +472,8 @@ export type QueryGetUserArgs = {
 };
 
 
-export type QueryOAuth2ClientArgs = {
-  clientId: Scalars['ID'];
+export type QueryOauth2ConsentRequestArgs = {
+  challenge: Scalars['String'];
 };
 
 /** Representation of the information about a user sourced from Kratos. */
@@ -430,6 +517,37 @@ export type GroupMutationVariables = Exact<{
 
 export type GroupMutation = { __typename?: 'Mutation', group: { __typename?: 'Group', name: string, members?: Array<{ __typename?: 'User', id: string, email: string, name?: { __typename?: 'Name', first?: string | null | undefined, last?: string | null | undefined } | null | undefined }> | null | undefined } };
 
+export type OAuth2ConsentRequestFragment = { __typename?: 'OAuth2ConsentRequest', challenge: string, context?: any | null | undefined, loginChallenge?: string | null | undefined, loginSessionId?: string | null | undefined, requestUrl?: string | null | undefined, requestedAccessTokenAudience?: Array<string> | null | undefined, requestedScope?: Array<string> | null | undefined, skip?: boolean | null | undefined, subject: string, redirectTo?: string | null | undefined, client: { __typename?: 'OAuth2Client', clientId?: string | null | undefined, clientName?: string | null | undefined, logoUri?: string | null | undefined, policyUri?: string | null | undefined, scope?: string | null | undefined, tosUri?: string | null | undefined }, oidcContext?: { __typename?: 'OidcContext', acrValues?: Array<string> | null | undefined, display?: string | null | undefined, idTokenHintClaims?: any | null | undefined, loginHint?: string | null | undefined, uiLocales?: Array<string> | null | undefined } | null | undefined };
+
+export type OAuthConsentOidcContextFragment = { __typename?: 'OidcContext', acrValues?: Array<string> | null | undefined, display?: string | null | undefined, idTokenHintClaims?: any | null | undefined, loginHint?: string | null | undefined, uiLocales?: Array<string> | null | undefined };
+
+export type OAuth2ConsentClientFragment = { __typename?: 'OAuth2Client', clientId?: string | null | undefined, clientName?: string | null | undefined, logoUri?: string | null | undefined, policyUri?: string | null | undefined, scope?: string | null | undefined, tosUri?: string | null | undefined };
+
+export type OAuth2ConsentRequestQueryVariables = Exact<{
+  challenge: Scalars['String'];
+}>;
+
+
+export type OAuth2ConsentRequestQuery = { __typename?: 'Query', oauth2ConsentRequest?: { __typename?: 'OAuth2ConsentRequest', challenge: string, context?: any | null | undefined, loginChallenge?: string | null | undefined, loginSessionId?: string | null | undefined, requestUrl?: string | null | undefined, requestedAccessTokenAudience?: Array<string> | null | undefined, requestedScope?: Array<string> | null | undefined, skip?: boolean | null | undefined, subject: string, redirectTo?: string | null | undefined, client: { __typename?: 'OAuth2Client', clientId?: string | null | undefined, clientName?: string | null | undefined, logoUri?: string | null | undefined, policyUri?: string | null | undefined, scope?: string | null | undefined, tosUri?: string | null | undefined }, oidcContext?: { __typename?: 'OidcContext', acrValues?: Array<string> | null | undefined, display?: string | null | undefined, idTokenHintClaims?: any | null | undefined, loginHint?: string | null | undefined, uiLocales?: Array<string> | null | undefined } | null | undefined } | null | undefined };
+
+export type AcceptOAuth2ConsentRequestMutationVariables = Exact<{
+  challenge: Scalars['String'];
+  grantScope?: Maybe<Array<Scalars['String']> | Scalars['String']>;
+  remember?: Maybe<Scalars['Boolean']>;
+  rememberFor?: Maybe<Scalars['Int']>;
+  session?: Maybe<AcceptOAuth2ConsentRequestSession>;
+}>;
+
+
+export type AcceptOAuth2ConsentRequestMutation = { __typename?: 'Mutation', acceptOAuth2ConsentRequest: { __typename?: 'OAuth2RedirectTo', redirectTo: string } };
+
+export type RejectOAuth2ConsentRequestMutationVariables = Exact<{
+  challenge: Scalars['String'];
+}>;
+
+
+export type RejectOAuth2ConsentRequestMutation = { __typename?: 'Mutation', rejectOAuth2ConsentRequest: { __typename?: 'OAuth2RedirectTo', redirectTo: string } };
+
 export type UserInfoFragment = { __typename?: 'User', id: string, email: string, name?: { __typename?: 'Name', first?: string | null | undefined, last?: string | null | undefined } | null | undefined, groups?: Array<{ __typename?: 'Group', name: string }> | null | undefined };
 
 export type UserGroupInfoFragment = { __typename?: 'Group', name: string };
@@ -457,6 +575,46 @@ export const GroupInfoFragmentDoc = gql`
   }
 }
     ${GroupUserInfoFragmentDoc}`;
+export const OAuth2ConsentClientFragmentDoc = gql`
+    fragment OAuth2ConsentClient on OAuth2Client {
+  clientId
+  clientName
+  logoUri
+  policyUri
+  scope
+  tosUri
+}
+    `;
+export const OAuthConsentOidcContextFragmentDoc = gql`
+    fragment OAuthConsentOIDCContext on OidcContext {
+  acrValues
+  display
+  idTokenHintClaims
+  loginHint
+  uiLocales
+}
+    `;
+export const OAuth2ConsentRequestFragmentDoc = gql`
+    fragment OAuth2ConsentRequest on OAuth2ConsentRequest {
+  challenge
+  client {
+    ...OAuth2ConsentClient
+  }
+  context
+  loginChallenge
+  loginSessionId
+  oidcContext {
+    ...OAuthConsentOIDCContext
+  }
+  requestUrl
+  requestedAccessTokenAudience
+  requestedScope
+  skip
+  subject
+  redirectTo
+}
+    ${OAuth2ConsentClientFragmentDoc}
+${OAuthConsentOidcContextFragmentDoc}`;
 export const UserGroupInfoFragmentDoc = gql`
     fragment UserGroupInfo on Group {
   name
@@ -576,6 +734,117 @@ export function useGroupMutation(baseOptions?: Apollo.MutationHookOptions<GroupM
 export type GroupMutationHookResult = ReturnType<typeof useGroupMutation>;
 export type GroupMutationResult = Apollo.MutationResult<GroupMutation>;
 export type GroupMutationOptions = Apollo.BaseMutationOptions<GroupMutation, GroupMutationVariables>;
+export const OAuth2ConsentRequestDocument = gql`
+    query OAuth2ConsentRequest($challenge: String!) {
+  oauth2ConsentRequest(challenge: $challenge) {
+    ...OAuth2ConsentRequest
+  }
+}
+    ${OAuth2ConsentRequestFragmentDoc}`;
+
+/**
+ * __useOAuth2ConsentRequestQuery__
+ *
+ * To run a query within a React component, call `useOAuth2ConsentRequestQuery` and pass it any options that fit your needs.
+ * When your component renders, `useOAuth2ConsentRequestQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOAuth2ConsentRequestQuery({
+ *   variables: {
+ *      challenge: // value for 'challenge'
+ *   },
+ * });
+ */
+export function useOAuth2ConsentRequestQuery(baseOptions: Apollo.QueryHookOptions<OAuth2ConsentRequestQuery, OAuth2ConsentRequestQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<OAuth2ConsentRequestQuery, OAuth2ConsentRequestQueryVariables>(OAuth2ConsentRequestDocument, options);
+      }
+export function useOAuth2ConsentRequestLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OAuth2ConsentRequestQuery, OAuth2ConsentRequestQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<OAuth2ConsentRequestQuery, OAuth2ConsentRequestQueryVariables>(OAuth2ConsentRequestDocument, options);
+        }
+export type OAuth2ConsentRequestQueryHookResult = ReturnType<typeof useOAuth2ConsentRequestQuery>;
+export type OAuth2ConsentRequestLazyQueryHookResult = ReturnType<typeof useOAuth2ConsentRequestLazyQuery>;
+export type OAuth2ConsentRequestQueryResult = Apollo.QueryResult<OAuth2ConsentRequestQuery, OAuth2ConsentRequestQueryVariables>;
+export const AcceptOAuth2ConsentRequestDocument = gql`
+    mutation AcceptOAuth2ConsentRequest($challenge: String!, $grantScope: [String!], $remember: Boolean, $rememberFor: Int, $session: AcceptOAuth2ConsentRequestSession) {
+  acceptOAuth2ConsentRequest(
+    challenge: $challenge
+    grantScope: $grantScope
+    remember: $remember
+    rememberFor: $rememberFor
+    session: $session
+  ) {
+    redirectTo
+  }
+}
+    `;
+export type AcceptOAuth2ConsentRequestMutationFn = Apollo.MutationFunction<AcceptOAuth2ConsentRequestMutation, AcceptOAuth2ConsentRequestMutationVariables>;
+
+/**
+ * __useAcceptOAuth2ConsentRequestMutation__
+ *
+ * To run a mutation, you first call `useAcceptOAuth2ConsentRequestMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAcceptOAuth2ConsentRequestMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [acceptOAuth2ConsentRequestMutation, { data, loading, error }] = useAcceptOAuth2ConsentRequestMutation({
+ *   variables: {
+ *      challenge: // value for 'challenge'
+ *      grantScope: // value for 'grantScope'
+ *      remember: // value for 'remember'
+ *      rememberFor: // value for 'rememberFor'
+ *      session: // value for 'session'
+ *   },
+ * });
+ */
+export function useAcceptOAuth2ConsentRequestMutation(baseOptions?: Apollo.MutationHookOptions<AcceptOAuth2ConsentRequestMutation, AcceptOAuth2ConsentRequestMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AcceptOAuth2ConsentRequestMutation, AcceptOAuth2ConsentRequestMutationVariables>(AcceptOAuth2ConsentRequestDocument, options);
+      }
+export type AcceptOAuth2ConsentRequestMutationHookResult = ReturnType<typeof useAcceptOAuth2ConsentRequestMutation>;
+export type AcceptOAuth2ConsentRequestMutationResult = Apollo.MutationResult<AcceptOAuth2ConsentRequestMutation>;
+export type AcceptOAuth2ConsentRequestMutationOptions = Apollo.BaseMutationOptions<AcceptOAuth2ConsentRequestMutation, AcceptOAuth2ConsentRequestMutationVariables>;
+export const RejectOAuth2ConsentRequestDocument = gql`
+    mutation RejectOAuth2ConsentRequest($challenge: String!) {
+  rejectOAuth2ConsentRequest(challenge: $challenge) {
+    redirectTo
+  }
+}
+    `;
+export type RejectOAuth2ConsentRequestMutationFn = Apollo.MutationFunction<RejectOAuth2ConsentRequestMutation, RejectOAuth2ConsentRequestMutationVariables>;
+
+/**
+ * __useRejectOAuth2ConsentRequestMutation__
+ *
+ * To run a mutation, you first call `useRejectOAuth2ConsentRequestMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRejectOAuth2ConsentRequestMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [rejectOAuth2ConsentRequestMutation, { data, loading, error }] = useRejectOAuth2ConsentRequestMutation({
+ *   variables: {
+ *      challenge: // value for 'challenge'
+ *   },
+ * });
+ */
+export function useRejectOAuth2ConsentRequestMutation(baseOptions?: Apollo.MutationHookOptions<RejectOAuth2ConsentRequestMutation, RejectOAuth2ConsentRequestMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RejectOAuth2ConsentRequestMutation, RejectOAuth2ConsentRequestMutationVariables>(RejectOAuth2ConsentRequestDocument, options);
+      }
+export type RejectOAuth2ConsentRequestMutationHookResult = ReturnType<typeof useRejectOAuth2ConsentRequestMutation>;
+export type RejectOAuth2ConsentRequestMutationResult = Apollo.MutationResult<RejectOAuth2ConsentRequestMutation>;
+export type RejectOAuth2ConsentRequestMutationOptions = Apollo.BaseMutationOptions<RejectOAuth2ConsentRequestMutation, RejectOAuth2ConsentRequestMutationVariables>;
 export const ListUsersDocument = gql`
     query ListUsers {
   listUsers {
@@ -613,15 +882,21 @@ export type ListUsersQueryResult = Apollo.QueryResult<ListUsersQuery, ListUsersQ
 export const namedOperations = {
   Query: {
     ListGroups: 'ListGroups',
+    OAuth2ConsentRequest: 'OAuth2ConsentRequest',
     ListUsers: 'ListUsers'
   },
   Mutation: {
     DeleteGroup: 'DeleteGroup',
-    Group: 'Group'
+    Group: 'Group',
+    AcceptOAuth2ConsentRequest: 'AcceptOAuth2ConsentRequest',
+    RejectOAuth2ConsentRequest: 'RejectOAuth2ConsentRequest'
   },
   Fragment: {
     GroupInfo: 'GroupInfo',
     GroupUserInfo: 'GroupUserInfo',
+    OAuth2ConsentRequest: 'OAuth2ConsentRequest',
+    OAuthConsentOIDCContext: 'OAuthConsentOIDCContext',
+    OAuth2ConsentClient: 'OAuth2ConsentClient',
     UserInfo: 'UserInfo',
     UserGroupInfo: 'UserGroupInfo'
   }

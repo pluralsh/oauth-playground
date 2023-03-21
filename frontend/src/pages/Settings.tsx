@@ -7,6 +7,7 @@ import {
 } from "@ory/elements"
 import { useCallback, useEffect, useState } from "react"
 import { useNavigate, useSearchParams } from "react-router-dom"
+import { CircularProgress } from '@mui/material'
 import { sdk, sdkError } from "../apis/ory"
 
 export const Settings = () => {
@@ -98,6 +99,6 @@ export const Settings = () => {
       ))}
     </div>
   ) : (
-    <div>Loading...</div>
+    <CircularProgress />
   )
 }

@@ -2,6 +2,7 @@ import { VerificationFlow, UpdateVerificationFlowBody } from "@ory/client"
 import { UserAuthCard } from "@ory/elements"
 import { useCallback, useEffect, useState } from "react"
 import { useNavigate, useSearchParams } from "react-router-dom"
+import { CircularProgress } from '@mui/material'
 import { sdk, sdkError } from "../apis/ory"
 
 export const Verification = (): JSX.Element => {
@@ -81,6 +82,6 @@ export const Verification = (): JSX.Element => {
       onSubmit={({ body }) => submitFlow(body as UpdateVerificationFlowBody)}
     />
   ) : (
-    <div>Loading...</div>
+    <CircularProgress />
   )
 }

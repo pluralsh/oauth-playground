@@ -2,6 +2,7 @@ import { RegistrationFlow, UpdateRegistrationFlowBody } from "@ory/client"
 import { UserAuthCard } from "@ory/elements"
 import { useCallback, useEffect, useState } from "react"
 import { useNavigate, useSearchParams } from "react-router-dom"
+import { CircularProgress } from '@mui/material'
 import { sdk, sdkError } from "../apis/ory"
 
 export const Registration = () => {
@@ -85,6 +86,6 @@ export const Registration = () => {
       onSubmit={({ body }) => submitFlow(body as UpdateRegistrationFlowBody)}
     />
   ) : (
-    <div>Loading...</div>
+    <CircularProgress />
   )
 }
