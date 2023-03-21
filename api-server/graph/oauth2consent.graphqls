@@ -38,6 +38,9 @@ type OAuth2ConsentRequest {
 
   "Subject is the user ID of the end-user that authenticated. This value will be set to the \"sub\" claim in the ID Token."
   subject: String!
+
+  "The URL to redirect to if an error occurred."
+  redirectTo: String
 }
 
 "OIDC Context for a consent request."
@@ -60,7 +63,7 @@ type OidcContext {
 
 type OAuth2RedirectTo {
   "RedirectTo can be used to redirect the user-agent to a specific location. This is useful if you want to redirect the user-agent to a specific location after the consent flow has been completed."
-  redirectTo: String
+  redirectTo: String!
 }
 
 input AcceptOAuth2ConsentRequestSession {
@@ -86,7 +89,7 @@ extend type Mutation {
     challenge: String!
 
     "The audience to grant."
-    grantAccessTokenAudience: String
+    grantAccessTokenAudience: [String!]
 
     "The scopes to grant."
     grantScope: [String!]

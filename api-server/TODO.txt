@@ -1,0 +1,1 @@
+Create seed for first admin user and seed organization into Keto

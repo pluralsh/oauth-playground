@@ -67,7 +67,7 @@ type ComplexityRoot struct {
 	}
 
 	Mutation struct {
-		AcceptOAuth2ConsentRequest func(childComplexity int, challenge string, grantAccessTokenAudience *string, grantScope []string, remember *bool, rememberFor *int64, session *model.AcceptOAuth2ConsentRequestSession) int
+		AcceptOAuth2ConsentRequest func(childComplexity int, challenge string, grantAccessTokenAudience []string, grantScope []string, remember *bool, rememberFor *int64, session *model.AcceptOAuth2ConsentRequestSession) int
 		CreateOAuth2Client         func(childComplexity int, allowedCorsOrigins []string, audience []string, authorizationCodeGrantAccessTokenLifespan *string, authorizationCodeGrantIDTokenLifespan *string, authorizationCodeGrantRefreshTokenLifespan *string, backChannelLogoutSessionRequired *bool, backChannelLogoutURI *string, clientCredentialsGrantAccessTokenLifespan *string, clientName *string, clientSecret *string, clientSecretExpiresAt *int64, clientURI *string, contacts []string, frontchannelLogoutSessionRequired *bool, frontchannelLogoutURI *string, grantTypes []string, implicitGrantAccessTokenLifespan *string, implicitGrantIDTokenLifespan *string, jwks map[string]interface{}, jwksURI *string, jwtBearerGrantAccessTokenLifespan *string, logoURI *string, metadata map[string]interface{}, policyURI *string, postLogoutRedirectUris []string, redirectUris []string, responseTypes []string, scope *string, sectorIdentifierURI *string, subjectType *string, tokenEndpointAuthMethod *string, tokenEndpointAuthSigningAlgorithm *string, tosURI *string, userinfoSignedResponseAlgorithm *string, loginBindings *model.LoginBindingsInput) int
 		CreateUser                 func(childComplexity int, email string, name *model.NameInput) int
 		DeleteGroup                func(childComplexity int, name string) int
@@ -138,6 +138,7 @@ type ComplexityRoot struct {
 		LoginChallenge               func(childComplexity int) int
 		LoginSessionID               func(childComplexity int) int
 		OidcContext                  func(childComplexity int) int
+		RedirectTo                   func(childComplexity int) int
 		RequestURL                   func(childComplexity int) int
 		RequestedAccessTokenAudience func(childComplexity int) int
 		RequestedScope               func(childComplexity int) int
@@ -217,7 +218,7 @@ type MutationResolver interface {
 	CreateOAuth2Client(ctx context.Context, allowedCorsOrigins []string, audience []string, authorizationCodeGrantAccessTokenLifespan *string, authorizationCodeGrantIDTokenLifespan *string, authorizationCodeGrantRefreshTokenLifespan *string, backChannelLogoutSessionRequired *bool, backChannelLogoutURI *string, clientCredentialsGrantAccessTokenLifespan *string, clientName *string, clientSecret *string, clientSecretExpiresAt *int64, clientURI *string, contacts []string, frontchannelLogoutSessionRequired *bool, frontchannelLogoutURI *string, grantTypes []string, implicitGrantAccessTokenLifespan *string, implicitGrantIDTokenLifespan *string, jwks map[string]interface{}, jwksURI *string, jwtBearerGrantAccessTokenLifespan *string, logoURI *string, metadata map[string]interface{}, policyURI *string, postLogoutRedirectUris []string, redirectUris []string, responseTypes []string, scope *string, sectorIdentifierURI *string, subjectType *string, tokenEndpointAuthMethod *string, tokenEndpointAuthSigningAlgorithm *string, tosURI *string, userinfoSignedResponseAlgorithm *string, loginBindings *model.LoginBindingsInput) (*model.OAuth2Client, error)
 	UpdateOAuth2Client(ctx context.Context, allowedCorsOrigins []string, audience []string, authorizationCodeGrantAccessTokenLifespan *string, authorizationCodeGrantIDTokenLifespan *string, authorizationCodeGrantRefreshTokenLifespan *string, backChannelLogoutSessionRequired *bool, backChannelLogoutURI *string, clientCredentialsGrantAccessTokenLifespan *string, clientID string, clientName *string, clientSecret *string, clientSecretExpiresAt *int64, clientURI *string, contacts []string, frontchannelLogoutSessionRequired *bool, frontchannelLogoutURI *string, grantTypes []string, implicitGrantAccessTokenLifespan *string, implicitGrantIDTokenLifespan *string, jwks map[string]interface{}, jwksURI *string, jwtBearerGrantAccessTokenLifespan *string, logoURI *string, metadata map[string]interface{}, policyURI *string, postLogoutRedirectUris []string, redirectUris []string, responseTypes []string, scope *string, sectorIdentifierURI *string, subjectType *string, tokenEndpointAuthMethod *string, tokenEndpointAuthSigningAlgorithm *string, tosURI *string, userinfoSignedResponseAlgorithm *string, loginBindings *model.LoginBindingsInput) (*model.OAuth2Client, error)
 	DeleteOAuth2Client(ctx context.Context, clientID string) (*model.OAuth2Client, error)
-	AcceptOAuth2ConsentRequest(ctx context.Context, challenge string, grantAccessTokenAudience *string, grantScope []string, remember *bool, rememberFor *int64, session *model.AcceptOAuth2ConsentRequestSession) (*model.OAuth2RedirectTo, error)
+	AcceptOAuth2ConsentRequest(ctx context.Context, challenge string, grantAccessTokenAudience []string, grantScope []string, remember *bool, rememberFor *int64, session *model.AcceptOAuth2ConsentRequestSession) (*model.OAuth2RedirectTo, error)
 	RejectOAuth2ConsentRequest(ctx context.Context, challenge string) (*model.OAuth2RedirectTo, error)
 	ObservabilityTenant(ctx context.Context, name string, viewers *model.ObservabilityTenantViewersInput, editors *model.ObservabilityTenantEditorsInput) (*model.ObservabilityTenant, error)
 	DeleteObservabilityTenant(ctx context.Context, name string) (*model.ObservabilityTenant, error)
@@ -319,7 +320,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.AcceptOAuth2ConsentRequest(childComplexity, args["challenge"].(string), args["grantAccessTokenAudience"].(*string), args["grantScope"].([]string), args["remember"].(*bool), args["rememberFor"].(*int64), args["session"].(*model.AcceptOAuth2ConsentRequestSession)), true
+		return e.complexity.Mutation.AcceptOAuth2ConsentRequest(childComplexity, args["challenge"].(string), args["grantAccessTokenAudience"].([]string), args["grantScope"].([]string), args["remember"].(*bool), args["rememberFor"].(*int64), args["session"].(*model.AcceptOAuth2ConsentRequestSession)), true
 
 	case "Mutation.createOAuth2Client":
 		if e.complexity.Mutation.CreateOAuth2Client == nil {
@@ -802,6 +803,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.OAuth2ConsentRequest.OidcContext(childComplexity), true
+
+	case "OAuth2ConsentRequest.redirectTo":
+		if e.complexity.OAuth2ConsentRequest.RedirectTo == nil {
+			break
+		}
+
+		return e.complexity.OAuth2ConsentRequest.RedirectTo(childComplexity), true
 
 	case "OAuth2ConsentRequest.requestUrl":
 		if e.complexity.OAuth2ConsentRequest.RequestURL == nil {
@@ -1619,6 +1627,9 @@ type OAuth2ConsentRequest {
 
   "Subject is the user ID of the end-user that authenticated. This value will be set to the \"sub\" claim in the ID Token."
   subject: String!
+
+  "The URL to redirect to if an error occurred."
+  redirectTo: String
 }
 
 "OIDC Context for a consent request."
@@ -1641,7 +1652,7 @@ type OidcContext {
 
 type OAuth2RedirectTo {
   "RedirectTo can be used to redirect the user-agent to a specific location. This is useful if you want to redirect the user-agent to a specific location after the consent flow has been completed."
-  redirectTo: String
+  redirectTo: String!
 }
 
 input AcceptOAuth2ConsentRequestSession {
@@ -1667,7 +1678,7 @@ extend type Mutation {
     challenge: String!
 
     "The audience to grant."
-    grantAccessTokenAudience: String
+    grantAccessTokenAudience: [String!]
 
     "The scopes to grant."
     grantScope: [String!]
@@ -1886,10 +1897,10 @@ func (ec *executionContext) field_Mutation_acceptOAuth2ConsentRequest_args(ctx c
 		}
 	}
 	args["challenge"] = arg0
-	var arg1 *string
+	var arg1 []string
 	if tmp, ok := rawArgs["grantAccessTokenAudience"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("grantAccessTokenAudience"))
-		arg1, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+		arg1, err = ec.unmarshalOString2ᚕstringᚄ(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -4066,7 +4077,7 @@ func (ec *executionContext) _Mutation_acceptOAuth2ConsentRequest(ctx context.Con
 	}()
 	resTmp := ec._fieldMiddleware(ctx, nil, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().AcceptOAuth2ConsentRequest(rctx, fc.Args["challenge"].(string), fc.Args["grantAccessTokenAudience"].(*string), fc.Args["grantScope"].([]string), fc.Args["remember"].(*bool), fc.Args["rememberFor"].(*int64), fc.Args["session"].(*model.AcceptOAuth2ConsentRequestSession))
+		return ec.resolvers.Mutation().AcceptOAuth2ConsentRequest(rctx, fc.Args["challenge"].(string), fc.Args["grantAccessTokenAudience"].([]string), fc.Args["grantScope"].([]string), fc.Args["remember"].(*bool), fc.Args["rememberFor"].(*int64), fc.Args["session"].(*model.AcceptOAuth2ConsentRequestSession))
 	})
 
 	if resTmp == nil {
@@ -6632,8 +6643,8 @@ func (ec *executionContext) fieldContext_OAuth2ConsentRequest_subject(ctx contex
 	return fc, nil
 }
 
-func (ec *executionContext) _OAuth2RedirectTo_redirectTo(ctx context.Context, field graphql.CollectedField, obj *model.OAuth2RedirectTo) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_OAuth2RedirectTo_redirectTo(ctx, field)
+func (ec *executionContext) _OAuth2ConsentRequest_redirectTo(ctx context.Context, field graphql.CollectedField, obj *model.OAuth2ConsentRequest) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_OAuth2ConsentRequest_redirectTo(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -6655,6 +6666,47 @@ func (ec *executionContext) _OAuth2RedirectTo_redirectTo(ctx context.Context, fi
 	res := resTmp.(*string)
 	fc.Result = res
 	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_OAuth2ConsentRequest_redirectTo(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "OAuth2ConsentRequest",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _OAuth2RedirectTo_redirectTo(ctx context.Context, field graphql.CollectedField, obj *model.OAuth2RedirectTo) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_OAuth2RedirectTo_redirectTo(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.RedirectTo, nil
+	})
+
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_OAuth2RedirectTo_redirectTo(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -8057,6 +8109,8 @@ func (ec *executionContext) fieldContext_Query_oauth2ConsentRequest(ctx context.
 				return ec.fieldContext_OAuth2ConsentRequest_skip(ctx, field)
 			case "subject":
 				return ec.fieldContext_OAuth2ConsentRequest_subject(ctx, field)
+			case "redirectTo":
+				return ec.fieldContext_OAuth2ConsentRequest_redirectTo(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type OAuth2ConsentRequest", field.Name)
 		},
@@ -11100,6 +11154,10 @@ func (ec *executionContext) _OAuth2ConsentRequest(ctx context.Context, sel ast.S
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
+		case "redirectTo":
+
+			out.Values[i] = ec._OAuth2ConsentRequest_redirectTo(ctx, field, obj)
+
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -11125,6 +11183,9 @@ func (ec *executionContext) _OAuth2RedirectTo(ctx context.Context, sel ast.Selec
 
 			out.Values[i] = ec._OAuth2RedirectTo_redirectTo(ctx, field, obj)
 
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

@@ -170,11 +170,13 @@ type OAuth2ConsentRequest struct {
 	Skip *bool `json:"skip"`
 	// Subject is the user ID of the end-user that authenticated. This value will be set to the "sub" claim in the ID Token.
 	Subject string `json:"subject"`
+	// The URL to redirect to if an error occurred.
+	RedirectTo *string `json:"redirectTo"`
 }
 
 type OAuth2RedirectTo struct {
 	// RedirectTo can be used to redirect the user-agent to a specific location. This is useful if you want to redirect the user-agent to a specific location after the consent flow has been completed.
-	RedirectTo *string `json:"redirectTo"`
+	RedirectTo string `json:"redirectTo"`
 }
 
 // Representation a tenant in the Grafana observability stack where metrics, logs and traces can be sent to or retrieved from.

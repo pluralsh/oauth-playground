@@ -6,22 +6,21 @@ package resolvers
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/pluralsh/oauth-playground/api-server/graph/model"
 )
 
 // AcceptOAuth2ConsentRequest is the resolver for the acceptOAuth2ConsentRequest field.
-func (r *mutationResolver) AcceptOAuth2ConsentRequest(ctx context.Context, challenge string, grantAccessTokenAudience *string, grantScope []string, remember *bool, rememberFor *int64, session *model.AcceptOAuth2ConsentRequestSession) (*model.OAuth2RedirectTo, error) {
-	panic(fmt.Errorf("not implemented: AcceptOAuth2ConsentRequest - acceptOAuth2ConsentRequest"))
+func (r *mutationResolver) AcceptOAuth2ConsentRequest(ctx context.Context, challenge string, grantAccessTokenAudience []string, grantScope []string, remember *bool, rememberFor *int64, session *model.AcceptOAuth2ConsentRequestSession) (*model.OAuth2RedirectTo, error) {
+	return r.C.AcceptOAuth2ConsentRequest(ctx, challenge, grantAccessTokenAudience, grantScope, remember, rememberFor, session)
 }
 
 // RejectOAuth2ConsentRequest is the resolver for the rejectOAuth2ConsentRequest field.
 func (r *mutationResolver) RejectOAuth2ConsentRequest(ctx context.Context, challenge string) (*model.OAuth2RedirectTo, error) {
-	panic(fmt.Errorf("not implemented: RejectOAuth2ConsentRequest - rejectOAuth2ConsentRequest"))
+	return r.C.RejectOAuth2ConsentRequest(ctx, challenge)
 }
 
 // Oauth2ConsentRequest is the resolver for the oauth2ConsentRequest field.
 func (r *queryResolver) Oauth2ConsentRequest(ctx context.Context, challenge string) (*model.OAuth2ConsentRequest, error) {
-	panic(fmt.Errorf("not implemented: Oauth2ConsentRequest - oauth2ConsentRequest"))
+	return r.C.GetOAuth2ConsentRequest(ctx, challenge)
 }

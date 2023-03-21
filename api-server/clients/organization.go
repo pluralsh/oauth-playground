@@ -15,16 +15,17 @@ func (c *ClientWrapper) UpdateOrganization(ctx context.Context, name string, adm
 	// TODO: create separate functions for adding and removing admins from an organization
 	log := c.Log.WithName("Organization").WithValues("Name", name)
 
-	exists, err := c.OrganizationExistsInKeto(ctx, name)
+	_, err := c.OrganizationExistsInKeto(ctx, name)
 	if err != nil {
 		log.Error(err, "Failed to check if organization already exists in keto")
 		return nil, err
 	}
 
-	if !exists {
-		log.Error(nil, "Organization does not exist in keto. Having multiple organizations is not yet supported.")
-		return nil, fmt.Errorf("Organization does not exist in keto. Having multiple organizations is not yet supported.")
-	}
+	//TODO: this doesn't seem to work and blocks updating with the first admin
+	// if !exists {
+	// 	log.Error(nil, "Organization does not exist in keto. Having multiple organizations is not yet supported.")
+	// 	return nil, fmt.Errorf("Organization does not exist in keto. Having multiple organizations is not yet supported.")
+	// }
 
 	toAdd, toRemove, err := c.OrgAdminChangeset(ctx, name, admins)
 	if err != nil {
