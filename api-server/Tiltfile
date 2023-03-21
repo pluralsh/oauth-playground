@@ -5,7 +5,7 @@ load('ext://restart_process', 'docker_build_with_restart')
 helm_repo('bitnami', 'https://charts.bitnami.com/bitnami')
 helm_repo('ory', 'https://k8s.ory.sh/helm/charts')
 
-## Kraots
+## Kratos
 
 helm_resource(
     'postgresql-kratos',
