@@ -146,7 +146,7 @@ extend type Query {
   listOAuth2Clients: [OAuth2Client!]! @checkPermissions @isAuthenticated
 
   "Get a single OAuth2 Client by ID."
-  oAuth2Client(
+  getOAuth2Client(
     "The ID of the OAuth2 Client."
     clientId: ID!
   ): OAuth2Client @checkPermissions @isAuthenticated

@@ -58,8 +58,8 @@ func (r *queryResolver) ListOAuth2Clients(ctx context.Context) ([]*model.OAuth2C
 	return r.C.ListOAuth2Clients(ctx)
 }
 
-// OAuth2Client is the resolver for the oAuth2Client field.
-func (r *queryResolver) OAuth2Client(ctx context.Context, clientID string) (*model.OAuth2Client, error) {
+// GetOAuth2Client is the resolver for the getOAuth2Client field.
+func (r *queryResolver) GetOAuth2Client(ctx context.Context, clientID string) (*model.OAuth2Client, error) {
 	return r.C.GetOAuth2Client(ctx, clientID)
 }
 

@@ -6,6 +6,13 @@ import (
 	"time"
 )
 
+type AcceptOAuth2ConsentRequestSession struct {
+	// AccessToken sets session data for the access and refresh token, as well as any future tokens issued by the refresh grant. Keep in mind that this data will be available to anyone performing OAuth 2.0 Challenge Introspection. If only your services can perform OAuth 2.0 Challenge Introspection, this is usually fine. But if third parties can access that endpoint as well, sensitive data from the session might be exposed to them. Use with care!
+	AccessToken map[string]interface{} `json:"accessToken"`
+	// IDToken sets session data for the OpenID Connect ID token. Keep in mind that the session'id payloads are readable by anyone that has access to the ID Challenge. Use with care!
+	IDToken map[string]interface{} `json:"idToken"`
+}
+
 // Input for adding a user to an organization as an administrator.
 type Admin struct {
 	// The ID of the user to add as an admin.
@@ -135,6 +142,41 @@ type OAuth2Client struct {
 	LoginBindings *LoginBindings `json:"loginBindings"`
 }
 
+// OAuth2ConsentRequest represents an OAuth 2.0 consent request.
+type OAuth2ConsentRequest struct {
+	// ACR represents the Authentication AuthorizationContext Class Reference value for this authentication session. You can use it to express that, for example, a user authenticated using two factor authentication.
+	Acr *string `json:"acr"`
+	// AMR represents the Authentication Methods References. It lists the method used to authenticate the end-user. For instance, if the end-user authenticated using password and OTP, the AMR value would be ["pwd", "otp"].
+	Amr []string `json:"amr"`
+	// The challenge is a random string which is used to identify the consent request.
+	Challenge string `json:"challenge"`
+	// The client is the OAuth 2.0 Client requesting the OAuth 2.0 Authorization.
+	Client *OAuth2Client `json:"client"`
+	// Context contains arbitrary context that is forwarded from the login request. This is useful if you want to pass data from the login request to the consent request.
+	Context map[string]interface{} `json:"context"`
+	// LoginChallenge is the login challenge this consent challenge belongs to. It can be used to associate a login and consent request in the login & consent app.
+	LoginChallenge *string `json:"loginChallenge"`
+	// LoginSessionID is the login session ID. If the user-agent reuses a login session (via cookie / remember flag) this ID will remain the same. If the user-agent did not have an existing authentication session (e.g. remember is false) this will be a new random value. This value is used as the "sid" parameter in the ID Token and in OIDC Front-/Back- channel logout. It's value can generally be used to associate consecutive login requests by a certain user.
+	LoginSessionID *string `json:"loginSessionId"`
+	// OIDCContext contains the OIDC context of the request. If the OAuth 2.0 Authorization request was not an OpenID Connect request, this value will be nil.
+	OidcContext *OidcContext `json:"oidcContext"`
+	// RequestURL is the original OAuth 2.0 Authorization URL requested by the OAuth 2.0 client. It is the URL which initiates the OAuth 2.0 Authorization Code or OAuth 2.0 Implicit flow. This URL is typically not needed, but might come in handy if you want to deal with additional request parameters.
+	RequestURL *string `json:"requestUrl"`
+	// RequestedAccessTokenAudience contains the audience (client) that the OAuth 2.0 Client requested the OAuth 2.0 Access Token to be issued for.
+	RequestedAccessTokenAudience []string `json:"requestedAccessTokenAudience"`
+	// RequestedScope contains the OAuth 2.0 Scope requested by the OAuth 2.0 Client.
+	RequestedScope []string `json:"requestedScope"`
+	// Skip is true when the client has requested the same scopes from the same user before. If this is true, you can skip asking the user to grant the requested scopes, or you can force showing the UI by setting this value to false.
+	Skip *bool `json:"skip"`
+	// Subject is the user ID of the end-user that authenticated. This value will be set to the "sub" claim in the ID Token.
+	Subject string `json:"subject"`
+}
+
+type OAuth2RedirectTo struct {
+	// RedirectTo can be used to redirect the user-agent to a specific location. This is useful if you want to redirect the user-agent to a specific location after the consent flow has been completed.
+	RedirectTo *string `json:"redirectTo"`
+}
+
 // Representation a tenant in the Grafana observability stack where metrics, logs and traces can be sent to or retrieved from.
 type ObservabilityTenant struct {
 	// The unique name of the tenant.
@@ -179,6 +221,20 @@ type ObservabilityTenantViewersInput struct {
 	Groups []string `json:"groups"`
 	// The clientIDs oauth2 clients that can send data a tenant.
 	Oauth2Clients []string `json:"oauth2Clients"`
+}
+
+// OIDC Context for a consent request.
+type OidcContext struct {
+	// ACRValues is the Authentication AuthorizationContext Class Reference requested in the OAuth 2.0 Authorization request. It is a parameter defined by OpenID Connect and expresses which level of authentication (e.g. 2FA) is required.  OpenID Connect defines it as follows: > Requested Authentication AuthorizationContext Class Reference values. Space-separated string that specifies the acr values that the Authorization Server is being requested to use for processing this Authentication Request, with the values appearing in order of preference. The Authentication AuthorizationContext Class satisfied by the authentication performed is returned as the acr Claim Value, as specified in Section 2. The acr Claim is requested as a Voluntary Claim by this parameter.
+	AcrValues []string `json:"acrValues"`
+	// Display is the display mode requested in the OAuth 2.0 Authorization request. It is a parameter defined by OpenID Connect and expresses how the Authorization Server displays authentication and consent user interfaces to the End-User.  OpenID Connect defines it as follows: > ASCII string value that specifies how the Authorization Server displays the authentication and consent user interface pages to the End-User. The defined values are: page: The Authorization Server SHOULD display the authentication and consent UI consistent with a full User Agent page view. If the display parameter is not specified, this is the default display mode. popup: The Authorization Server SHOULD display the authentication and consent UI consistent with a popup User Agent window. The popup User Agent window should be of an appropriate size for a login-focused dialog and should not obscure the entire window that it is popping up over. touch: The Authorization Server SHOULD display the authentication and consent UI consistent with a device that leverages a touch interface. > The display parameter is used only if the prompt parameter value is not none. If the prompt parameter value is none, the display parameter is ignored.
+	Display *string `json:"display"`
+	// IDTokenHintClaims contains the claims from the ID Token hint if it was present in the OAuth 2.0 Authorization request.
+	IDTokenHintClaims map[string]interface{} `json:"idTokenHintClaims"`
+	// LoginHint is the login hint requested in the OAuth 2.0 Authorization request. It is a parameter defined by OpenID Connect and expresses the preferred login identifier the End-User might use to log in (if necessary).  OpenID Connect defines it as follows: > Hint to the Authorization Server about the login identifier the End-User might use to log in (if necessary). > This hint can be used by an RP if it first asks the End-User for their e-mail address (or other identifier) and then wants to pass that value as a hint to the discovered authorization service. > It is RECOMMENDED that the hint value match the value used for discovery. > This value MAY also be a phone number in the format specified for the phone_number Claim. > The use of this parameter is left to the OP's discretion.
+	LoginHint *string `json:"loginHint"`
+	// UILocales is the End-User'id preferred languages and scripts for the user interface, represented as a space-separated list of BCP47 [RFC5646] language tag values, ordered by preference. For instance, the value "fr-CA fr en" represents a preference for French as spoken in Canada, then French (without a region designation), followed by English (without a region designation). An error SHOULD NOT result if some or all of the requested locales are not supported by the OpenID Provider.
+	UILocales []string `json:"uiLocales"`
 }
 
 // Representation an Organization in the auth stack.

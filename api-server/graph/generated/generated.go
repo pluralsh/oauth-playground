@@ -67,16 +67,18 @@ type ComplexityRoot struct {
 	}
 
 	Mutation struct {
-		CreateOAuth2Client        func(childComplexity int, allowedCorsOrigins []string, audience []string, authorizationCodeGrantAccessTokenLifespan *string, authorizationCodeGrantIDTokenLifespan *string, authorizationCodeGrantRefreshTokenLifespan *string, backChannelLogoutSessionRequired *bool, backChannelLogoutURI *string, clientCredentialsGrantAccessTokenLifespan *string, clientName *string, clientSecret *string, clientSecretExpiresAt *int64, clientURI *string, contacts []string, frontchannelLogoutSessionRequired *bool, frontchannelLogoutURI *string, grantTypes []string, implicitGrantAccessTokenLifespan *string, implicitGrantIDTokenLifespan *string, jwks map[string]interface{}, jwksURI *string, jwtBearerGrantAccessTokenLifespan *string, logoURI *string, metadata map[string]interface{}, policyURI *string, postLogoutRedirectUris []string, redirectUris []string, responseTypes []string, scope *string, sectorIdentifierURI *string, subjectType *string, tokenEndpointAuthMethod *string, tokenEndpointAuthSigningAlgorithm *string, tosURI *string, userinfoSignedResponseAlgorithm *string, loginBindings *model.LoginBindingsInput) int
-		CreateUser                func(childComplexity int, email string, name *model.NameInput) int
-		DeleteGroup               func(childComplexity int, name string) int
-		DeleteOAuth2Client        func(childComplexity int, clientID string) int
-		DeleteObservabilityTenant func(childComplexity int, name string) int
-		DeleteUser                func(childComplexity int, id string) int
-		Group                     func(childComplexity int, name string, members []string) int
-		ObservabilityTenant       func(childComplexity int, name string, viewers *model.ObservabilityTenantViewersInput, editors *model.ObservabilityTenantEditorsInput) int
-		Organization              func(childComplexity int, name string, admins []string) int
-		UpdateOAuth2Client        func(childComplexity int, allowedCorsOrigins []string, audience []string, authorizationCodeGrantAccessTokenLifespan *string, authorizationCodeGrantIDTokenLifespan *string, authorizationCodeGrantRefreshTokenLifespan *string, backChannelLogoutSessionRequired *bool, backChannelLogoutURI *string, clientCredentialsGrantAccessTokenLifespan *string, clientID string, clientName *string, clientSecret *string, clientSecretExpiresAt *int64, clientURI *string, contacts []string, frontchannelLogoutSessionRequired *bool, frontchannelLogoutURI *string, grantTypes []string, implicitGrantAccessTokenLifespan *string, implicitGrantIDTokenLifespan *string, jwks map[string]interface{}, jwksURI *string, jwtBearerGrantAccessTokenLifespan *string, logoURI *string, metadata map[string]interface{}, policyURI *string, postLogoutRedirectUris []string, redirectUris []string, responseTypes []string, scope *string, sectorIdentifierURI *string, subjectType *string, tokenEndpointAuthMethod *string, tokenEndpointAuthSigningAlgorithm *string, tosURI *string, userinfoSignedResponseAlgorithm *string, loginBindings *model.LoginBindingsInput) int
+		AcceptOAuth2ConsentRequest func(childComplexity int, challenge string, grantAccessTokenAudience *string, grantScope []string, remember *bool, rememberFor *int64, session *model.AcceptOAuth2ConsentRequestSession) int
+		CreateOAuth2Client         func(childComplexity int, allowedCorsOrigins []string, audience []string, authorizationCodeGrantAccessTokenLifespan *string, authorizationCodeGrantIDTokenLifespan *string, authorizationCodeGrantRefreshTokenLifespan *string, backChannelLogoutSessionRequired *bool, backChannelLogoutURI *string, clientCredentialsGrantAccessTokenLifespan *string, clientName *string, clientSecret *string, clientSecretExpiresAt *int64, clientURI *string, contacts []string, frontchannelLogoutSessionRequired *bool, frontchannelLogoutURI *string, grantTypes []string, implicitGrantAccessTokenLifespan *string, implicitGrantIDTokenLifespan *string, jwks map[string]interface{}, jwksURI *string, jwtBearerGrantAccessTokenLifespan *string, logoURI *string, metadata map[string]interface{}, policyURI *string, postLogoutRedirectUris []string, redirectUris []string, responseTypes []string, scope *string, sectorIdentifierURI *string, subjectType *string, tokenEndpointAuthMethod *string, tokenEndpointAuthSigningAlgorithm *string, tosURI *string, userinfoSignedResponseAlgorithm *string, loginBindings *model.LoginBindingsInput) int
+		CreateUser                 func(childComplexity int, email string, name *model.NameInput) int
+		DeleteGroup                func(childComplexity int, name string) int
+		DeleteOAuth2Client         func(childComplexity int, clientID string) int
+		DeleteObservabilityTenant  func(childComplexity int, name string) int
+		DeleteUser                 func(childComplexity int, id string) int
+		Group                      func(childComplexity int, name string, members []string) int
+		ObservabilityTenant        func(childComplexity int, name string, viewers *model.ObservabilityTenantViewersInput, editors *model.ObservabilityTenantEditorsInput) int
+		Organization               func(childComplexity int, name string, admins []string) int
+		RejectOAuth2ConsentRequest func(childComplexity int, challenge string) int
+		UpdateOAuth2Client         func(childComplexity int, allowedCorsOrigins []string, audience []string, authorizationCodeGrantAccessTokenLifespan *string, authorizationCodeGrantIDTokenLifespan *string, authorizationCodeGrantRefreshTokenLifespan *string, backChannelLogoutSessionRequired *bool, backChannelLogoutURI *string, clientCredentialsGrantAccessTokenLifespan *string, clientID string, clientName *string, clientSecret *string, clientSecretExpiresAt *int64, clientURI *string, contacts []string, frontchannelLogoutSessionRequired *bool, frontchannelLogoutURI *string, grantTypes []string, implicitGrantAccessTokenLifespan *string, implicitGrantIDTokenLifespan *string, jwks map[string]interface{}, jwksURI *string, jwtBearerGrantAccessTokenLifespan *string, logoURI *string, metadata map[string]interface{}, policyURI *string, postLogoutRedirectUris []string, redirectUris []string, responseTypes []string, scope *string, sectorIdentifierURI *string, subjectType *string, tokenEndpointAuthMethod *string, tokenEndpointAuthSigningAlgorithm *string, tosURI *string, userinfoSignedResponseAlgorithm *string, loginBindings *model.LoginBindingsInput) int
 	}
 
 	Name struct {
@@ -127,6 +129,26 @@ type ComplexityRoot struct {
 		UserinfoSignedResponseAlgorithm            func(childComplexity int) int
 	}
 
+	OAuth2ConsentRequest struct {
+		Acr                          func(childComplexity int) int
+		Amr                          func(childComplexity int) int
+		Challenge                    func(childComplexity int) int
+		Client                       func(childComplexity int) int
+		Context                      func(childComplexity int) int
+		LoginChallenge               func(childComplexity int) int
+		LoginSessionID               func(childComplexity int) int
+		OidcContext                  func(childComplexity int) int
+		RequestURL                   func(childComplexity int) int
+		RequestedAccessTokenAudience func(childComplexity int) int
+		RequestedScope               func(childComplexity int) int
+		Skip                         func(childComplexity int) int
+		Subject                      func(childComplexity int) int
+	}
+
+	OAuth2RedirectTo struct {
+		RedirectTo func(childComplexity int) int
+	}
+
 	ObservabilityTenant struct {
 		Editors      func(childComplexity int) int
 		Name         func(childComplexity int) int
@@ -145,12 +167,21 @@ type ComplexityRoot struct {
 		Users         func(childComplexity int) int
 	}
 
+	OidcContext struct {
+		AcrValues         func(childComplexity int) int
+		Display           func(childComplexity int) int
+		IDTokenHintClaims func(childComplexity int) int
+		LoginHint         func(childComplexity int) int
+		UILocales         func(childComplexity int) int
+	}
+
 	Organization struct {
 		Admins func(childComplexity int) int
 		Name   func(childComplexity int) int
 	}
 
 	Query struct {
+		GetOAuth2Client          func(childComplexity int, clientID string) int
 		GetObservabilityTenant   func(childComplexity int, name string) int
 		GetUser                  func(childComplexity int, id string) int
 		ListGroups               func(childComplexity int) int
@@ -158,7 +189,7 @@ type ComplexityRoot struct {
 		ListObservabilityTenants func(childComplexity int) int
 		ListOrganizations        func(childComplexity int) int
 		ListUsers                func(childComplexity int) int
-		OAuth2Client             func(childComplexity int, clientID string) int
+		Oauth2ConsentRequest     func(childComplexity int, challenge string) int
 	}
 
 	User struct {
@@ -186,6 +217,8 @@ type MutationResolver interface {
 	CreateOAuth2Client(ctx context.Context, allowedCorsOrigins []string, audience []string, authorizationCodeGrantAccessTokenLifespan *string, authorizationCodeGrantIDTokenLifespan *string, authorizationCodeGrantRefreshTokenLifespan *string, backChannelLogoutSessionRequired *bool, backChannelLogoutURI *string, clientCredentialsGrantAccessTokenLifespan *string, clientName *string, clientSecret *string, clientSecretExpiresAt *int64, clientURI *string, contacts []string, frontchannelLogoutSessionRequired *bool, frontchannelLogoutURI *string, grantTypes []string, implicitGrantAccessTokenLifespan *string, implicitGrantIDTokenLifespan *string, jwks map[string]interface{}, jwksURI *string, jwtBearerGrantAccessTokenLifespan *string, logoURI *string, metadata map[string]interface{}, policyURI *string, postLogoutRedirectUris []string, redirectUris []string, responseTypes []string, scope *string, sectorIdentifierURI *string, subjectType *string, tokenEndpointAuthMethod *string, tokenEndpointAuthSigningAlgorithm *string, tosURI *string, userinfoSignedResponseAlgorithm *string, loginBindings *model.LoginBindingsInput) (*model.OAuth2Client, error)
 	UpdateOAuth2Client(ctx context.Context, allowedCorsOrigins []string, audience []string, authorizationCodeGrantAccessTokenLifespan *string, authorizationCodeGrantIDTokenLifespan *string, authorizationCodeGrantRefreshTokenLifespan *string, backChannelLogoutSessionRequired *bool, backChannelLogoutURI *string, clientCredentialsGrantAccessTokenLifespan *string, clientID string, clientName *string, clientSecret *string, clientSecretExpiresAt *int64, clientURI *string, contacts []string, frontchannelLogoutSessionRequired *bool, frontchannelLogoutURI *string, grantTypes []string, implicitGrantAccessTokenLifespan *string, implicitGrantIDTokenLifespan *string, jwks map[string]interface{}, jwksURI *string, jwtBearerGrantAccessTokenLifespan *string, logoURI *string, metadata map[string]interface{}, policyURI *string, postLogoutRedirectUris []string, redirectUris []string, responseTypes []string, scope *string, sectorIdentifierURI *string, subjectType *string, tokenEndpointAuthMethod *string, tokenEndpointAuthSigningAlgorithm *string, tosURI *string, userinfoSignedResponseAlgorithm *string, loginBindings *model.LoginBindingsInput) (*model.OAuth2Client, error)
 	DeleteOAuth2Client(ctx context.Context, clientID string) (*model.OAuth2Client, error)
+	AcceptOAuth2ConsentRequest(ctx context.Context, challenge string, grantAccessTokenAudience *string, grantScope []string, remember *bool, rememberFor *int64, session *model.AcceptOAuth2ConsentRequestSession) (*model.OAuth2RedirectTo, error)
+	RejectOAuth2ConsentRequest(ctx context.Context, challenge string) (*model.OAuth2RedirectTo, error)
 	ObservabilityTenant(ctx context.Context, name string, viewers *model.ObservabilityTenantViewersInput, editors *model.ObservabilityTenantEditorsInput) (*model.ObservabilityTenant, error)
 	DeleteObservabilityTenant(ctx context.Context, name string) (*model.ObservabilityTenant, error)
 	Organization(ctx context.Context, name string, admins []string) (*model.Organization, error)
@@ -216,7 +249,8 @@ type QueryResolver interface {
 	GetUser(ctx context.Context, id string) (*model.User, error)
 	ListGroups(ctx context.Context) ([]*model.Group, error)
 	ListOAuth2Clients(ctx context.Context) ([]*model.OAuth2Client, error)
-	OAuth2Client(ctx context.Context, clientID string) (*model.OAuth2Client, error)
+	GetOAuth2Client(ctx context.Context, clientID string) (*model.OAuth2Client, error)
+	Oauth2ConsentRequest(ctx context.Context, challenge string) (*model.OAuth2ConsentRequest, error)
 	ListObservabilityTenants(ctx context.Context) ([]*model.ObservabilityTenant, error)
 	GetObservabilityTenant(ctx context.Context, name string) (*model.ObservabilityTenant, error)
 	ListOrganizations(ctx context.Context) ([]*model.Organization, error)
@@ -274,6 +308,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.LoginBindings.Users(childComplexity), true
+
+	case "Mutation.acceptOAuth2ConsentRequest":
+		if e.complexity.Mutation.AcceptOAuth2ConsentRequest == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_acceptOAuth2ConsentRequest_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.AcceptOAuth2ConsentRequest(childComplexity, args["challenge"].(string), args["grantAccessTokenAudience"].(*string), args["grantScope"].([]string), args["remember"].(*bool), args["rememberFor"].(*int64), args["session"].(*model.AcceptOAuth2ConsentRequestSession)), true
 
 	case "Mutation.createOAuth2Client":
 		if e.complexity.Mutation.CreateOAuth2Client == nil {
@@ -382,6 +428,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.Organization(childComplexity, args["name"].(string), args["admins"].([]string)), true
+
+	case "Mutation.rejectOAuth2ConsentRequest":
+		if e.complexity.Mutation.RejectOAuth2ConsentRequest == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_rejectOAuth2ConsentRequest_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.RejectOAuth2ConsentRequest(childComplexity, args["challenge"].(string)), true
 
 	case "Mutation.updateOAuth2Client":
 		if e.complexity.Mutation.UpdateOAuth2Client == nil {
@@ -689,6 +747,104 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.OAuth2Client.UserinfoSignedResponseAlgorithm(childComplexity), true
 
+	case "OAuth2ConsentRequest.acr":
+		if e.complexity.OAuth2ConsentRequest.Acr == nil {
+			break
+		}
+
+		return e.complexity.OAuth2ConsentRequest.Acr(childComplexity), true
+
+	case "OAuth2ConsentRequest.amr":
+		if e.complexity.OAuth2ConsentRequest.Amr == nil {
+			break
+		}
+
+		return e.complexity.OAuth2ConsentRequest.Amr(childComplexity), true
+
+	case "OAuth2ConsentRequest.challenge":
+		if e.complexity.OAuth2ConsentRequest.Challenge == nil {
+			break
+		}
+
+		return e.complexity.OAuth2ConsentRequest.Challenge(childComplexity), true
+
+	case "OAuth2ConsentRequest.client":
+		if e.complexity.OAuth2ConsentRequest.Client == nil {
+			break
+		}
+
+		return e.complexity.OAuth2ConsentRequest.Client(childComplexity), true
+
+	case "OAuth2ConsentRequest.context":
+		if e.complexity.OAuth2ConsentRequest.Context == nil {
+			break
+		}
+
+		return e.complexity.OAuth2ConsentRequest.Context(childComplexity), true
+
+	case "OAuth2ConsentRequest.loginChallenge":
+		if e.complexity.OAuth2ConsentRequest.LoginChallenge == nil {
+			break
+		}
+
+		return e.complexity.OAuth2ConsentRequest.LoginChallenge(childComplexity), true
+
+	case "OAuth2ConsentRequest.loginSessionId":
+		if e.complexity.OAuth2ConsentRequest.LoginSessionID == nil {
+			break
+		}
+
+		return e.complexity.OAuth2ConsentRequest.LoginSessionID(childComplexity), true
+
+	case "OAuth2ConsentRequest.oidcContext":
+		if e.complexity.OAuth2ConsentRequest.OidcContext == nil {
+			break
+		}
+
+		return e.complexity.OAuth2ConsentRequest.OidcContext(childComplexity), true
+
+	case "OAuth2ConsentRequest.requestUrl":
+		if e.complexity.OAuth2ConsentRequest.RequestURL == nil {
+			break
+		}
+
+		return e.complexity.OAuth2ConsentRequest.RequestURL(childComplexity), true
+
+	case "OAuth2ConsentRequest.requestedAccessTokenAudience":
+		if e.complexity.OAuth2ConsentRequest.RequestedAccessTokenAudience == nil {
+			break
+		}
+
+		return e.complexity.OAuth2ConsentRequest.RequestedAccessTokenAudience(childComplexity), true
+
+	case "OAuth2ConsentRequest.requestedScope":
+		if e.complexity.OAuth2ConsentRequest.RequestedScope == nil {
+			break
+		}
+
+		return e.complexity.OAuth2ConsentRequest.RequestedScope(childComplexity), true
+
+	case "OAuth2ConsentRequest.skip":
+		if e.complexity.OAuth2ConsentRequest.Skip == nil {
+			break
+		}
+
+		return e.complexity.OAuth2ConsentRequest.Skip(childComplexity), true
+
+	case "OAuth2ConsentRequest.subject":
+		if e.complexity.OAuth2ConsentRequest.Subject == nil {
+			break
+		}
+
+		return e.complexity.OAuth2ConsentRequest.Subject(childComplexity), true
+
+	case "OAuth2RedirectTo.redirectTo":
+		if e.complexity.OAuth2RedirectTo.RedirectTo == nil {
+			break
+		}
+
+		return e.complexity.OAuth2RedirectTo.RedirectTo(childComplexity), true
+
 	case "ObservabilityTenant.editors":
 		if e.complexity.ObservabilityTenant.Editors == nil {
 			break
@@ -752,6 +908,41 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.ObservabilityTenantViewers.Users(childComplexity), true
 
+	case "OidcContext.acrValues":
+		if e.complexity.OidcContext.AcrValues == nil {
+			break
+		}
+
+		return e.complexity.OidcContext.AcrValues(childComplexity), true
+
+	case "OidcContext.display":
+		if e.complexity.OidcContext.Display == nil {
+			break
+		}
+
+		return e.complexity.OidcContext.Display(childComplexity), true
+
+	case "OidcContext.idTokenHintClaims":
+		if e.complexity.OidcContext.IDTokenHintClaims == nil {
+			break
+		}
+
+		return e.complexity.OidcContext.IDTokenHintClaims(childComplexity), true
+
+	case "OidcContext.loginHint":
+		if e.complexity.OidcContext.LoginHint == nil {
+			break
+		}
+
+		return e.complexity.OidcContext.LoginHint(childComplexity), true
+
+	case "OidcContext.uiLocales":
+		if e.complexity.OidcContext.UILocales == nil {
+			break
+		}
+
+		return e.complexity.OidcContext.UILocales(childComplexity), true
+
 	case "Organization.admins":
 		if e.complexity.Organization.Admins == nil {
 			break
@@ -765,6 +956,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Organization.Name(childComplexity), true
+
+	case "Query.getOAuth2Client":
+		if e.complexity.Query.GetOAuth2Client == nil {
+			break
+		}
+
+		args, err := ec.field_Query_getOAuth2Client_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.GetOAuth2Client(childComplexity, args["clientId"].(string)), true
 
 	case "Query.getObservabilityTenant":
 		if e.complexity.Query.GetObservabilityTenant == nil {
@@ -825,17 +1028,17 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Query.ListUsers(childComplexity), true
 
-	case "Query.oAuth2Client":
-		if e.complexity.Query.OAuth2Client == nil {
+	case "Query.oauth2ConsentRequest":
+		if e.complexity.Query.Oauth2ConsentRequest == nil {
 			break
 		}
 
-		args, err := ec.field_Query_oAuth2Client_args(context.TODO(), rawArgs)
+		args, err := ec.field_Query_oauth2ConsentRequest_args(context.TODO(), rawArgs)
 		if err != nil {
 			return 0, false
 		}
 
-		return e.complexity.Query.OAuth2Client(childComplexity, args["clientId"].(string)), true
+		return e.complexity.Query.Oauth2ConsentRequest(childComplexity, args["challenge"].(string)), true
 
 	case "User.email":
 		if e.complexity.User.Email == nil {
@@ -887,6 +1090,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 	rc := graphql.GetOperationContext(ctx)
 	ec := executionContext{rc, e}
 	inputUnmarshalMap := graphql.BuildUnmarshalerMap(
+		ec.unmarshalInputAcceptOAuth2ConsentRequestSession,
 		ec.unmarshalInputAdmin,
 		ec.unmarshalInputLoginBindingsInput,
 		ec.unmarshalInputNameInput,
@@ -1144,7 +1348,7 @@ extend type Query {
   listOAuth2Clients: [OAuth2Client!]! @checkPermissions @isAuthenticated
 
   "Get a single OAuth2 Client by ID."
-  oAuth2Client(
+  getOAuth2Client(
     "The ID of the OAuth2 Client."
     clientId: ID!
   ): OAuth2Client @checkPermissions @isAuthenticated
@@ -1375,6 +1579,116 @@ extend type Mutation {
   ): OAuth2Client! @checkPermissions @isAuthenticated
 }
 `, BuiltIn: false},
+	{Name: "../oauth2consent.graphqls", Input: `"OAuth2ConsentRequest represents an OAuth 2.0 consent request."
+type OAuth2ConsentRequest {
+  "ACR represents the Authentication AuthorizationContext Class Reference value for this authentication session. You can use it to express that, for example, a user authenticated using two factor authentication."
+  acr: String
+
+  "AMR represents the Authentication Methods References. It lists the method used to authenticate the end-user. For instance, if the end-user authenticated using password and OTP, the AMR value would be [\"pwd\", \"otp\"]."
+  amr: [String!]
+
+  "The challenge is a random string which is used to identify the consent request."
+  challenge: String!
+
+  "The client is the OAuth 2.0 Client requesting the OAuth 2.0 Authorization."
+  client: OAuth2Client!
+
+  "Context contains arbitrary context that is forwarded from the login request. This is useful if you want to pass data from the login request to the consent request."
+  context: Map
+
+  "LoginChallenge is the login challenge this consent challenge belongs to. It can be used to associate a login and consent request in the login & consent app."
+  loginChallenge: String
+
+  "LoginSessionID is the login session ID. If the user-agent reuses a login session (via cookie / remember flag) this ID will remain the same. If the user-agent did not have an existing authentication session (e.g. remember is false) this will be a new random value. This value is used as the \"sid\" parameter in the ID Token and in OIDC Front-/Back- channel logout. It's value can generally be used to associate consecutive login requests by a certain user."
+  loginSessionId: String
+
+  "OIDCContext contains the OIDC context of the request. If the OAuth 2.0 Authorization request was not an OpenID Connect request, this value will be nil."
+  oidcContext: OidcContext
+
+  "RequestURL is the original OAuth 2.0 Authorization URL requested by the OAuth 2.0 client. It is the URL which initiates the OAuth 2.0 Authorization Code or OAuth 2.0 Implicit flow. This URL is typically not needed, but might come in handy if you want to deal with additional request parameters."
+  requestUrl: String
+
+  "RequestedAccessTokenAudience contains the audience (client) that the OAuth 2.0 Client requested the OAuth 2.0 Access Token to be issued for."
+  requestedAccessTokenAudience: [String!]
+
+  "RequestedScope contains the OAuth 2.0 Scope requested by the OAuth 2.0 Client."
+  requestedScope: [String!]
+
+  "Skip is true when the client has requested the same scopes from the same user before. If this is true, you can skip asking the user to grant the requested scopes, or you can force showing the UI by setting this value to false."
+  skip: Boolean
+
+  "Subject is the user ID of the end-user that authenticated. This value will be set to the \"sub\" claim in the ID Token."
+  subject: String!
+}
+
+"OIDC Context for a consent request."
+type OidcContext {
+  "ACRValues is the Authentication AuthorizationContext Class Reference requested in the OAuth 2.0 Authorization request. It is a parameter defined by OpenID Connect and expresses which level of authentication (e.g. 2FA) is required.  OpenID Connect defines it as follows: > Requested Authentication AuthorizationContext Class Reference values. Space-separated string that specifies the acr values that the Authorization Server is being requested to use for processing this Authentication Request, with the values appearing in order of preference. The Authentication AuthorizationContext Class satisfied by the authentication performed is returned as the acr Claim Value, as specified in Section 2. The acr Claim is requested as a Voluntary Claim by this parameter."
+  acrValues: [String!]
+
+  "Display is the display mode requested in the OAuth 2.0 Authorization request. It is a parameter defined by OpenID Connect and expresses how the Authorization Server displays authentication and consent user interfaces to the End-User.  OpenID Connect defines it as follows: > ASCII string value that specifies how the Authorization Server displays the authentication and consent user interface pages to the End-User. The defined values are: page: The Authorization Server SHOULD display the authentication and consent UI consistent with a full User Agent page view. If the display parameter is not specified, this is the default display mode. popup: The Authorization Server SHOULD display the authentication and consent UI consistent with a popup User Agent window. The popup User Agent window should be of an appropriate size for a login-focused dialog and should not obscure the entire window that it is popping up over. touch: The Authorization Server SHOULD display the authentication and consent UI consistent with a device that leverages a touch interface. > The display parameter is used only if the prompt parameter value is not none. If the prompt parameter value is none, the display parameter is ignored."
+  display: String
+
+  "IDTokenHintClaims contains the claims from the ID Token hint if it was present in the OAuth 2.0 Authorization request."
+  idTokenHintClaims: Map
+
+  "LoginHint is the login hint requested in the OAuth 2.0 Authorization request. It is a parameter defined by OpenID Connect and expresses the preferred login identifier the End-User might use to log in (if necessary).  OpenID Connect defines it as follows: > Hint to the Authorization Server about the login identifier the End-User might use to log in (if necessary). > This hint can be used by an RP if it first asks the End-User for their e-mail address (or other identifier) and then wants to pass that value as a hint to the discovered authorization service. > It is RECOMMENDED that the hint value match the value used for discovery. > This value MAY also be a phone number in the format specified for the phone_number Claim. > The use of this parameter is left to the OP's discretion."
+  loginHint: String
+
+  "UILocales is the End-User'id preferred languages and scripts for the user interface, represented as a space-separated list of BCP47 [RFC5646] language tag values, ordered by preference. For instance, the value \"fr-CA fr en\" represents a preference for French as spoken in Canada, then French (without a region designation), followed by English (without a region designation). An error SHOULD NOT result if some or all of the requested locales are not supported by the OpenID Provider."
+  uiLocales: [String!]
+}
+
+type OAuth2RedirectTo {
+  "RedirectTo can be used to redirect the user-agent to a specific location. This is useful if you want to redirect the user-agent to a specific location after the consent flow has been completed."
+  redirectTo: String
+}
+
+input AcceptOAuth2ConsentRequestSession {
+  "AccessToken sets session data for the access and refresh token, as well as any future tokens issued by the refresh grant. Keep in mind that this data will be available to anyone performing OAuth 2.0 Challenge Introspection. If only your services can perform OAuth 2.0 Challenge Introspection, this is usually fine. But if third parties can access that endpoint as well, sensitive data from the session might be exposed to them. Use with care!"
+  accessToken: Map
+
+  "IDToken sets session data for the OpenID Connect ID token. Keep in mind that the session'id payloads are readable by anyone that has access to the ID Challenge. Use with care!"
+  idToken: Map
+}
+
+extend type Query {
+  "OAuth2ConsentRequest returns the OAuth 2.0 consent request information."
+  oauth2ConsentRequest(
+    "The challenge to fetch the consent request for."
+    challenge: String!
+  ): OAuth2ConsentRequest
+}
+
+extend type Mutation {
+  "AcceptOAuth2ConsentRequest accepts an OAuth 2.0 consent request. If the request was granted, a code or access token will be issued. If the request was denied, the request will be rejected."
+  acceptOAuth2ConsentRequest(
+    "The challenge to accept."
+    challenge: String!
+
+    "The audience to grant."
+    grantAccessTokenAudience: String
+
+    "The scopes to grant."
+    grantScope: [String!]
+
+    "Remember, if set to true, tells ORY Hydra to remember this consent authorization and reuse it if the same client asks the same user for the same, or a subset of, scope."
+    remember: Boolean
+
+    "RememberFor sets how long the consent authorization should be remembered for in seconds. If set to 0, the authorization will be remembered indefinitely."
+    rememberFor: Int
+
+    "The session to set for the granted OAuth 2.0 request."
+    session: AcceptOAuth2ConsentRequestSession
+  ): OAuth2RedirectTo!
+
+  "RejectOAuth2ConsentRequest rejects an OAuth 2.0 consent request."
+  rejectOAuth2ConsentRequest(
+    "The challenge to reject."
+    challenge: String!
+  ): OAuth2RedirectTo!
+}
+`, BuiltIn: false},
 	{Name: "../observabilitytenant.graphqls", Input: `"Representation a tenant in the Grafana observability stack where metrics, logs and traces can be sent to or retrieved from."
 type ObservabilityTenant {
   "The unique name of the tenant."
@@ -1559,6 +1873,66 @@ var parsedSchema = gqlparser.MustLoadSchema(sources...)
 // endregion ************************** generated!.gotpl **************************
 
 // region    ***************************** args.gotpl *****************************
+
+func (ec *executionContext) field_Mutation_acceptOAuth2ConsentRequest_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["challenge"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("challenge"))
+		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["challenge"] = arg0
+	var arg1 *string
+	if tmp, ok := rawArgs["grantAccessTokenAudience"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("grantAccessTokenAudience"))
+		arg1, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["grantAccessTokenAudience"] = arg1
+	var arg2 []string
+	if tmp, ok := rawArgs["grantScope"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("grantScope"))
+		arg2, err = ec.unmarshalOString2ᚕstringᚄ(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["grantScope"] = arg2
+	var arg3 *bool
+	if tmp, ok := rawArgs["remember"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("remember"))
+		arg3, err = ec.unmarshalOBoolean2ᚖbool(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["remember"] = arg3
+	var arg4 *int64
+	if tmp, ok := rawArgs["rememberFor"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("rememberFor"))
+		arg4, err = ec.unmarshalOInt2ᚖint64(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["rememberFor"] = arg4
+	var arg5 *model.AcceptOAuth2ConsentRequestSession
+	if tmp, ok := rawArgs["session"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("session"))
+		arg5, err = ec.unmarshalOAcceptOAuth2ConsentRequestSession2ᚖgithubᚗcomᚋpluralshᚋoauthᚑplaygroundᚋapiᚑserverᚋgraphᚋmodelᚐAcceptOAuth2ConsentRequestSession(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["session"] = arg5
+	return args, nil
+}
 
 func (ec *executionContext) field_Mutation_createOAuth2Client_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
@@ -2046,6 +2420,21 @@ func (ec *executionContext) field_Mutation_organization_args(ctx context.Context
 	return args, nil
 }
 
+func (ec *executionContext) field_Mutation_rejectOAuth2ConsentRequest_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["challenge"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("challenge"))
+		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["challenge"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_updateOAuth2Client_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
@@ -2391,6 +2780,21 @@ func (ec *executionContext) field_Query___type_args(ctx context.Context, rawArgs
 	return args, nil
 }
 
+func (ec *executionContext) field_Query_getOAuth2Client_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["clientId"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clientId"))
+		arg0, err = ec.unmarshalNID2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["clientId"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Query_getObservabilityTenant_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
@@ -2421,18 +2825,18 @@ func (ec *executionContext) field_Query_getUser_args(ctx context.Context, rawArg
 	return args, nil
 }
 
-func (ec *executionContext) field_Query_oAuth2Client_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Query_oauth2ConsentRequest_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
 	var arg0 string
-	if tmp, ok := rawArgs["clientId"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clientId"))
-		arg0, err = ec.unmarshalNID2string(ctx, tmp)
+	if tmp, ok := rawArgs["challenge"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("challenge"))
+		arg0, err = ec.unmarshalNString2string(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["clientId"] = arg0
+	args["challenge"] = arg0
 	return args, nil
 }
 
@@ -3642,6 +4046,118 @@ func (ec *executionContext) fieldContext_Mutation_deleteOAuth2Client(ctx context
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_deleteOAuth2Client_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_acceptOAuth2ConsentRequest(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_acceptOAuth2ConsentRequest(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, nil, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().AcceptOAuth2ConsentRequest(rctx, fc.Args["challenge"].(string), fc.Args["grantAccessTokenAudience"].(*string), fc.Args["grantScope"].([]string), fc.Args["remember"].(*bool), fc.Args["rememberFor"].(*int64), fc.Args["session"].(*model.AcceptOAuth2ConsentRequestSession))
+	})
+
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.OAuth2RedirectTo)
+	fc.Result = res
+	return ec.marshalNOAuth2RedirectTo2ᚖgithubᚗcomᚋpluralshᚋoauthᚑplaygroundᚋapiᚑserverᚋgraphᚋmodelᚐOAuth2RedirectTo(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_acceptOAuth2ConsentRequest(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "redirectTo":
+				return ec.fieldContext_OAuth2RedirectTo_redirectTo(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type OAuth2RedirectTo", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_acceptOAuth2ConsentRequest_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_rejectOAuth2ConsentRequest(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_rejectOAuth2ConsentRequest(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, nil, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().RejectOAuth2ConsentRequest(rctx, fc.Args["challenge"].(string))
+	})
+
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.OAuth2RedirectTo)
+	fc.Result = res
+	return ec.marshalNOAuth2RedirectTo2ᚖgithubᚗcomᚋpluralshᚋoauthᚑplaygroundᚋapiᚑserverᚋgraphᚋmodelᚐOAuth2RedirectTo(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_rejectOAuth2ConsentRequest(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "redirectTo":
+				return ec.fieldContext_OAuth2RedirectTo_redirectTo(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type OAuth2RedirectTo", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_rejectOAuth2ConsentRequest_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return
 	}
@@ -5519,6 +6035,641 @@ func (ec *executionContext) fieldContext_OAuth2Client_loginBindings(ctx context.
 	return fc, nil
 }
 
+func (ec *executionContext) _OAuth2ConsentRequest_acr(ctx context.Context, field graphql.CollectedField, obj *model.OAuth2ConsentRequest) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_OAuth2ConsentRequest_acr(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Acr, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_OAuth2ConsentRequest_acr(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "OAuth2ConsentRequest",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _OAuth2ConsentRequest_amr(ctx context.Context, field graphql.CollectedField, obj *model.OAuth2ConsentRequest) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_OAuth2ConsentRequest_amr(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Amr, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]string)
+	fc.Result = res
+	return ec.marshalOString2ᚕstringᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_OAuth2ConsentRequest_amr(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "OAuth2ConsentRequest",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _OAuth2ConsentRequest_challenge(ctx context.Context, field graphql.CollectedField, obj *model.OAuth2ConsentRequest) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_OAuth2ConsentRequest_challenge(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Challenge, nil
+	})
+
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_OAuth2ConsentRequest_challenge(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "OAuth2ConsentRequest",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _OAuth2ConsentRequest_client(ctx context.Context, field graphql.CollectedField, obj *model.OAuth2ConsentRequest) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_OAuth2ConsentRequest_client(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Client, nil
+	})
+
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.OAuth2Client)
+	fc.Result = res
+	return ec.marshalNOAuth2Client2ᚖgithubᚗcomᚋpluralshᚋoauthᚑplaygroundᚋapiᚑserverᚋgraphᚋmodelᚐOAuth2Client(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_OAuth2ConsentRequest_client(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "OAuth2ConsentRequest",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "allowedCorsOrigins":
+				return ec.fieldContext_OAuth2Client_allowedCorsOrigins(ctx, field)
+			case "audience":
+				return ec.fieldContext_OAuth2Client_audience(ctx, field)
+			case "authorizationCodeGrantAccessTokenLifespan":
+				return ec.fieldContext_OAuth2Client_authorizationCodeGrantAccessTokenLifespan(ctx, field)
+			case "authorizationCodeGrantIdTokenLifespan":
+				return ec.fieldContext_OAuth2Client_authorizationCodeGrantIdTokenLifespan(ctx, field)
+			case "authorizationCodeGrantRefreshTokenLifespan":
+				return ec.fieldContext_OAuth2Client_authorizationCodeGrantRefreshTokenLifespan(ctx, field)
+			case "backChannelLogoutSessionRequired":
+				return ec.fieldContext_OAuth2Client_backChannelLogoutSessionRequired(ctx, field)
+			case "backChannelLogoutUri":
+				return ec.fieldContext_OAuth2Client_backChannelLogoutUri(ctx, field)
+			case "clientCredentialsGrantAccessTokenLifespan":
+				return ec.fieldContext_OAuth2Client_clientCredentialsGrantAccessTokenLifespan(ctx, field)
+			case "clientId":
+				return ec.fieldContext_OAuth2Client_clientId(ctx, field)
+			case "clientName":
+				return ec.fieldContext_OAuth2Client_clientName(ctx, field)
+			case "clientSecret":
+				return ec.fieldContext_OAuth2Client_clientSecret(ctx, field)
+			case "ClientSecretExpiresAt":
+				return ec.fieldContext_OAuth2Client_ClientSecretExpiresAt(ctx, field)
+			case "clientUri":
+				return ec.fieldContext_OAuth2Client_clientUri(ctx, field)
+			case "contacts":
+				return ec.fieldContext_OAuth2Client_contacts(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_OAuth2Client_createdAt(ctx, field)
+			case "frontchannelLogoutSessionRequired":
+				return ec.fieldContext_OAuth2Client_frontchannelLogoutSessionRequired(ctx, field)
+			case "frontchannelLogoutUri":
+				return ec.fieldContext_OAuth2Client_frontchannelLogoutUri(ctx, field)
+			case "grantTypes":
+				return ec.fieldContext_OAuth2Client_grantTypes(ctx, field)
+			case "implicitGrantAccessTokenLifespan":
+				return ec.fieldContext_OAuth2Client_implicitGrantAccessTokenLifespan(ctx, field)
+			case "implicitGrantIdTokenLifespan":
+				return ec.fieldContext_OAuth2Client_implicitGrantIdTokenLifespan(ctx, field)
+			case "jwks":
+				return ec.fieldContext_OAuth2Client_jwks(ctx, field)
+			case "jwksUri":
+				return ec.fieldContext_OAuth2Client_jwksUri(ctx, field)
+			case "jwtBearerGrantAccessTokenLifespan":
+				return ec.fieldContext_OAuth2Client_jwtBearerGrantAccessTokenLifespan(ctx, field)
+			case "logoUri":
+				return ec.fieldContext_OAuth2Client_logoUri(ctx, field)
+			case "metadata":
+				return ec.fieldContext_OAuth2Client_metadata(ctx, field)
+			case "owner":
+				return ec.fieldContext_OAuth2Client_owner(ctx, field)
+			case "policyUri":
+				return ec.fieldContext_OAuth2Client_policyUri(ctx, field)
+			case "postLogoutRedirectUris":
+				return ec.fieldContext_OAuth2Client_postLogoutRedirectUris(ctx, field)
+			case "redirectUris":
+				return ec.fieldContext_OAuth2Client_redirectUris(ctx, field)
+			case "responseTypes":
+				return ec.fieldContext_OAuth2Client_responseTypes(ctx, field)
+			case "scope":
+				return ec.fieldContext_OAuth2Client_scope(ctx, field)
+			case "sectorIdentifierUri":
+				return ec.fieldContext_OAuth2Client_sectorIdentifierUri(ctx, field)
+			case "subjectType":
+				return ec.fieldContext_OAuth2Client_subjectType(ctx, field)
+			case "tokenEndpointAuthMethod":
+				return ec.fieldContext_OAuth2Client_tokenEndpointAuthMethod(ctx, field)
+			case "tokenEndpointAuthSigningAlgorithm":
+				return ec.fieldContext_OAuth2Client_tokenEndpointAuthSigningAlgorithm(ctx, field)
+			case "tosUri":
+				return ec.fieldContext_OAuth2Client_tosUri(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_OAuth2Client_updatedAt(ctx, field)
+			case "userinfoSignedResponseAlgorithm":
+				return ec.fieldContext_OAuth2Client_userinfoSignedResponseAlgorithm(ctx, field)
+			case "organization":
+				return ec.fieldContext_OAuth2Client_organization(ctx, field)
+			case "loginBindings":
+				return ec.fieldContext_OAuth2Client_loginBindings(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type OAuth2Client", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _OAuth2ConsentRequest_context(ctx context.Context, field graphql.CollectedField, obj *model.OAuth2ConsentRequest) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_OAuth2ConsentRequest_context(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Context, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(map[string]interface{})
+	fc.Result = res
+	return ec.marshalOMap2map(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_OAuth2ConsentRequest_context(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "OAuth2ConsentRequest",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Map does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _OAuth2ConsentRequest_loginChallenge(ctx context.Context, field graphql.CollectedField, obj *model.OAuth2ConsentRequest) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_OAuth2ConsentRequest_loginChallenge(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.LoginChallenge, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_OAuth2ConsentRequest_loginChallenge(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "OAuth2ConsentRequest",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _OAuth2ConsentRequest_loginSessionId(ctx context.Context, field graphql.CollectedField, obj *model.OAuth2ConsentRequest) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_OAuth2ConsentRequest_loginSessionId(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.LoginSessionID, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_OAuth2ConsentRequest_loginSessionId(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "OAuth2ConsentRequest",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _OAuth2ConsentRequest_oidcContext(ctx context.Context, field graphql.CollectedField, obj *model.OAuth2ConsentRequest) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_OAuth2ConsentRequest_oidcContext(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.OidcContext, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.OidcContext)
+	fc.Result = res
+	return ec.marshalOOidcContext2ᚖgithubᚗcomᚋpluralshᚋoauthᚑplaygroundᚋapiᚑserverᚋgraphᚋmodelᚐOidcContext(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_OAuth2ConsentRequest_oidcContext(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "OAuth2ConsentRequest",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "acrValues":
+				return ec.fieldContext_OidcContext_acrValues(ctx, field)
+			case "display":
+				return ec.fieldContext_OidcContext_display(ctx, field)
+			case "idTokenHintClaims":
+				return ec.fieldContext_OidcContext_idTokenHintClaims(ctx, field)
+			case "loginHint":
+				return ec.fieldContext_OidcContext_loginHint(ctx, field)
+			case "uiLocales":
+				return ec.fieldContext_OidcContext_uiLocales(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type OidcContext", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _OAuth2ConsentRequest_requestUrl(ctx context.Context, field graphql.CollectedField, obj *model.OAuth2ConsentRequest) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_OAuth2ConsentRequest_requestUrl(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.RequestURL, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_OAuth2ConsentRequest_requestUrl(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "OAuth2ConsentRequest",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _OAuth2ConsentRequest_requestedAccessTokenAudience(ctx context.Context, field graphql.CollectedField, obj *model.OAuth2ConsentRequest) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_OAuth2ConsentRequest_requestedAccessTokenAudience(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.RequestedAccessTokenAudience, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]string)
+	fc.Result = res
+	return ec.marshalOString2ᚕstringᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_OAuth2ConsentRequest_requestedAccessTokenAudience(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "OAuth2ConsentRequest",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _OAuth2ConsentRequest_requestedScope(ctx context.Context, field graphql.CollectedField, obj *model.OAuth2ConsentRequest) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_OAuth2ConsentRequest_requestedScope(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.RequestedScope, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]string)
+	fc.Result = res
+	return ec.marshalOString2ᚕstringᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_OAuth2ConsentRequest_requestedScope(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "OAuth2ConsentRequest",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _OAuth2ConsentRequest_skip(ctx context.Context, field graphql.CollectedField, obj *model.OAuth2ConsentRequest) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_OAuth2ConsentRequest_skip(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Skip, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*bool)
+	fc.Result = res
+	return ec.marshalOBoolean2ᚖbool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_OAuth2ConsentRequest_skip(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "OAuth2ConsentRequest",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _OAuth2ConsentRequest_subject(ctx context.Context, field graphql.CollectedField, obj *model.OAuth2ConsentRequest) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_OAuth2ConsentRequest_subject(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Subject, nil
+	})
+
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_OAuth2ConsentRequest_subject(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "OAuth2ConsentRequest",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _OAuth2RedirectTo_redirectTo(ctx context.Context, field graphql.CollectedField, obj *model.OAuth2RedirectTo) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_OAuth2RedirectTo_redirectTo(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.RedirectTo, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_OAuth2RedirectTo_redirectTo(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "OAuth2RedirectTo",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _ObservabilityTenant_name(ctx context.Context, field graphql.CollectedField, obj *model.ObservabilityTenant) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_ObservabilityTenant_name(ctx, field)
 	if err != nil {
@@ -6013,6 +7164,196 @@ func (ec *executionContext) fieldContext_ObservabilityTenantViewers_oauth2Client
 	return fc, nil
 }
 
+func (ec *executionContext) _OidcContext_acrValues(ctx context.Context, field graphql.CollectedField, obj *model.OidcContext) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_OidcContext_acrValues(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.AcrValues, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]string)
+	fc.Result = res
+	return ec.marshalOString2ᚕstringᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_OidcContext_acrValues(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "OidcContext",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _OidcContext_display(ctx context.Context, field graphql.CollectedField, obj *model.OidcContext) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_OidcContext_display(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Display, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_OidcContext_display(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "OidcContext",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _OidcContext_idTokenHintClaims(ctx context.Context, field graphql.CollectedField, obj *model.OidcContext) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_OidcContext_idTokenHintClaims(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.IDTokenHintClaims, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(map[string]interface{})
+	fc.Result = res
+	return ec.marshalOMap2map(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_OidcContext_idTokenHintClaims(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "OidcContext",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Map does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _OidcContext_loginHint(ctx context.Context, field graphql.CollectedField, obj *model.OidcContext) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_OidcContext_loginHint(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.LoginHint, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_OidcContext_loginHint(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "OidcContext",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _OidcContext_uiLocales(ctx context.Context, field graphql.CollectedField, obj *model.OidcContext) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_OidcContext_uiLocales(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UILocales, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]string)
+	fc.Result = res
+	return ec.marshalOString2ᚕstringᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_OidcContext_uiLocales(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "OidcContext",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Organization_name(ctx context.Context, field graphql.CollectedField, obj *model.Organization) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Organization_name(ctx, field)
 	if err != nil {
@@ -6500,8 +7841,8 @@ func (ec *executionContext) fieldContext_Query_listOAuth2Clients(ctx context.Con
 	return fc, nil
 }
 
-func (ec *executionContext) _Query_oAuth2Client(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Query_oAuth2Client(ctx, field)
+func (ec *executionContext) _Query_getOAuth2Client(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_getOAuth2Client(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -6515,7 +7856,7 @@ func (ec *executionContext) _Query_oAuth2Client(ctx context.Context, field graph
 	resTmp := ec._fieldMiddleware(ctx, nil, func(rctx context.Context) (interface{}, error) {
 		directive0 := func(rctx context.Context) (interface{}, error) {
 			ctx = rctx // use context from middleware stack in children
-			return ec.resolvers.Query().OAuth2Client(rctx, fc.Args["clientId"].(string))
+			return ec.resolvers.Query().GetOAuth2Client(rctx, fc.Args["clientId"].(string))
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
 			if ec.directives.CheckPermissions == nil {
@@ -6551,7 +7892,7 @@ func (ec *executionContext) _Query_oAuth2Client(ctx context.Context, field graph
 	return ec.marshalOOAuth2Client2ᚖgithubᚗcomᚋpluralshᚋoauthᚑplaygroundᚋapiᚑserverᚋgraphᚋmodelᚐOAuth2Client(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Query_oAuth2Client(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Query_getOAuth2Client(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Query",
 		Field:      field,
@@ -6650,7 +7991,84 @@ func (ec *executionContext) fieldContext_Query_oAuth2Client(ctx context.Context,
 		}
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Query_oAuth2Client_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+	if fc.Args, err = ec.field_Query_getOAuth2Client_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_oauth2ConsentRequest(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_oauth2ConsentRequest(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, nil, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().Oauth2ConsentRequest(rctx, fc.Args["challenge"].(string))
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.OAuth2ConsentRequest)
+	fc.Result = res
+	return ec.marshalOOAuth2ConsentRequest2ᚖgithubᚗcomᚋpluralshᚋoauthᚑplaygroundᚋapiᚑserverᚋgraphᚋmodelᚐOAuth2ConsentRequest(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_oauth2ConsentRequest(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "acr":
+				return ec.fieldContext_OAuth2ConsentRequest_acr(ctx, field)
+			case "amr":
+				return ec.fieldContext_OAuth2ConsentRequest_amr(ctx, field)
+			case "challenge":
+				return ec.fieldContext_OAuth2ConsentRequest_challenge(ctx, field)
+			case "client":
+				return ec.fieldContext_OAuth2ConsentRequest_client(ctx, field)
+			case "context":
+				return ec.fieldContext_OAuth2ConsentRequest_context(ctx, field)
+			case "loginChallenge":
+				return ec.fieldContext_OAuth2ConsentRequest_loginChallenge(ctx, field)
+			case "loginSessionId":
+				return ec.fieldContext_OAuth2ConsentRequest_loginSessionId(ctx, field)
+			case "oidcContext":
+				return ec.fieldContext_OAuth2ConsentRequest_oidcContext(ctx, field)
+			case "requestUrl":
+				return ec.fieldContext_OAuth2ConsentRequest_requestUrl(ctx, field)
+			case "requestedAccessTokenAudience":
+				return ec.fieldContext_OAuth2ConsentRequest_requestedAccessTokenAudience(ctx, field)
+			case "requestedScope":
+				return ec.fieldContext_OAuth2ConsentRequest_requestedScope(ctx, field)
+			case "skip":
+				return ec.fieldContext_OAuth2ConsentRequest_skip(ctx, field)
+			case "subject":
+				return ec.fieldContext_OAuth2ConsentRequest_subject(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type OAuth2ConsentRequest", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_oauth2ConsentRequest_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return
 	}
@@ -8943,6 +10361,42 @@ func (ec *executionContext) fieldContext___Type_specifiedByURL(ctx context.Conte
 
 // region    **************************** input.gotpl *****************************
 
+func (ec *executionContext) unmarshalInputAcceptOAuth2ConsentRequestSession(ctx context.Context, obj interface{}) (model.AcceptOAuth2ConsentRequestSession, error) {
+	var it model.AcceptOAuth2ConsentRequestSession
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"accessToken", "idToken"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "accessToken":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("accessToken"))
+			it.AccessToken, err = ec.unmarshalOMap2map(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "idToken":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idToken"))
+			it.IDToken, err = ec.unmarshalOMap2map(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputAdmin(ctx context.Context, obj interface{}) (model.Admin, error) {
 	var it model.Admin
 	asMap := map[string]interface{}{}
@@ -9298,6 +10752,18 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 				return ec._Mutation_deleteOAuth2Client(ctx, field)
 			})
 
+		case "acceptOAuth2ConsentRequest":
+
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_acceptOAuth2ConsentRequest(ctx, field)
+			})
+
+		case "rejectOAuth2ConsentRequest":
+
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_rejectOAuth2ConsentRequest(ctx, field)
+			})
+
 		case "observabilityTenant":
 
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
@@ -9563,6 +11029,113 @@ func (ec *executionContext) _OAuth2Client(ctx context.Context, sel ast.Selection
 	return out
 }
 
+var oAuth2ConsentRequestImplementors = []string{"OAuth2ConsentRequest"}
+
+func (ec *executionContext) _OAuth2ConsentRequest(ctx context.Context, sel ast.SelectionSet, obj *model.OAuth2ConsentRequest) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, oAuth2ConsentRequestImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("OAuth2ConsentRequest")
+		case "acr":
+
+			out.Values[i] = ec._OAuth2ConsentRequest_acr(ctx, field, obj)
+
+		case "amr":
+
+			out.Values[i] = ec._OAuth2ConsentRequest_amr(ctx, field, obj)
+
+		case "challenge":
+
+			out.Values[i] = ec._OAuth2ConsentRequest_challenge(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "client":
+
+			out.Values[i] = ec._OAuth2ConsentRequest_client(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "context":
+
+			out.Values[i] = ec._OAuth2ConsentRequest_context(ctx, field, obj)
+
+		case "loginChallenge":
+
+			out.Values[i] = ec._OAuth2ConsentRequest_loginChallenge(ctx, field, obj)
+
+		case "loginSessionId":
+
+			out.Values[i] = ec._OAuth2ConsentRequest_loginSessionId(ctx, field, obj)
+
+		case "oidcContext":
+
+			out.Values[i] = ec._OAuth2ConsentRequest_oidcContext(ctx, field, obj)
+
+		case "requestUrl":
+
+			out.Values[i] = ec._OAuth2ConsentRequest_requestUrl(ctx, field, obj)
+
+		case "requestedAccessTokenAudience":
+
+			out.Values[i] = ec._OAuth2ConsentRequest_requestedAccessTokenAudience(ctx, field, obj)
+
+		case "requestedScope":
+
+			out.Values[i] = ec._OAuth2ConsentRequest_requestedScope(ctx, field, obj)
+
+		case "skip":
+
+			out.Values[i] = ec._OAuth2ConsentRequest_skip(ctx, field, obj)
+
+		case "subject":
+
+			out.Values[i] = ec._OAuth2ConsentRequest_subject(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var oAuth2RedirectToImplementors = []string{"OAuth2RedirectTo"}
+
+func (ec *executionContext) _OAuth2RedirectTo(ctx context.Context, sel ast.SelectionSet, obj *model.OAuth2RedirectTo) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, oAuth2RedirectToImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("OAuth2RedirectTo")
+		case "redirectTo":
+
+			out.Values[i] = ec._OAuth2RedirectTo_redirectTo(ctx, field, obj)
+
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
 var observabilityTenantImplementors = []string{"ObservabilityTenant"}
 
 func (ec *executionContext) _ObservabilityTenant(ctx context.Context, sel ast.SelectionSet, obj *model.ObservabilityTenant) graphql.Marshaler {
@@ -9759,6 +11332,47 @@ func (ec *executionContext) _ObservabilityTenantViewers(ctx context.Context, sel
 	return out
 }
 
+var oidcContextImplementors = []string{"OidcContext"}
+
+func (ec *executionContext) _OidcContext(ctx context.Context, sel ast.SelectionSet, obj *model.OidcContext) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, oidcContextImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("OidcContext")
+		case "acrValues":
+
+			out.Values[i] = ec._OidcContext_acrValues(ctx, field, obj)
+
+		case "display":
+
+			out.Values[i] = ec._OidcContext_display(ctx, field, obj)
+
+		case "idTokenHintClaims":
+
+			out.Values[i] = ec._OidcContext_idTokenHintClaims(ctx, field, obj)
+
+		case "loginHint":
+
+			out.Values[i] = ec._OidcContext_loginHint(ctx, field, obj)
+
+		case "uiLocales":
+
+			out.Values[i] = ec._OidcContext_uiLocales(ctx, field, obj)
+
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
 var organizationImplementors = []string{"Organization"}
 
 func (ec *executionContext) _Organization(ctx context.Context, sel ast.SelectionSet, obj *model.Organization) graphql.Marshaler {
@@ -9902,7 +11516,7 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			out.Concurrently(i, func() graphql.Marshaler {
 				return rrm(innerCtx)
 			})
-		case "oAuth2Client":
+		case "getOAuth2Client":
 			field := field
 
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
@@ -9911,7 +11525,27 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 						ec.Error(ctx, ec.Recover(ctx, r))
 					}
 				}()
-				res = ec._Query_oAuth2Client(ctx, field)
+				res = ec._Query_getOAuth2Client(ctx, field)
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx, innerFunc)
+			}
+
+			out.Concurrently(i, func() graphql.Marshaler {
+				return rrm(innerCtx)
+			})
+		case "oauth2ConsentRequest":
+			field := field
+
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_oauth2ConsentRequest(ctx, field)
 				return res
 			}
 
@@ -10489,6 +12123,20 @@ func (ec *executionContext) marshalNOAuth2Client2ᚖgithubᚗcomᚋpluralshᚋoa
 	return ec._OAuth2Client(ctx, sel, v)
 }
 
+func (ec *executionContext) marshalNOAuth2RedirectTo2githubᚗcomᚋpluralshᚋoauthᚑplaygroundᚋapiᚑserverᚋgraphᚋmodelᚐOAuth2RedirectTo(ctx context.Context, sel ast.SelectionSet, v model.OAuth2RedirectTo) graphql.Marshaler {
+	return ec._OAuth2RedirectTo(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNOAuth2RedirectTo2ᚖgithubᚗcomᚋpluralshᚋoauthᚑplaygroundᚋapiᚑserverᚋgraphᚋmodelᚐOAuth2RedirectTo(ctx context.Context, sel ast.SelectionSet, v *model.OAuth2RedirectTo) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._OAuth2RedirectTo(ctx, sel, v)
+}
+
 func (ec *executionContext) marshalNObservabilityTenant2githubᚗcomᚋpluralshᚋoauthᚑplaygroundᚋapiᚑserverᚋgraphᚋmodelᚐObservabilityTenant(ctx context.Context, sel ast.SelectionSet, v model.ObservabilityTenant) graphql.Marshaler {
 	return ec._ObservabilityTenant(ctx, sel, &v)
 }
@@ -10963,6 +12611,14 @@ func (ec *executionContext) marshalN__TypeKind2string(ctx context.Context, sel a
 	return res
 }
 
+func (ec *executionContext) unmarshalOAcceptOAuth2ConsentRequestSession2ᚖgithubᚗcomᚋpluralshᚋoauthᚑplaygroundᚋapiᚑserverᚋgraphᚋmodelᚐAcceptOAuth2ConsentRequestSession(ctx context.Context, v interface{}) (*model.AcceptOAuth2ConsentRequestSession, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputAcceptOAuth2ConsentRequestSession(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
 func (ec *executionContext) unmarshalOBoolean2bool(ctx context.Context, v interface{}) (bool, error) {
 	res, err := graphql.UnmarshalBoolean(v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -11190,6 +12846,13 @@ func (ec *executionContext) marshalOOAuth2Client2ᚖgithubᚗcomᚋpluralshᚋoa
 	return ec._OAuth2Client(ctx, sel, v)
 }
 
+func (ec *executionContext) marshalOOAuth2ConsentRequest2ᚖgithubᚗcomᚋpluralshᚋoauthᚑplaygroundᚋapiᚑserverᚋgraphᚋmodelᚐOAuth2ConsentRequest(ctx context.Context, sel ast.SelectionSet, v *model.OAuth2ConsentRequest) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._OAuth2ConsentRequest(ctx, sel, v)
+}
+
 func (ec *executionContext) marshalOObservabilityTenantEditors2ᚖgithubᚗcomᚋpluralshᚋoauthᚑplaygroundᚋapiᚑserverᚋgraphᚋmodelᚐObservabilityTenantEditors(ctx context.Context, sel ast.SelectionSet, v *model.ObservabilityTenantEditors) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
@@ -11218,6 +12881,13 @@ func (ec *executionContext) unmarshalOObservabilityTenantViewersInput2ᚖgithub�
 	}
 	res, err := ec.unmarshalInputObservabilityTenantViewersInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOOidcContext2ᚖgithubᚗcomᚋpluralshᚋoauthᚑplaygroundᚋapiᚑserverᚋgraphᚋmodelᚐOidcContext(ctx context.Context, sel ast.SelectionSet, v *model.OidcContext) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._OidcContext(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalOString2ᚕstringᚄ(ctx context.Context, v interface{}) ([]string, error) {
