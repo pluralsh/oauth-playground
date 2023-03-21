@@ -24,9 +24,9 @@ helm_resource(
     flags=[
         '--create-namespace',
         '--values=./dev/kratos_values.yaml',
-        "--set-file=kratos.identitySchemas.identity\\.person\\.schema\\.json=./configs/kratos/identity.person.schema.json",
+        "--set-file=kratos.identitySchemas.identity\\.person\\.schema\\.json=./dev/configs/kratos/identity.person.schema.json",
         ],
-    deps=['./dev/kratos_values.yaml', './configs/kratos/'],
+    deps=['./dev/kratos_values.yaml', './dev/configs/kratos/'],
     labels=['kratos'],
     resource_deps=['ory', 'postgres-kratos'],
 )
@@ -47,9 +47,9 @@ helm_resource(
     flags=[
         '--create-namespace',
         '--values=./dev/oathkeeper_values.yaml',
-        "--set-file=oathkeeper.accessRules=./configs/oathkeeper/access-rules.yaml",
+        "--set-file=oathkeeper.accessRules=./dev/configs/oathkeeper/access-rules.yaml",
         ],
-    deps=['./dev/oathkeeper_values.yaml', './configs/oathkeeper/'],
+    deps=['./dev/oathkeeper_values.yaml', './dev/configs/oathkeeper/'],
     labels=['oathkeeper'],
     resource_deps=['ory'],
     )
@@ -114,7 +114,7 @@ helm_resource(
 configmap_create(
     'keto-namespaces-config',
     namespace='keto',
-    from_file='namespaces.keto.ts=./configs/keto/opl_ts/src/observability.ts',
+    from_file='namespaces.keto.ts=./dev/configs/keto/opl_ts/src/observability.ts',
     watch=True
 )
 
