@@ -13,9 +13,9 @@ hydra:
 
     urls:
       self:
-        issuer: http://localhost:4455/hydra
-      login: http://localhost:4455/login
-      consent: http://localhost:4455/consent
+        issuer: https://hydra.localhost.pluraldev.sh:4455
+      login: https://localhost.pluraldev.sh:4455/login
+      consent: https://localhost.pluraldev.sh:4455/consent
     serve:
       admin:
         tls:

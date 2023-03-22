@@ -7,18 +7,22 @@ kratos:
   automigration:
     enabled: true
   config:
+    dev: true
     serve:
       public:
-        base_url: http://localhost:4455/.ory/kratos/public/
+        base_url: https://localhost.pluraldev.sh:4455/.ory/kratos/public/
         cors:
           enabled: true
           allowed_origins:
           - http://localhost:3000
+          - https://localhost:3000
+          - http://localhost.pluraldev.sh:4455
+          - https://localhost.pluraldev.sh:4455
     dsn: postgres://kratos:kratospassword@postgresql-kratos:5432/kratos
     oauth2_provider:
       url: http://oauth-stack-hydra-admin:4445
     selfservice:
-      default_browser_return_url: http://localhost:4455/
+      default_browser_return_url: https://localhost.pluraldev.sh:4455/
 
       methods:
         password:
@@ -28,42 +32,45 @@ kratos:
           config:
             passwordless: true
             rp:
-              id: localhost
+              id: localhost.pluraldev.sh
               display_name: Ory Foundation
               icon: https://www.ory.sh/an-icon.png
-              origin: http://localhost:4455/login
+              origin: https://localhost.pluraldev.sh:4455/login
 
       flows:
         error:
-          ui_url: http://localhost:4455/error
+          ui_url: https://localhost.pluraldev.sh:4455/error
 
         settings:
-          ui_url: http://localhost:4455/settings
+          ui_url: https://localhost.pluraldev.sh:4455/settings
           privileged_session_max_age: 15m
 
         recovery:
           enabled: true
-          ui_url: http://localhost:4455/recovery
+          ui_url: https://localhost.pluraldev.sh:4455/recovery
 
         verification:
           enabled: true
-          ui_url: http://localhost:4455/verification
+          ui_url: https://localhost.pluraldev.sh:4455/verification
           after:
-            default_browser_return_url: http://localhost:4455/
+            default_browser_return_url: https://localhost.pluraldev.sh:4455/
 
         logout:
           after:
-            default_browser_return_url: http://localhost:4455/login
+            default_browser_return_url: https://localhost.pluraldev.sh:4455/login
 
         login:
-          ui_url: http://localhost:4455/login
+          ui_url: https://localhost.pluraldev.sh:4455/login
           lifespan: 10m
 
         registration:
           lifespan: 10m
-          ui_url: http://localhost:4455/registration
+          ui_url: https://localhost.pluraldev.sh:4455/registration
           after:
             password:
+              hooks:
+                - hook: session
+            webauthn:
               hooks:
                 - hook: session
 

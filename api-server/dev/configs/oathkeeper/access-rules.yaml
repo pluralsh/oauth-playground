@@ -3,7 +3,7 @@
     url: http://frontend.default.svc.cluster.local
     preserve_host: true
   match:
-    url: <http|https>://<127.0.0.1|localhost>:4455</|/registration.*|/welcome.*|/recovery.*|/verification.*|/login.*|/consent.*|/error|/404|/500|/*.css|/*.js|/*.png|/*.svg|/assets/.*|/static/.*|/users|/groups|/settings.*|/manifest.json|/logo192.png>
+    url: <http|https>://localhost.pluraldev.sh:4455</|/registration.*|/welcome.*|/recovery.*|/verification.*|/login.*|/consent.*|/error|/404|/500|/.*.css|./*.js|/.*.png|/.*.svg|/assets/.*|/static/.*|/users|/groups|/settings.*|/.*.json>
     methods:
       - GET
       - POST
@@ -23,7 +23,7 @@
     strip_path: /graphiql
     preserve_host: true
   match:
-    url: <http|https>://<127.0.0.1|localhost>:4455/graphiql
+    url: <http|https>://localhost.pluraldev.sh:4455/graphiql
     methods:
       - GET
       - POST
@@ -42,7 +42,7 @@
     url: http://api-server.default.svc.cluster.local:8082
     preserve_host: true
   match:
-    url: <http|https>://<127.0.0.1|localhost>:4455/graphql
+    url: <http|https>://localhost.pluraldev.sh:4455/graphql
     methods:
       - GET
       - POST
@@ -62,7 +62,7 @@
     strip_path: /.ory/kratos/public
     preserve_host: true
   match:
-    url: <http|https>://<127.0.0.1|localhost>:4455/.ory/kratos/public/<.*>
+    url: <http|https>://localhost.pluraldev.sh:4455/.ory/kratos/public/<.*>
     methods:
       - GET
       - POST
@@ -82,7 +82,7 @@
     strip_path: /hydra
     preserve_host: true
   match:
-    url: <http|https>://<127.0.0.1|localhost>:4455/hydra<.*>
+    url: <http|https>://hydra.localhost.pluraldev.sh:4455<.*>
     methods:
       - GET
       - POST

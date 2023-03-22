@@ -15,6 +15,7 @@ import { Verification } from "./pages/Verification"
 import { Error } from "./pages/Error"
 import { Registration } from './pages/Registration';
 import { Recovery } from './pages/Recovery';
+import { Consent } from './pages/Consent';
 
 function App() {
     return (
@@ -32,6 +33,7 @@ function App() {
           <Route path="/verification" element={<Verification />} />
           <Route path="/error" element={<Error />} />
           <Route path="/recovery" element={<Recovery />} />
+          <Route path="/consent" element={<Consent />} />
         </Routes>
       </BrowserRouter>
     )
