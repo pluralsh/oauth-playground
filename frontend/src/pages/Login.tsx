@@ -64,7 +64,7 @@ export const Login = (): JSX.Element => {
           window.location.href = flow?.return_to
         }
 
-        navigate("/error")
+        navigate("/", { replace: true })
       })
       .catch(sdkErrorHandler)
   }
