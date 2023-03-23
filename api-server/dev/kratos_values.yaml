@@ -20,7 +20,7 @@ kratos:
           - https://localhost.pluraldev.sh:4455
     dsn: postgres://kratos:kratospassword@postgresql-kratos:5432/kratos
     oauth2_provider:
-      url: http://oauth-stack-hydra-admin:4445
+      url: http://hydra-admin.hydra:4445
     selfservice:
       default_browser_return_url: https://localhost.pluraldev.sh:4455/
 

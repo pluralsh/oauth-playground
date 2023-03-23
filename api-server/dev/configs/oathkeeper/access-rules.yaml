@@ -79,10 +79,28 @@
 - id: ory:hydra:public
   upstream:
     url: http://hydra-public.hydra:4444
-    strip_path: /hydra
     preserve_host: true
   match:
     url: <http|https>://hydra.localhost.pluraldev.sh:4455<.*>
+    methods:
+      - GET
+      - POST
+      - PUT
+      - DELETE
+      - PATCH
+      - OPTIONS
+  authenticators:
+    - handler: noop
+  authorizer:
+    handler: allow
+  mutators:
+    - handler: noop
+- id: grafana:grafana:public
+  upstream:
+    url: http://grafana.grafana:80
+    preserve_host: true
+  match:
+    url: <http|https>://grafana.localhost.pluraldev.sh:4455<.*>
     methods:
       - GET
       - POST

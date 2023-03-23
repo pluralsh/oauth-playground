@@ -27,12 +27,16 @@ export const Login = (): JSX.Element => {
 
   // Create a new login flow
   const createFlow = () => {
+    const refresh = searchParams.get("refresh")
+    const return_to = searchParams.get("return_to") || undefined
     const aal2 = searchParams.get("aal2")
+    const loginChallenge = searchParams.get("login_challenge") || undefined
+
     sdk
       // aal2 is a query parameter that can be used to request Two-Factor authentication
       // aal1 is the default authentication level (Single-Factor)
       // we always pass refresh (true) on login so that the session can be refreshed when there is already an active session
-      .createBrowserLoginFlow({ refresh: true, aal: aal2 ? "aal2" : "aal1" })
+      .createBrowserLoginFlow({ refresh: (refresh === 'true'), aal: aal2 ? "aal2" : "aal1", returnTo: return_to, loginChallenge: loginChallenge })
       // flow contains the form fields and csrf token
       .then(({ data: flow }) => {
         // Update URI query params to include flow id
@@ -47,13 +51,20 @@ export const Login = (): JSX.Element => {
   const submitFlow = (body: UpdateLoginFlowBody) => {
     // something unexpected went wrong and the flow was not set
     if (!flow) return navigate("/login", { replace: true })
-
     // we submit the flow to Ory with the form data
     sdk
       .updateLoginFlow({ flow: flow.id, updateLoginFlowBody: body })
-      .then(() => {
+      .then(({ status: status, data: resp }) => {
+        console.log(flow)
+        console.log(resp)
+        console.log(status)
         // we successfully submitted the login flow, so lets redirect to the dashboard
-        navigate("/", { replace: true })
+
+        if (flow?.return_to) {
+          window.location.href = flow?.return_to
+        }
+
+        navigate("/error")
       })
       .catch(sdkErrorHandler)
   }

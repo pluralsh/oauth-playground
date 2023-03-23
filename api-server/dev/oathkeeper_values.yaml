@@ -53,7 +53,7 @@ oathkeeper:
       cookie_session:
         enabled: true
         config:
-          check_session_url: http://oauth-stack-kratos-public/sessions/whoami
+          check_session_url: http://kratos-public.kratos/sessions/whoami
           preserve_path: true
           extra_from: "@this"
           subject_from: "identity.id"
@@ -63,7 +63,7 @@ oathkeeper:
       oauth2_introspection:
         enabled: true
         config:
-          introspection_url: http://oauth-stack-hydra-admin:4445/admin/oauth2/introspect
+          introspection_url: http://hydra-admin.hydra:4445/admin/oauth2/introspect
           # scope_strategy: exact
 
       noop:

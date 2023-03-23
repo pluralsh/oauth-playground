@@ -4,6 +4,22 @@ load('ext://restart_process', 'docker_build_with_restart')
 
 helm_repo('bitnami', 'https://charts.bitnami.com/bitnami')
 helm_repo('ory', 'https://k8s.ory.sh/helm/charts')
+helm_repo('grafana-helm', 'https://grafana.github.io/helm-charts')
+
+## Grafana
+
+helm_resource(
+    'grafana',
+    'grafana/grafana',
+    namespace='grafana',
+    flags=[
+        '--create-namespace',
+        '--values=./dev/grafana_values.yaml',
+        ],
+    deps=['./dev/grafana_values.yaml'],
+    labels=['grafana'],
+    resource_deps=['grafana-helm'],
+)
 
 ## Kratos
 
