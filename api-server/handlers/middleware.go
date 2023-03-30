@@ -65,6 +65,8 @@ func (h *Handler) Middleware() func(http.Handler) http.Handler {
 				// TODO: should we return here?
 				log.Error(err, fmt.Sprintf("Error when calling `V0alpha2Api.ToSession``: %v\n", err))
 				log.Error(err, fmt.Sprintf("Full HTTP response: %v\n", req))
+				next.ServeHTTP(w, r) // TODO: find proper way to handle unauthenticated response?
+				return
 			}
 			// response from `ToSession`: Session
 			log.Info(fmt.Sprintf("%s", resp.Identity.Traits))
