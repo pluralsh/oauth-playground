@@ -135,7 +135,7 @@ func serve(ctx context.Context, resolver *resolvers.Resolver, directives *direct
 	//     },
 	// })
 
-	router.Handle("/", playground.Handler("GraphQL playground", "/graphql"))
+	router.Handle("/graphiql", playground.Handler("GraphQL playground", "/graphql"))
 	router.Handle("/graphql", gqlSrv)
 	router.Post("/tenant-hydrator", handlers.HydrateObservabilityTenants)
 
@@ -151,7 +151,7 @@ func serve(ctx context.Context, resolver *resolvers.Resolver, directives *direct
 	}()
 
 	setupLog.Info("server started")
-	setupLog.Info("connect to http://localhost:" + port + "/ for GraphQL playground")
+	setupLog.Info("connect to http://localhost:" + port + "/graphiql for GraphQL playground")
 
 	<-ctx.Done()
 
