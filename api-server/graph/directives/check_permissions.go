@@ -2,8 +2,10 @@ package directives
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/pluralsh/oauth-playground/api-server/handlers"
 )
 
 func (d *Directive) CheckPermissions(ctx context.Context, obj interface{}, next graphql.Resolver) (interface{}, error) {
@@ -83,6 +85,17 @@ func (d *Directive) CheckPermissions(ctx context.Context, obj interface{}, next 
 	// 	setupLog.Info("scope directive failed")
 	// 	return nil, fmt.Errorf("Access denied: User is not allowed to '%s' '%s' in namespace '%s'. Error: %s", verb, TypeSar.Resource, namespace, err)
 	// }
+
+	userCtx := handlers.ForContext(ctx)
+	if userCtx != nil {
+		if !userCtx.IsAdmin {
+			return nil, fmt.Errorf("Access denied: User '%s' does not have required permissions.", userCtx.Email)
+		}
+	} else {
+		// TODO: remove debug log message
+		d.C.Log.Info("scope directive failed")
+		return nil, fmt.Errorf("Access denied: User does not have required permissions.")
+	}
 
 	// TODO: remove debug log message
 	d.C.Log.Info("scope directive successful")
