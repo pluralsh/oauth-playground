@@ -238,6 +238,24 @@ func ErrInvalidRequest(err error) render.Renderer {
 	}
 }
 
+func ErrFailedToGetAdmins(err error) render.Renderer {
+	return &ErrResponse{
+		Err:            err,
+		HTTPStatusCode: 400,
+		StatusText:     "Failed to get organization admins.",
+		ErrorText:      err.Error(),
+	}
+}
+
+func ErrFailedToSetInitialAdmin(err error) render.Renderer {
+	return &ErrResponse{
+		Err:            err,
+		HTTPStatusCode: 400,
+		StatusText:     "Failed to set initial organization admin.",
+		ErrorText:      err.Error(),
+	}
+}
+
 type ErrResponse struct {
 	Err            error `json:"-"` // low-level runtime error
 	HTTPStatusCode int   `json:"-"` // http response status code

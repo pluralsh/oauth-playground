@@ -138,6 +138,7 @@ func serve(ctx context.Context, resolver *resolvers.Resolver, directives *direct
 	router.Handle("/graphiql", playground.Handler("GraphQL playground", "/graphql"))
 	router.Handle("/graphql", gqlSrv)
 	router.Post("/tenant-hydrator", handlers.HydrateObservabilityTenants)
+	router.Post("/user-webhook", handlers.BootstrapAdmin)
 
 	srv := &http.Server{
 		Addr:    ":" + port,
