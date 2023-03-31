@@ -22,7 +22,7 @@ type ObservabilityTenantViewers {
   groups: [Group!]
 
   "The oauth2 clients that can send data a tenant."
-  oauth2Clients: [OAuth2Client!]
+  oauth2Clients: [OAuth2Client!] # TODO: add check so that an oauth2 client can only be added to a single tenant
 }
 
 "Representation of the users and groups that can edit a tenant."

@@ -60,7 +60,7 @@ func (h *Handler) HydrateObservabilityTenants(w http.ResponseWriter, r *http.Req
 	json, _ := json.Marshal(data.AuthenticationSession)
 	log.Info("Post", "body", string(json))
 
-	render.Status(r, http.StatusCreated)
+	render.Status(r, http.StatusOK) // TODO: we should probably do error checking above so we can return a 400 if something goes wrong
 	render.Render(w, r, h.NewAuthenticationSessionResponse(data))
 }
 

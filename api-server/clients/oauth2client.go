@@ -130,7 +130,7 @@ func (c *ClientWrapper) CreateOAuth2Client(ctx context.Context, mode HydraOperat
 
 	client := format.GraphQLNewOAuth2ClientToHydra(allowedCorsOrigins, audience, authorizationCodeGrantAccessTokenLifespan, authorizationCodeGrantIDTokenLifespan, authorizationCodeGrantRefreshTokenLifespan, backChannelLogoutSessionRequired, backChannelLogoutURI, clientCredentialsGrantAccessTokenLifespan, clientID, clientName, clientSecret, clientSecretExpiresAt, clientURI, contacts, frontchannelLogoutSessionRequired, frontchannelLogoutURI, grantTypes, implicitGrantAccessTokenLifespan, implicitGrantIDTokenLifespan, jwks, jwksURI, jwtBearerGrantAccessTokenLifespan, logoURI, metadata, policyURI, postLogoutRedirectUris, redirectUris, responseTypes, scope, sectorIdentifierURI, subjectType, tokenEndpointAuthMethod, tokenEndpointAuthSigningAlgorithm, tosURI, userinfoSignedResponseAlgorithm, loginBindings)
 
-	// TODO: add current user as owner to client before creating it
+	// TODO: add bound observability tenant as owner of the client so we can ensure that a client is only bound to one tenant
 
 	var createdClient *hydra.OAuth2Client
 	var resp *http.Response
