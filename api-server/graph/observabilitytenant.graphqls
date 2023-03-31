@@ -11,6 +11,37 @@ type ObservabilityTenant {
 
   "The users and groups that can edit a tenant to add users, groups or oauth2 clients to it."
   editors: ObservabilityTenantEditors
+
+  "The limits of the tenant."
+  limits: ObservabilityTenantLimits
+}
+
+"Representation of the limits of a tenant."
+type ObservabilityTenantLimits {
+  "The limits for Mimir for the tenant."
+  mimir: MimirLimits
+
+  "The limits for Loki for the tenant."
+  loki: LokiLimits
+
+  "The limits for Tempo for the tenant."
+  tempo: TempoLimits
+}
+
+"Representation of the limits for Mimir for a tenant."
+type MimirLimits {
+  requestRate: Float
+
+}
+
+"Representation of the limits for Loki for a tenant."
+type LokiLimits {
+  requestRate: Float
+}
+
+"Representation of the limits for Tempo for a tenant."
+type TempoLimits {
+  requestRate: Float
 }
 
 "Representation of the users, groups and oauth2 clients that can view or send data a tenant."

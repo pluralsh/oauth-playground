@@ -66,6 +66,14 @@ type ComplexityRoot struct {
 		Users  func(childComplexity int) int
 	}
 
+	LokiLimits struct {
+		RequestRate func(childComplexity int) int
+	}
+
+	MimirLimits struct {
+		RequestRate func(childComplexity int) int
+	}
+
 	Mutation struct {
 		AcceptOAuth2ConsentRequest func(childComplexity int, challenge string, grantAccessTokenAudience []string, grantScope []string, remember *bool, rememberFor *int64, session *model.AcceptOAuth2ConsentRequestSession) int
 		CreateOAuth2Client         func(childComplexity int, allowedCorsOrigins []string, audience []string, authorizationCodeGrantAccessTokenLifespan *string, authorizationCodeGrantIDTokenLifespan *string, authorizationCodeGrantRefreshTokenLifespan *string, backChannelLogoutSessionRequired *bool, backChannelLogoutURI *string, clientCredentialsGrantAccessTokenLifespan *string, clientName *string, clientSecret *string, clientSecretExpiresAt *int64, clientURI *string, contacts []string, frontchannelLogoutSessionRequired *bool, frontchannelLogoutURI *string, grantTypes []string, implicitGrantAccessTokenLifespan *string, implicitGrantIDTokenLifespan *string, jwks map[string]interface{}, jwksURI *string, jwtBearerGrantAccessTokenLifespan *string, logoURI *string, metadata map[string]interface{}, policyURI *string, postLogoutRedirectUris []string, redirectUris []string, responseTypes []string, scope *string, sectorIdentifierURI *string, subjectType *string, tokenEndpointAuthMethod *string, tokenEndpointAuthSigningAlgorithm *string, tosURI *string, userinfoSignedResponseAlgorithm *string, loginBindings *model.LoginBindingsInput) int
@@ -152,6 +160,7 @@ type ComplexityRoot struct {
 
 	ObservabilityTenant struct {
 		Editors      func(childComplexity int) int
+		Limits       func(childComplexity int) int
 		Name         func(childComplexity int) int
 		Organization func(childComplexity int) int
 		Viewers      func(childComplexity int) int
@@ -160,6 +169,12 @@ type ComplexityRoot struct {
 	ObservabilityTenantEditors struct {
 		Groups func(childComplexity int) int
 		Users  func(childComplexity int) int
+	}
+
+	ObservabilityTenantLimits struct {
+		Loki  func(childComplexity int) int
+		Mimir func(childComplexity int) int
+		Tempo func(childComplexity int) int
 	}
 
 	ObservabilityTenantViewers struct {
@@ -192,6 +207,10 @@ type ComplexityRoot struct {
 		ListUsers                func(childComplexity int) int
 		Oauth2ConsentRequest     func(childComplexity int, challenge string) int
 		Organization             func(childComplexity int, name string) int
+	}
+
+	TempoLimits struct {
+		RequestRate func(childComplexity int) int
 	}
 
 	User struct {
@@ -311,6 +330,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.LoginBindings.Users(childComplexity), true
+
+	case "LokiLimits.requestRate":
+		if e.complexity.LokiLimits.RequestRate == nil {
+			break
+		}
+
+		return e.complexity.LokiLimits.RequestRate(childComplexity), true
+
+	case "MimirLimits.requestRate":
+		if e.complexity.MimirLimits.RequestRate == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.RequestRate(childComplexity), true
 
 	case "Mutation.acceptOAuth2ConsentRequest":
 		if e.complexity.Mutation.AcceptOAuth2ConsentRequest == nil {
@@ -862,6 +895,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.ObservabilityTenant.Editors(childComplexity), true
 
+	case "ObservabilityTenant.limits":
+		if e.complexity.ObservabilityTenant.Limits == nil {
+			break
+		}
+
+		return e.complexity.ObservabilityTenant.Limits(childComplexity), true
+
 	case "ObservabilityTenant.name":
 		if e.complexity.ObservabilityTenant.Name == nil {
 			break
@@ -896,6 +936,27 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.ObservabilityTenantEditors.Users(childComplexity), true
+
+	case "ObservabilityTenantLimits.loki":
+		if e.complexity.ObservabilityTenantLimits.Loki == nil {
+			break
+		}
+
+		return e.complexity.ObservabilityTenantLimits.Loki(childComplexity), true
+
+	case "ObservabilityTenantLimits.mimir":
+		if e.complexity.ObservabilityTenantLimits.Mimir == nil {
+			break
+		}
+
+		return e.complexity.ObservabilityTenantLimits.Mimir(childComplexity), true
+
+	case "ObservabilityTenantLimits.tempo":
+		if e.complexity.ObservabilityTenantLimits.Tempo == nil {
+			break
+		}
+
+		return e.complexity.ObservabilityTenantLimits.Tempo(childComplexity), true
 
 	case "ObservabilityTenantViewers.groups":
 		if e.complexity.ObservabilityTenantViewers.Groups == nil {
@@ -1061,6 +1122,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Query.Organization(childComplexity, args["name"].(string)), true
+
+	case "TempoLimits.requestRate":
+		if e.complexity.TempoLimits.RequestRate == nil {
+			break
+		}
+
+		return e.complexity.TempoLimits.RequestRate(childComplexity), true
 
 	case "User.email":
 		if e.complexity.User.Email == nil {
@@ -1727,6 +1795,37 @@ type ObservabilityTenant {
 
   "The users and groups that can edit a tenant to add users, groups or oauth2 clients to it."
   editors: ObservabilityTenantEditors
+
+  "The limits of the tenant."
+  limits: ObservabilityTenantLimits
+}
+
+"Representation of the limits of a tenant."
+type ObservabilityTenantLimits {
+  "The limits for Mimir for the tenant."
+  mimir: MimirLimits
+
+  "The limits for Loki for the tenant."
+  loki: LokiLimits
+
+  "The limits for Tempo for the tenant."
+  tempo: TempoLimits
+}
+
+"Representation of the limits for Mimir for a tenant."
+type MimirLimits {
+  requestRate: Float
+
+}
+
+"Representation of the limits for Loki for a tenant."
+type LokiLimits {
+  requestRate: Float
+}
+
+"Representation of the limits for Tempo for a tenant."
+type TempoLimits {
+  requestRate: Float
 }
 
 "Representation of the users, groups and oauth2 clients that can view or send data a tenant."
@@ -3262,6 +3361,82 @@ func (ec *executionContext) fieldContext_LoginBindings_groups(ctx context.Contex
 	return fc, nil
 }
 
+func (ec *executionContext) _LokiLimits_requestRate(ctx context.Context, field graphql.CollectedField, obj *model.LokiLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_LokiLimits_requestRate(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.RequestRate, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*float64)
+	fc.Result = res
+	return ec.marshalOFloat2ᚖfloat64(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_LokiLimits_requestRate(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "LokiLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Float does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_requestRate(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_requestRate(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.RequestRate, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*float64)
+	fc.Result = res
+	return ec.marshalOFloat2ᚖfloat64(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_requestRate(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Float does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Mutation_createUser(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Mutation_createUser(ctx, field)
 	if err != nil {
@@ -4280,6 +4455,8 @@ func (ec *executionContext) fieldContext_Mutation_observabilityTenant(ctx contex
 				return ec.fieldContext_ObservabilityTenant_viewers(ctx, field)
 			case "editors":
 				return ec.fieldContext_ObservabilityTenant_editors(ctx, field)
+			case "limits":
+				return ec.fieldContext_ObservabilityTenant_limits(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type ObservabilityTenant", field.Name)
 		},
@@ -4368,6 +4545,8 @@ func (ec *executionContext) fieldContext_Mutation_deleteObservabilityTenant(ctx 
 				return ec.fieldContext_ObservabilityTenant_viewers(ctx, field)
 			case "editors":
 				return ec.fieldContext_ObservabilityTenant_editors(ctx, field)
+			case "limits":
+				return ec.fieldContext_ObservabilityTenant_limits(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type ObservabilityTenant", field.Name)
 		},
@@ -6935,6 +7114,52 @@ func (ec *executionContext) fieldContext_ObservabilityTenant_editors(ctx context
 	return fc, nil
 }
 
+func (ec *executionContext) _ObservabilityTenant_limits(ctx context.Context, field graphql.CollectedField, obj *model.ObservabilityTenant) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ObservabilityTenant_limits(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Limits, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.ObservabilityTenantLimits)
+	fc.Result = res
+	return ec.marshalOObservabilityTenantLimits2ᚖgithubᚗcomᚋpluralshᚋoauthᚑplaygroundᚋapiᚑserverᚋgraphᚋmodelᚐObservabilityTenantLimits(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ObservabilityTenant_limits(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ObservabilityTenant",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "mimir":
+				return ec.fieldContext_ObservabilityTenantLimits_mimir(ctx, field)
+			case "loki":
+				return ec.fieldContext_ObservabilityTenantLimits_loki(ctx, field)
+			case "tempo":
+				return ec.fieldContext_ObservabilityTenantLimits_tempo(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type ObservabilityTenantLimits", field.Name)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _ObservabilityTenantEditors_users(ctx context.Context, field graphql.CollectedField, obj *model.ObservabilityTenantEditors) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_ObservabilityTenantEditors_users(ctx, field)
 	if err != nil {
@@ -7028,6 +7253,132 @@ func (ec *executionContext) fieldContext_ObservabilityTenantEditors_groups(ctx c
 				return ec.fieldContext_Group_organization(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Group", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ObservabilityTenantLimits_mimir(ctx context.Context, field graphql.CollectedField, obj *model.ObservabilityTenantLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ObservabilityTenantLimits_mimir(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Mimir, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.MimirLimits)
+	fc.Result = res
+	return ec.marshalOMimirLimits2ᚖgithubᚗcomᚋpluralshᚋoauthᚑplaygroundᚋapiᚑserverᚋgraphᚋmodelᚐMimirLimits(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ObservabilityTenantLimits_mimir(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ObservabilityTenantLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "requestRate":
+				return ec.fieldContext_MimirLimits_requestRate(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type MimirLimits", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ObservabilityTenantLimits_loki(ctx context.Context, field graphql.CollectedField, obj *model.ObservabilityTenantLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ObservabilityTenantLimits_loki(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Loki, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.LokiLimits)
+	fc.Result = res
+	return ec.marshalOLokiLimits2ᚖgithubᚗcomᚋpluralshᚋoauthᚑplaygroundᚋapiᚑserverᚋgraphᚋmodelᚐLokiLimits(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ObservabilityTenantLimits_loki(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ObservabilityTenantLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "requestRate":
+				return ec.fieldContext_LokiLimits_requestRate(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type LokiLimits", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ObservabilityTenantLimits_tempo(ctx context.Context, field graphql.CollectedField, obj *model.ObservabilityTenantLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ObservabilityTenantLimits_tempo(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Tempo, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.TempoLimits)
+	fc.Result = res
+	return ec.marshalOTempoLimits2ᚖgithubᚗcomᚋpluralshᚋoauthᚑplaygroundᚋapiᚑserverᚋgraphᚋmodelᚐTempoLimits(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ObservabilityTenantLimits_tempo(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ObservabilityTenantLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "requestRate":
+				return ec.fieldContext_TempoLimits_requestRate(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type TempoLimits", field.Name)
 		},
 	}
 	return fc, nil
@@ -8234,6 +8585,8 @@ func (ec *executionContext) fieldContext_Query_listObservabilityTenants(ctx cont
 				return ec.fieldContext_ObservabilityTenant_viewers(ctx, field)
 			case "editors":
 				return ec.fieldContext_ObservabilityTenant_editors(ctx, field)
+			case "limits":
+				return ec.fieldContext_ObservabilityTenant_limits(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type ObservabilityTenant", field.Name)
 		},
@@ -8311,6 +8664,8 @@ func (ec *executionContext) fieldContext_Query_getObservabilityTenant(ctx contex
 				return ec.fieldContext_ObservabilityTenant_viewers(ctx, field)
 			case "editors":
 				return ec.fieldContext_ObservabilityTenant_editors(ctx, field)
+			case "limits":
+				return ec.fieldContext_ObservabilityTenant_limits(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type ObservabilityTenant", field.Name)
 		},
@@ -8604,6 +8959,44 @@ func (ec *executionContext) fieldContext_Query___schema(ctx context.Context, fie
 				return ec.fieldContext___Schema_directives(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type __Schema", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _TempoLimits_requestRate(ctx context.Context, field graphql.CollectedField, obj *model.TempoLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_TempoLimits_requestRate(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.RequestRate, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*float64)
+	fc.Result = res
+	return ec.marshalOFloat2ᚖfloat64(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_TempoLimits_requestRate(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "TempoLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Float does not have child fields")
 		},
 	}
 	return fc, nil
@@ -10865,6 +11258,56 @@ func (ec *executionContext) _LoginBindings(ctx context.Context, sel ast.Selectio
 	return out
 }
 
+var lokiLimitsImplementors = []string{"LokiLimits"}
+
+func (ec *executionContext) _LokiLimits(ctx context.Context, sel ast.SelectionSet, obj *model.LokiLimits) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, lokiLimitsImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("LokiLimits")
+		case "requestRate":
+
+			out.Values[i] = ec._LokiLimits_requestRate(ctx, field, obj)
+
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var mimirLimitsImplementors = []string{"MimirLimits"}
+
+func (ec *executionContext) _MimirLimits(ctx context.Context, sel ast.SelectionSet, obj *model.MimirLimits) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, mimirLimitsImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("MimirLimits")
+		case "requestRate":
+
+			out.Values[i] = ec._MimirLimits_requestRate(ctx, field, obj)
+
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
 var mutationImplementors = []string{"Mutation"}
 
 func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet) graphql.Marshaler {
@@ -11374,6 +11817,10 @@ func (ec *executionContext) _ObservabilityTenant(ctx context.Context, sel ast.Se
 				return innerFunc(ctx)
 
 			})
+		case "limits":
+
+			out.Values[i] = ec._ObservabilityTenant_limits(ctx, field, obj)
+
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -11429,6 +11876,39 @@ func (ec *executionContext) _ObservabilityTenantEditors(ctx context.Context, sel
 				return innerFunc(ctx)
 
 			})
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var observabilityTenantLimitsImplementors = []string{"ObservabilityTenantLimits"}
+
+func (ec *executionContext) _ObservabilityTenantLimits(ctx context.Context, sel ast.SelectionSet, obj *model.ObservabilityTenantLimits) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, observabilityTenantLimitsImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("ObservabilityTenantLimits")
+		case "mimir":
+
+			out.Values[i] = ec._ObservabilityTenantLimits_mimir(ctx, field, obj)
+
+		case "loki":
+
+			out.Values[i] = ec._ObservabilityTenantLimits_loki(ctx, field, obj)
+
+		case "tempo":
+
+			out.Values[i] = ec._ObservabilityTenantLimits_tempo(ctx, field, obj)
+
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -11833,6 +12313,31 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 		}
 	}
 	out.Dispatch()
+	return out
+}
+
+var tempoLimitsImplementors = []string{"TempoLimits"}
+
+func (ec *executionContext) _TempoLimits(ctx context.Context, sel ast.SelectionSet, obj *model.TempoLimits) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, tempoLimitsImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("TempoLimits")
+		case "requestRate":
+
+			out.Values[i] = ec._TempoLimits_requestRate(ctx, field, obj)
+
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
 	return out
 }
 
@@ -12845,6 +13350,22 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 	return res
 }
 
+func (ec *executionContext) unmarshalOFloat2ᚖfloat64(ctx context.Context, v interface{}) (*float64, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := graphql.UnmarshalFloat(v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOFloat2ᚖfloat64(ctx context.Context, sel ast.SelectionSet, v *float64) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	res := graphql.MarshalFloat(*v)
+	return res
+}
+
 func (ec *executionContext) marshalOGroup2ᚕᚖgithubᚗcomᚋpluralshᚋoauthᚑplaygroundᚋapiᚑserverᚋgraphᚋmodelᚐGroupᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Group) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
@@ -12961,6 +13482,13 @@ func (ec *executionContext) unmarshalOLoginBindingsInput2ᚖgithubᚗcomᚋplura
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
+func (ec *executionContext) marshalOLokiLimits2ᚖgithubᚗcomᚋpluralshᚋoauthᚑplaygroundᚋapiᚑserverᚋgraphᚋmodelᚐLokiLimits(ctx context.Context, sel ast.SelectionSet, v *model.LokiLimits) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._LokiLimits(ctx, sel, v)
+}
+
 func (ec *executionContext) unmarshalOMap2map(ctx context.Context, v interface{}) (map[string]interface{}, error) {
 	if v == nil {
 		return nil, nil
@@ -12975,6 +13503,13 @@ func (ec *executionContext) marshalOMap2map(ctx context.Context, sel ast.Selecti
 	}
 	res := graphql.MarshalMap(v)
 	return res
+}
+
+func (ec *executionContext) marshalOMimirLimits2ᚖgithubᚗcomᚋpluralshᚋoauthᚑplaygroundᚋapiᚑserverᚋgraphᚋmodelᚐMimirLimits(ctx context.Context, sel ast.SelectionSet, v *model.MimirLimits) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._MimirLimits(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalOName2ᚖgithubᚗcomᚋpluralshᚋoauthᚑplaygroundᚋapiᚑserverᚋgraphᚋmodelᚐName(ctx context.Context, sel ast.SelectionSet, v *model.Name) graphql.Marshaler {
@@ -13068,6 +13603,13 @@ func (ec *executionContext) unmarshalOObservabilityTenantEditorsInput2ᚖgithub�
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
+func (ec *executionContext) marshalOObservabilityTenantLimits2ᚖgithubᚗcomᚋpluralshᚋoauthᚑplaygroundᚋapiᚑserverᚋgraphᚋmodelᚐObservabilityTenantLimits(ctx context.Context, sel ast.SelectionSet, v *model.ObservabilityTenantLimits) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._ObservabilityTenantLimits(ctx, sel, v)
+}
+
 func (ec *executionContext) marshalOObservabilityTenantViewers2ᚖgithubᚗcomᚋpluralshᚋoauthᚑplaygroundᚋapiᚑserverᚋgraphᚋmodelᚐObservabilityTenantViewers(ctx context.Context, sel ast.SelectionSet, v *model.ObservabilityTenantViewers) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
@@ -13142,6 +13684,13 @@ func (ec *executionContext) marshalOString2ᚖstring(ctx context.Context, sel as
 	}
 	res := graphql.MarshalString(*v)
 	return res
+}
+
+func (ec *executionContext) marshalOTempoLimits2ᚖgithubᚗcomᚋpluralshᚋoauthᚑplaygroundᚋapiᚑserverᚋgraphᚋmodelᚐTempoLimits(ctx context.Context, sel ast.SelectionSet, v *model.TempoLimits) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._TempoLimits(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalOTime2ᚖtimeᚐTime(ctx context.Context, v interface{}) (*time.Time, error) {

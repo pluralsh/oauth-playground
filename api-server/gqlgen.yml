@@ -62,6 +62,9 @@ models:
       - github.com/99designs/gqlgen/graphql.Int64
       - github.com/99designs/gqlgen/graphql.Int
       - github.com/99designs/gqlgen/graphql.Int32
+  Float:
+    model:
+      - github.com/99designs/gqlgen/graphql.Float
   User:
     fields:
       groups:
