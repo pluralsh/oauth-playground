@@ -51,7 +51,7 @@ func (h *Handler) Middleware() func(http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			log := h.Log.WithName("Middleware")
 
-			cookie, err := r.Cookie("ory_kratos_session")
+			cookie, err := r.Cookie("ory_kratos_session") // TODO: make this compatible with bearer token
 			// Allow unauthenticated users in
 			if err != nil || cookie == nil {
 				next.ServeHTTP(w, r)
