@@ -201,6 +201,18 @@ func (c *ClientWrapper) ListOrganizations(ctx context.Context) ([]*model.Organiz
 
 // function that lists all organizations in keto
 func (c *ClientWrapper) GetOrganization(ctx context.Context, orgName string) (*model.Organization, error) {
+	log := c.Log.WithName("Organization").WithValues("Name", orgName)
+	exists, err := c.OrganizationExistsInKeto(ctx, orgName)
+	if err != nil {
+		log.Error(err, "Failed to check if organization exists in keto")
+		return nil, err
+	}
+
+	if !exists {
+		log.Error(nil, "Organization does not exist in keto. Having multiple organizations is not yet supported.")
+		return nil, fmt.Errorf("Organization does not exist in keto. Having multiple organizations is not yet supported.")
+	}
+
 	currentAdmins, err := c.GetOrganizationAdmins(ctx, orgName)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get current admins: %w", err)
