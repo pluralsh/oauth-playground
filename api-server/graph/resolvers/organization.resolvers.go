@@ -26,6 +26,11 @@ func (r *queryResolver) ListOrganizations(ctx context.Context) ([]*model.Organiz
 	return r.C.ListOrganizations(ctx)
 }
 
+// Organization is the resolver for the organization field.
+func (r *queryResolver) Organization(ctx context.Context, name string) (*model.Organization, error) {
+	return r.C.GetOrganization(ctx, name)
+}
+
 // Organization returns generated.OrganizationResolver implementation.
 func (r *Resolver) Organization() generated.OrganizationResolver { return &organizationResolver{r} }
 

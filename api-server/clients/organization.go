@@ -198,3 +198,16 @@ func (c *ClientWrapper) ListOrganizations(ctx context.Context) ([]*model.Organiz
 
 	return outputOrgs, nil
 }
+
+// function that lists all organizations in keto
+func (c *ClientWrapper) GetOrganization(ctx context.Context, orgName string) (*model.Organization, error) {
+	currentAdmins, err := c.GetOrganizationAdmins(ctx, orgName)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get current admins: %w", err)
+	}
+
+	return &model.Organization{
+		Name:   orgName,
+		Admins: currentAdmins,
+	}, nil
+}

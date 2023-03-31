@@ -16,6 +16,12 @@ input Admin {
 extend type Query {
   "Get a list of all users."
   listOrganizations: [Organization!]! @checkPermissions @isAuthenticated
+
+  "Get a single organization by name."
+  organization(
+    "The name of the organization."
+    name: String!
+  ): Organization! @checkPermissions @isAuthenticated
 }
 
 extend type Mutation {
