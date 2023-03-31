@@ -65,5 +65,9 @@ func (h *Handler) BootstrapAdmin(w http.ResponseWriter, r *http.Request) {
 	log.Info("Post", "body", string(json))
 
 	render.Status(r, http.StatusOK) // TODO: we should probably do error checking above so we can return a 400 if something goes wrong
-	render.Render(w, r, nil)
+	render.Render(w, r, h.BootstrapUser(data))
+}
+
+func (h *Handler) BootstrapUser(b *BootstrapRequest) *BootstrapRequest {
+	return b
 }
