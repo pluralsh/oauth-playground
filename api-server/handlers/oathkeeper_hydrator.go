@@ -58,7 +58,7 @@ func (h *Handler) HydrateObservabilityTenants(w http.ResponseWriter, r *http.Req
 	// dbNewArticle(article)
 
 	json, _ := json.Marshal(data.AuthenticationSession)
-	log.Info("Post", "body", string(json))
+	log.Info("Post", "body", string(json)) // TODO: remove debug log query since it leaks tokens
 
 	render.Status(r, http.StatusOK) // TODO: we should probably do error checking above so we can return a 400 if something goes wrong
 	render.Render(w, r, h.NewAuthenticationSessionResponse(data))

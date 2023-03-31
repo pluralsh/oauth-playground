@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
+	rts "github.com/ory/keto/proto/ory/keto/relation_tuples/v1alpha2"
 	kratosClient "github.com/ory/kratos-client-go"
 )
 
@@ -106,6 +107,26 @@ func (h *Handler) Middleware() func(http.Handler) http.Handler {
 			// user.Username = strings.Replace(strings.Split(user.Email, "@")[0], ".", "-", -1)
 
 			user.IsAdmin = false
+
+			adminQuery := rts.RelationTuple{
+				Namespace: "Organization",
+				Object:    "main",
+				Relation:  "admins",
+				Subject: rts.NewSubjectSet(
+					"User",
+					resp.Identity.Id,
+					"",
+				),
+			}
+
+			isAdmin, err := h.C.KetoClient.Check(context.Background(), &adminQuery)
+			if err != nil {
+				log.Error(err, "Error when checking if user is admin")
+			}
+
+			log.Info("Admin check", "user", user.Email, "admin", isAdmin)
+			user.IsAdmin = isAdmin
+
 			// for _, adminEmail := range kubricksConfig.Spec.Admins {
 			// 	if adminEmail == email {
 			// 		user.IsAdmin = true

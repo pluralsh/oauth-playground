@@ -179,7 +179,7 @@ func (c *ClientWrapper) ListOrganizations(ctx context.Context) ([]*model.Organiz
 	query := rts.RelationQuery{
 		Namespace: px.Ptr("Organization"),
 		Object:    nil,
-		Relation:  px.Ptr("admins"),
+		Relation:  nil,
 		Subject:   nil,
 	}
 
