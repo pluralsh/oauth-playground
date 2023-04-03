@@ -28,10 +28,200 @@ type ObservabilityTenantLimits {
   tempo: TempoLimits
 }
 
+scalar Duration
+scalar FloatMap
+
 "Representation of the limits for Mimir for a tenant."
 type MimirLimits {
   requestRate: Float
 
+  requestBurstSize: Int
+	
+	ingestionRate: Float
+	
+	ingestionBurstSize: Int
+	
+	acceptHASamples: Boolean
+	
+	haClusterLabel: String
+	
+	haReplicaLabel: String
+	
+	haMaxClusters: Int
+	
+	dropLabels: [String]
+	
+	maxLabelNameLength: Int
+	
+	maxLabelValueLength: Int
+	
+	maxLabelNamesPerSeries: Int
+	
+	maxMetadataLength: Int
+	
+	creationGracePeriod: Duration
+	
+	enforceMetadataMetricName: Boolean
+	
+	ingestionTenantShardSize: Int
+	
+
+	
+	
+
+	
+	
+	
+	maxGlobalSeriesPerUser: Int
+	
+	maxGlobalSeriesPerMetric: Int
+	
+	
+	maxGlobalMetricsWithMetadataPerUser: Int
+	
+	maxGlobalMetadataPerMetric: Int
+	
+	
+	
+	maxGlobalExemplarsPerUser: Int
+	
+	
+	nativeHistogramsIngestionEnabled: Boolean
+	
+	
+	
+	
+	outOfOrderTimeWindow: Duration
+	
+	outOfOrderBlocksExternalLabelEnabled: Boolean
+	
+
+	
+	
+	separateMetricsGroupLabel: String
+
+	
+	
+	maxChunksPerQuery: Int
+	
+	maxFetchedSeriesPerQuery: Int
+	
+	maxFetchedChunkBytesPerQuery: Int
+	
+	maxQueryLookback: Duration
+	
+	maxPartialQueryLength: Duration
+	
+	maxQueryParallelism: Int
+	
+	maxLabelsQueryLength: Duration
+	
+	maxCacheFreshness: Duration
+	
+	maxQueriersPerTenant: Int
+	
+	queryShardingTotalShards: Int
+	
+	queryShardingMaxShardedQueries: Int
+	
+	queryShardingMaxRegexpSizeBytes: Int
+	
+	splitInstantQueriesByInterval: Duration
+
+	
+	
+	maxTotalQueryLength: Duration
+	
+	resultsCacheTTL: Duration
+	
+	resultsCacheTTLForOutOfOrderTimeWindow: Duration
+	
+	maxQueryExpressionSizeBytes: Int
+
+	
+	
+	cardinalityAnalysisEnabled: Boolean
+	
+	labelNamesAndValuesResultsMaxSizeBytes: Int
+	
+	labelValuesMaxCardinalityLabelNamesPerRequest: Int
+
+	
+	
+	rulerEvaluationDelay: Duration
+	
+	rulerTenantShardSize: Int
+	
+	rulerMaxRulesPerRuleGroup: Int
+	
+	rulerMaxRuleGroupsPerTenant: Int
+	
+	rulerRecordingRulesEvaluationEnabled: Boolean
+	
+	rulerAlertingRulesEvaluationEnabled: Boolean
+
+	
+	
+	storeGatewayTenantShardSize: Int
+
+	
+	
+	compactorBlocksRetentionPeriod: Duration
+	
+	compactorSplitAndMergeShards: Int
+	
+	compactorSplitGroups: Int
+	
+	compactorTenantShardSize: Int
+	
+	compactorPartialBlockDeletionDelay: Duration
+	
+	compactorBlockUploadEnabled: Boolean
+	
+	compactorBlockUploadValidationEnabled: Boolean
+	
+	compactorBlockUploadVerifyChunks: Boolean
+
+	
+	
+	
+	s3SSEType: String
+	
+	s3SSEKMSKeyID: String
+	
+	s3SSEKMSEncryptionContext: String
+
+	
+	
+	
+	alertmanagerReceiversBlockCIDRNetworks: String
+	
+	alertmanagerReceiversBlockPrivateAddresses: Boolean
+
+	
+	notificationRateLimit: Float
+	
+	notificationRateLimitPerIntegration: FloatMap
+
+	
+	alertmanagerMaxConfigSizeBytes: Int
+	
+	alertmanagerMaxTemplatesCount: Int
+	
+	alertmanagerMaxTemplateSizeBytes: Int
+	
+	alertmanagerMaxDispatcherAggregationGroups: Int
+	
+	alertmanagerMaxAlertsCount: Int
+	
+	alertmanagerMaxAlertsSizeBytes: Int
+
+	
+	forwardingEndpoInt: String
+	
+	forwardingDropOlderThan: Duration
+	
+	#forwardingRules: ForwardingRules # TODO: add forwarding rules
 }
 
 "Representation of the limits for Loki for a tenant."

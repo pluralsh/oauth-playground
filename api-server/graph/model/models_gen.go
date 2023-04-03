@@ -49,11 +49,6 @@ type LokiLimits struct {
 	RequestRate *float64 `json:"request_rate"`
 }
 
-// Representation of the limits for Mimir for a tenant.
-type MimirLimits struct {
-	RequestRate *float64 `json:"request_rate"`
-}
-
 // The first and last name of a user.
 type Name struct {
 	// The user's first name.

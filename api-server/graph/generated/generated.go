@@ -14,7 +14,9 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
+	"github.com/pluralsh/oauth-playground/api-server/graph/custom"
 	"github.com/pluralsh/oauth-playground/api-server/graph/model"
+	model1 "github.com/prometheus/common/model"
 	gqlparser "github.com/vektah/gqlparser/v2"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -71,7 +73,81 @@ type ComplexityRoot struct {
 	}
 
 	MimirLimits struct {
-		RequestRate func(childComplexity int) int
+		AcceptHASamples                               func(childComplexity int) int
+		AlertmanagerMaxAlertsCount                    func(childComplexity int) int
+		AlertmanagerMaxAlertsSizeBytes                func(childComplexity int) int
+		AlertmanagerMaxConfigSizeBytes                func(childComplexity int) int
+		AlertmanagerMaxDispatcherAggregationGroups    func(childComplexity int) int
+		AlertmanagerMaxTemplateSizeBytes              func(childComplexity int) int
+		AlertmanagerMaxTemplatesCount                 func(childComplexity int) int
+		AlertmanagerReceiversBlockCIDRNetworks        func(childComplexity int) int
+		AlertmanagerReceiversBlockPrivateAddresses    func(childComplexity int) int
+		CardinalityAnalysisEnabled                    func(childComplexity int) int
+		CompactorBlockUploadEnabled                   func(childComplexity int) int
+		CompactorBlockUploadValidationEnabled         func(childComplexity int) int
+		CompactorBlockUploadVerifyChunks              func(childComplexity int) int
+		CompactorBlocksRetentionPeriod                func(childComplexity int) int
+		CompactorPartialBlockDeletionDelay            func(childComplexity int) int
+		CompactorSplitAndMergeShards                  func(childComplexity int) int
+		CompactorSplitGroups                          func(childComplexity int) int
+		CompactorTenantShardSize                      func(childComplexity int) int
+		CreationGracePeriod                           func(childComplexity int) int
+		DropLabels                                    func(childComplexity int) int
+		EnforceMetadataMetricName                     func(childComplexity int) int
+		ForwardingDropOlderThan                       func(childComplexity int) int
+		ForwardingEndpoint                            func(childComplexity int) int
+		HAClusterLabel                                func(childComplexity int) int
+		HAMaxClusters                                 func(childComplexity int) int
+		HAReplicaLabel                                func(childComplexity int) int
+		IngestionBurstSize                            func(childComplexity int) int
+		IngestionRate                                 func(childComplexity int) int
+		IngestionTenantShardSize                      func(childComplexity int) int
+		LabelNamesAndValuesResultsMaxSizeBytes        func(childComplexity int) int
+		LabelValuesMaxCardinalityLabelNamesPerRequest func(childComplexity int) int
+		MaxCacheFreshness                             func(childComplexity int) int
+		MaxChunksPerQuery                             func(childComplexity int) int
+		MaxFetchedChunkBytesPerQuery                  func(childComplexity int) int
+		MaxFetchedSeriesPerQuery                      func(childComplexity int) int
+		MaxGlobalExemplarsPerUser                     func(childComplexity int) int
+		MaxGlobalMetadataPerMetric                    func(childComplexity int) int
+		MaxGlobalMetricsWithMetadataPerUser           func(childComplexity int) int
+		MaxGlobalSeriesPerMetric                      func(childComplexity int) int
+		MaxGlobalSeriesPerUser                        func(childComplexity int) int
+		MaxLabelNameLength                            func(childComplexity int) int
+		MaxLabelNamesPerSeries                        func(childComplexity int) int
+		MaxLabelValueLength                           func(childComplexity int) int
+		MaxLabelsQueryLength                          func(childComplexity int) int
+		MaxMetadataLength                             func(childComplexity int) int
+		MaxPartialQueryLength                         func(childComplexity int) int
+		MaxQueriersPerTenant                          func(childComplexity int) int
+		MaxQueryExpressionSizeBytes                   func(childComplexity int) int
+		MaxQueryLookback                              func(childComplexity int) int
+		MaxQueryParallelism                           func(childComplexity int) int
+		MaxTotalQueryLength                           func(childComplexity int) int
+		NativeHistogramsIngestionEnabled              func(childComplexity int) int
+		NotificationRateLimit                         func(childComplexity int) int
+		NotificationRateLimitPerIntegration           func(childComplexity int) int
+		OutOfOrderBlocksExternalLabelEnabled          func(childComplexity int) int
+		OutOfOrderTimeWindow                          func(childComplexity int) int
+		QueryShardingMaxRegexpSizeBytes               func(childComplexity int) int
+		QueryShardingMaxShardedQueries                func(childComplexity int) int
+		QueryShardingTotalShards                      func(childComplexity int) int
+		RequestBurstSize                              func(childComplexity int) int
+		RequestRate                                   func(childComplexity int) int
+		ResultsCacheTTL                               func(childComplexity int) int
+		ResultsCacheTTLForOutOfOrderTimeWindow        func(childComplexity int) int
+		RulerAlertingRulesEvaluationEnabled           func(childComplexity int) int
+		RulerEvaluationDelay                          func(childComplexity int) int
+		RulerMaxRuleGroupsPerTenant                   func(childComplexity int) int
+		RulerMaxRulesPerRuleGroup                     func(childComplexity int) int
+		RulerRecordingRulesEvaluationEnabled          func(childComplexity int) int
+		RulerTenantShardSize                          func(childComplexity int) int
+		S3SSEKMSEncryptionContext                     func(childComplexity int) int
+		S3SSEKMSKeyID                                 func(childComplexity int) int
+		S3SSEType                                     func(childComplexity int) int
+		SeparateMetricsGroupLabel                     func(childComplexity int) int
+		SplitInstantQueriesByInterval                 func(childComplexity int) int
+		StoreGatewayTenantShardSize                   func(childComplexity int) int
 	}
 
 	Mutation struct {
@@ -338,12 +414,530 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.LokiLimits.RequestRate(childComplexity), true
 
+	case "MimirLimits.acceptHASamples":
+		if e.complexity.MimirLimits.AcceptHASamples == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.AcceptHASamples(childComplexity), true
+
+	case "MimirLimits.alertmanagerMaxAlertsCount":
+		if e.complexity.MimirLimits.AlertmanagerMaxAlertsCount == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.AlertmanagerMaxAlertsCount(childComplexity), true
+
+	case "MimirLimits.alertmanagerMaxAlertsSizeBytes":
+		if e.complexity.MimirLimits.AlertmanagerMaxAlertsSizeBytes == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.AlertmanagerMaxAlertsSizeBytes(childComplexity), true
+
+	case "MimirLimits.alertmanagerMaxConfigSizeBytes":
+		if e.complexity.MimirLimits.AlertmanagerMaxConfigSizeBytes == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.AlertmanagerMaxConfigSizeBytes(childComplexity), true
+
+	case "MimirLimits.alertmanagerMaxDispatcherAggregationGroups":
+		if e.complexity.MimirLimits.AlertmanagerMaxDispatcherAggregationGroups == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.AlertmanagerMaxDispatcherAggregationGroups(childComplexity), true
+
+	case "MimirLimits.alertmanagerMaxTemplateSizeBytes":
+		if e.complexity.MimirLimits.AlertmanagerMaxTemplateSizeBytes == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.AlertmanagerMaxTemplateSizeBytes(childComplexity), true
+
+	case "MimirLimits.alertmanagerMaxTemplatesCount":
+		if e.complexity.MimirLimits.AlertmanagerMaxTemplatesCount == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.AlertmanagerMaxTemplatesCount(childComplexity), true
+
+	case "MimirLimits.alertmanagerReceiversBlockCIDRNetworks":
+		if e.complexity.MimirLimits.AlertmanagerReceiversBlockCIDRNetworks == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.AlertmanagerReceiversBlockCIDRNetworks(childComplexity), true
+
+	case "MimirLimits.alertmanagerReceiversBlockPrivateAddresses":
+		if e.complexity.MimirLimits.AlertmanagerReceiversBlockPrivateAddresses == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.AlertmanagerReceiversBlockPrivateAddresses(childComplexity), true
+
+	case "MimirLimits.cardinalityAnalysisEnabled":
+		if e.complexity.MimirLimits.CardinalityAnalysisEnabled == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.CardinalityAnalysisEnabled(childComplexity), true
+
+	case "MimirLimits.compactorBlockUploadEnabled":
+		if e.complexity.MimirLimits.CompactorBlockUploadEnabled == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.CompactorBlockUploadEnabled(childComplexity), true
+
+	case "MimirLimits.compactorBlockUploadValidationEnabled":
+		if e.complexity.MimirLimits.CompactorBlockUploadValidationEnabled == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.CompactorBlockUploadValidationEnabled(childComplexity), true
+
+	case "MimirLimits.compactorBlockUploadVerifyChunks":
+		if e.complexity.MimirLimits.CompactorBlockUploadVerifyChunks == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.CompactorBlockUploadVerifyChunks(childComplexity), true
+
+	case "MimirLimits.compactorBlocksRetentionPeriod":
+		if e.complexity.MimirLimits.CompactorBlocksRetentionPeriod == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.CompactorBlocksRetentionPeriod(childComplexity), true
+
+	case "MimirLimits.compactorPartialBlockDeletionDelay":
+		if e.complexity.MimirLimits.CompactorPartialBlockDeletionDelay == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.CompactorPartialBlockDeletionDelay(childComplexity), true
+
+	case "MimirLimits.compactorSplitAndMergeShards":
+		if e.complexity.MimirLimits.CompactorSplitAndMergeShards == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.CompactorSplitAndMergeShards(childComplexity), true
+
+	case "MimirLimits.compactorSplitGroups":
+		if e.complexity.MimirLimits.CompactorSplitGroups == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.CompactorSplitGroups(childComplexity), true
+
+	case "MimirLimits.compactorTenantShardSize":
+		if e.complexity.MimirLimits.CompactorTenantShardSize == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.CompactorTenantShardSize(childComplexity), true
+
+	case "MimirLimits.creationGracePeriod":
+		if e.complexity.MimirLimits.CreationGracePeriod == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.CreationGracePeriod(childComplexity), true
+
+	case "MimirLimits.dropLabels":
+		if e.complexity.MimirLimits.DropLabels == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.DropLabels(childComplexity), true
+
+	case "MimirLimits.enforceMetadataMetricName":
+		if e.complexity.MimirLimits.EnforceMetadataMetricName == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.EnforceMetadataMetricName(childComplexity), true
+
+	case "MimirLimits.forwardingDropOlderThan":
+		if e.complexity.MimirLimits.ForwardingDropOlderThan == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.ForwardingDropOlderThan(childComplexity), true
+
+	case "MimirLimits.forwardingEndpoInt":
+		if e.complexity.MimirLimits.ForwardingEndpoint == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.ForwardingEndpoint(childComplexity), true
+
+	case "MimirLimits.haClusterLabel":
+		if e.complexity.MimirLimits.HAClusterLabel == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.HAClusterLabel(childComplexity), true
+
+	case "MimirLimits.haMaxClusters":
+		if e.complexity.MimirLimits.HAMaxClusters == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.HAMaxClusters(childComplexity), true
+
+	case "MimirLimits.haReplicaLabel":
+		if e.complexity.MimirLimits.HAReplicaLabel == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.HAReplicaLabel(childComplexity), true
+
+	case "MimirLimits.ingestionBurstSize":
+		if e.complexity.MimirLimits.IngestionBurstSize == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.IngestionBurstSize(childComplexity), true
+
+	case "MimirLimits.ingestionRate":
+		if e.complexity.MimirLimits.IngestionRate == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.IngestionRate(childComplexity), true
+
+	case "MimirLimits.ingestionTenantShardSize":
+		if e.complexity.MimirLimits.IngestionTenantShardSize == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.IngestionTenantShardSize(childComplexity), true
+
+	case "MimirLimits.labelNamesAndValuesResultsMaxSizeBytes":
+		if e.complexity.MimirLimits.LabelNamesAndValuesResultsMaxSizeBytes == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.LabelNamesAndValuesResultsMaxSizeBytes(childComplexity), true
+
+	case "MimirLimits.labelValuesMaxCardinalityLabelNamesPerRequest":
+		if e.complexity.MimirLimits.LabelValuesMaxCardinalityLabelNamesPerRequest == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.LabelValuesMaxCardinalityLabelNamesPerRequest(childComplexity), true
+
+	case "MimirLimits.maxCacheFreshness":
+		if e.complexity.MimirLimits.MaxCacheFreshness == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.MaxCacheFreshness(childComplexity), true
+
+	case "MimirLimits.maxChunksPerQuery":
+		if e.complexity.MimirLimits.MaxChunksPerQuery == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.MaxChunksPerQuery(childComplexity), true
+
+	case "MimirLimits.maxFetchedChunkBytesPerQuery":
+		if e.complexity.MimirLimits.MaxFetchedChunkBytesPerQuery == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.MaxFetchedChunkBytesPerQuery(childComplexity), true
+
+	case "MimirLimits.maxFetchedSeriesPerQuery":
+		if e.complexity.MimirLimits.MaxFetchedSeriesPerQuery == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.MaxFetchedSeriesPerQuery(childComplexity), true
+
+	case "MimirLimits.maxGlobalExemplarsPerUser":
+		if e.complexity.MimirLimits.MaxGlobalExemplarsPerUser == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.MaxGlobalExemplarsPerUser(childComplexity), true
+
+	case "MimirLimits.maxGlobalMetadataPerMetric":
+		if e.complexity.MimirLimits.MaxGlobalMetadataPerMetric == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.MaxGlobalMetadataPerMetric(childComplexity), true
+
+	case "MimirLimits.maxGlobalMetricsWithMetadataPerUser":
+		if e.complexity.MimirLimits.MaxGlobalMetricsWithMetadataPerUser == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.MaxGlobalMetricsWithMetadataPerUser(childComplexity), true
+
+	case "MimirLimits.maxGlobalSeriesPerMetric":
+		if e.complexity.MimirLimits.MaxGlobalSeriesPerMetric == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.MaxGlobalSeriesPerMetric(childComplexity), true
+
+	case "MimirLimits.maxGlobalSeriesPerUser":
+		if e.complexity.MimirLimits.MaxGlobalSeriesPerUser == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.MaxGlobalSeriesPerUser(childComplexity), true
+
+	case "MimirLimits.maxLabelNameLength":
+		if e.complexity.MimirLimits.MaxLabelNameLength == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.MaxLabelNameLength(childComplexity), true
+
+	case "MimirLimits.maxLabelNamesPerSeries":
+		if e.complexity.MimirLimits.MaxLabelNamesPerSeries == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.MaxLabelNamesPerSeries(childComplexity), true
+
+	case "MimirLimits.maxLabelValueLength":
+		if e.complexity.MimirLimits.MaxLabelValueLength == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.MaxLabelValueLength(childComplexity), true
+
+	case "MimirLimits.maxLabelsQueryLength":
+		if e.complexity.MimirLimits.MaxLabelsQueryLength == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.MaxLabelsQueryLength(childComplexity), true
+
+	case "MimirLimits.maxMetadataLength":
+		if e.complexity.MimirLimits.MaxMetadataLength == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.MaxMetadataLength(childComplexity), true
+
+	case "MimirLimits.maxPartialQueryLength":
+		if e.complexity.MimirLimits.MaxPartialQueryLength == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.MaxPartialQueryLength(childComplexity), true
+
+	case "MimirLimits.maxQueriersPerTenant":
+		if e.complexity.MimirLimits.MaxQueriersPerTenant == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.MaxQueriersPerTenant(childComplexity), true
+
+	case "MimirLimits.maxQueryExpressionSizeBytes":
+		if e.complexity.MimirLimits.MaxQueryExpressionSizeBytes == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.MaxQueryExpressionSizeBytes(childComplexity), true
+
+	case "MimirLimits.maxQueryLookback":
+		if e.complexity.MimirLimits.MaxQueryLookback == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.MaxQueryLookback(childComplexity), true
+
+	case "MimirLimits.maxQueryParallelism":
+		if e.complexity.MimirLimits.MaxQueryParallelism == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.MaxQueryParallelism(childComplexity), true
+
+	case "MimirLimits.maxTotalQueryLength":
+		if e.complexity.MimirLimits.MaxTotalQueryLength == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.MaxTotalQueryLength(childComplexity), true
+
+	case "MimirLimits.nativeHistogramsIngestionEnabled":
+		if e.complexity.MimirLimits.NativeHistogramsIngestionEnabled == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.NativeHistogramsIngestionEnabled(childComplexity), true
+
+	case "MimirLimits.notificationRateLimit":
+		if e.complexity.MimirLimits.NotificationRateLimit == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.NotificationRateLimit(childComplexity), true
+
+	case "MimirLimits.notificationRateLimitPerIntegration":
+		if e.complexity.MimirLimits.NotificationRateLimitPerIntegration == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.NotificationRateLimitPerIntegration(childComplexity), true
+
+	case "MimirLimits.outOfOrderBlocksExternalLabelEnabled":
+		if e.complexity.MimirLimits.OutOfOrderBlocksExternalLabelEnabled == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.OutOfOrderBlocksExternalLabelEnabled(childComplexity), true
+
+	case "MimirLimits.outOfOrderTimeWindow":
+		if e.complexity.MimirLimits.OutOfOrderTimeWindow == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.OutOfOrderTimeWindow(childComplexity), true
+
+	case "MimirLimits.queryShardingMaxRegexpSizeBytes":
+		if e.complexity.MimirLimits.QueryShardingMaxRegexpSizeBytes == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.QueryShardingMaxRegexpSizeBytes(childComplexity), true
+
+	case "MimirLimits.queryShardingMaxShardedQueries":
+		if e.complexity.MimirLimits.QueryShardingMaxShardedQueries == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.QueryShardingMaxShardedQueries(childComplexity), true
+
+	case "MimirLimits.queryShardingTotalShards":
+		if e.complexity.MimirLimits.QueryShardingTotalShards == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.QueryShardingTotalShards(childComplexity), true
+
+	case "MimirLimits.requestBurstSize":
+		if e.complexity.MimirLimits.RequestBurstSize == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.RequestBurstSize(childComplexity), true
+
 	case "MimirLimits.requestRate":
 		if e.complexity.MimirLimits.RequestRate == nil {
 			break
 		}
 
 		return e.complexity.MimirLimits.RequestRate(childComplexity), true
+
+	case "MimirLimits.resultsCacheTTL":
+		if e.complexity.MimirLimits.ResultsCacheTTL == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.ResultsCacheTTL(childComplexity), true
+
+	case "MimirLimits.resultsCacheTTLForOutOfOrderTimeWindow":
+		if e.complexity.MimirLimits.ResultsCacheTTLForOutOfOrderTimeWindow == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.ResultsCacheTTLForOutOfOrderTimeWindow(childComplexity), true
+
+	case "MimirLimits.rulerAlertingRulesEvaluationEnabled":
+		if e.complexity.MimirLimits.RulerAlertingRulesEvaluationEnabled == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.RulerAlertingRulesEvaluationEnabled(childComplexity), true
+
+	case "MimirLimits.rulerEvaluationDelay":
+		if e.complexity.MimirLimits.RulerEvaluationDelay == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.RulerEvaluationDelay(childComplexity), true
+
+	case "MimirLimits.rulerMaxRuleGroupsPerTenant":
+		if e.complexity.MimirLimits.RulerMaxRuleGroupsPerTenant == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.RulerMaxRuleGroupsPerTenant(childComplexity), true
+
+	case "MimirLimits.rulerMaxRulesPerRuleGroup":
+		if e.complexity.MimirLimits.RulerMaxRulesPerRuleGroup == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.RulerMaxRulesPerRuleGroup(childComplexity), true
+
+	case "MimirLimits.rulerRecordingRulesEvaluationEnabled":
+		if e.complexity.MimirLimits.RulerRecordingRulesEvaluationEnabled == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.RulerRecordingRulesEvaluationEnabled(childComplexity), true
+
+	case "MimirLimits.rulerTenantShardSize":
+		if e.complexity.MimirLimits.RulerTenantShardSize == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.RulerTenantShardSize(childComplexity), true
+
+	case "MimirLimits.s3SSEKMSEncryptionContext":
+		if e.complexity.MimirLimits.S3SSEKMSEncryptionContext == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.S3SSEKMSEncryptionContext(childComplexity), true
+
+	case "MimirLimits.s3SSEKMSKeyID":
+		if e.complexity.MimirLimits.S3SSEKMSKeyID == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.S3SSEKMSKeyID(childComplexity), true
+
+	case "MimirLimits.s3SSEType":
+		if e.complexity.MimirLimits.S3SSEType == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.S3SSEType(childComplexity), true
+
+	case "MimirLimits.separateMetricsGroupLabel":
+		if e.complexity.MimirLimits.SeparateMetricsGroupLabel == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.SeparateMetricsGroupLabel(childComplexity), true
+
+	case "MimirLimits.splitInstantQueriesByInterval":
+		if e.complexity.MimirLimits.SplitInstantQueriesByInterval == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.SplitInstantQueriesByInterval(childComplexity), true
+
+	case "MimirLimits.storeGatewayTenantShardSize":
+		if e.complexity.MimirLimits.StoreGatewayTenantShardSize == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.StoreGatewayTenantShardSize(childComplexity), true
 
 	case "Mutation.acceptOAuth2ConsentRequest":
 		if e.complexity.Mutation.AcceptOAuth2ConsentRequest == nil {
@@ -1812,10 +2406,200 @@ type ObservabilityTenantLimits {
   tempo: TempoLimits
 }
 
+scalar Duration
+scalar FloatMap
+
 "Representation of the limits for Mimir for a tenant."
 type MimirLimits {
   requestRate: Float
 
+  requestBurstSize: Int
+	
+	ingestionRate: Float
+	
+	ingestionBurstSize: Int
+	
+	acceptHASamples: Boolean
+	
+	haClusterLabel: String
+	
+	haReplicaLabel: String
+	
+	haMaxClusters: Int
+	
+	dropLabels: [String]
+	
+	maxLabelNameLength: Int
+	
+	maxLabelValueLength: Int
+	
+	maxLabelNamesPerSeries: Int
+	
+	maxMetadataLength: Int
+	
+	creationGracePeriod: Duration
+	
+	enforceMetadataMetricName: Boolean
+	
+	ingestionTenantShardSize: Int
+	
+
+	
+	
+
+	
+	
+	
+	maxGlobalSeriesPerUser: Int
+	
+	maxGlobalSeriesPerMetric: Int
+	
+	
+	maxGlobalMetricsWithMetadataPerUser: Int
+	
+	maxGlobalMetadataPerMetric: Int
+	
+	
+	
+	maxGlobalExemplarsPerUser: Int
+	
+	
+	nativeHistogramsIngestionEnabled: Boolean
+	
+	
+	
+	
+	outOfOrderTimeWindow: Duration
+	
+	outOfOrderBlocksExternalLabelEnabled: Boolean
+	
+
+	
+	
+	separateMetricsGroupLabel: String
+
+	
+	
+	maxChunksPerQuery: Int
+	
+	maxFetchedSeriesPerQuery: Int
+	
+	maxFetchedChunkBytesPerQuery: Int
+	
+	maxQueryLookback: Duration
+	
+	maxPartialQueryLength: Duration
+	
+	maxQueryParallelism: Int
+	
+	maxLabelsQueryLength: Duration
+	
+	maxCacheFreshness: Duration
+	
+	maxQueriersPerTenant: Int
+	
+	queryShardingTotalShards: Int
+	
+	queryShardingMaxShardedQueries: Int
+	
+	queryShardingMaxRegexpSizeBytes: Int
+	
+	splitInstantQueriesByInterval: Duration
+
+	
+	
+	maxTotalQueryLength: Duration
+	
+	resultsCacheTTL: Duration
+	
+	resultsCacheTTLForOutOfOrderTimeWindow: Duration
+	
+	maxQueryExpressionSizeBytes: Int
+
+	
+	
+	cardinalityAnalysisEnabled: Boolean
+	
+	labelNamesAndValuesResultsMaxSizeBytes: Int
+	
+	labelValuesMaxCardinalityLabelNamesPerRequest: Int
+
+	
+	
+	rulerEvaluationDelay: Duration
+	
+	rulerTenantShardSize: Int
+	
+	rulerMaxRulesPerRuleGroup: Int
+	
+	rulerMaxRuleGroupsPerTenant: Int
+	
+	rulerRecordingRulesEvaluationEnabled: Boolean
+	
+	rulerAlertingRulesEvaluationEnabled: Boolean
+
+	
+	
+	storeGatewayTenantShardSize: Int
+
+	
+	
+	compactorBlocksRetentionPeriod: Duration
+	
+	compactorSplitAndMergeShards: Int
+	
+	compactorSplitGroups: Int
+	
+	compactorTenantShardSize: Int
+	
+	compactorPartialBlockDeletionDelay: Duration
+	
+	compactorBlockUploadEnabled: Boolean
+	
+	compactorBlockUploadValidationEnabled: Boolean
+	
+	compactorBlockUploadVerifyChunks: Boolean
+
+	
+	
+	
+	s3SSEType: String
+	
+	s3SSEKMSKeyID: String
+	
+	s3SSEKMSEncryptionContext: String
+
+	
+	
+	
+	alertmanagerReceiversBlockCIDRNetworks: String
+	
+	alertmanagerReceiversBlockPrivateAddresses: Boolean
+
+	
+	notificationRateLimit: Float
+	
+	notificationRateLimitPerIntegration: FloatMap
+
+	
+	alertmanagerMaxConfigSizeBytes: Int
+	
+	alertmanagerMaxTemplatesCount: Int
+	
+	alertmanagerMaxTemplateSizeBytes: Int
+	
+	alertmanagerMaxDispatcherAggregationGroups: Int
+	
+	alertmanagerMaxAlertsCount: Int
+	
+	alertmanagerMaxAlertsSizeBytes: Int
+
+	
+	forwardingEndpoInt: String
+	
+	forwardingDropOlderThan: Duration
+	
+	#forwardingRules: ForwardingRules # TODO: add forwarding rules
 }
 
 "Representation of the limits for Loki for a tenant."
@@ -3419,9 +4203,9 @@ func (ec *executionContext) _MimirLimits_requestRate(ctx context.Context, field 
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*float64)
+	res := resTmp.(float64)
 	fc.Result = res
-	return ec.marshalOFloat2ᚖfloat64(ctx, field.Selections, res)
+	return ec.marshalOFloat2float64(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_MimirLimits_requestRate(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3432,6 +4216,2818 @@ func (ec *executionContext) fieldContext_MimirLimits_requestRate(ctx context.Con
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type Float does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_requestBurstSize(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_requestBurstSize(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.RequestBurstSize, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalOInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_requestBurstSize(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_ingestionRate(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_ingestionRate(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.IngestionRate, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(float64)
+	fc.Result = res
+	return ec.marshalOFloat2float64(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_ingestionRate(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Float does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_ingestionBurstSize(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_ingestionBurstSize(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.IngestionBurstSize, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalOInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_ingestionBurstSize(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_acceptHASamples(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_acceptHASamples(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.AcceptHASamples, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalOBoolean2bool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_acceptHASamples(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_haClusterLabel(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_haClusterLabel(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.HAClusterLabel, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalOString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_haClusterLabel(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_haReplicaLabel(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_haReplicaLabel(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.HAReplicaLabel, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalOString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_haReplicaLabel(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_haMaxClusters(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_haMaxClusters(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.HAMaxClusters, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalOInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_haMaxClusters(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_dropLabels(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_dropLabels(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.DropLabels, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]string)
+	fc.Result = res
+	return ec.marshalOString2ᚕstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_dropLabels(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_maxLabelNameLength(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_maxLabelNameLength(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.MaxLabelNameLength, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalOInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_maxLabelNameLength(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_maxLabelValueLength(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_maxLabelValueLength(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.MaxLabelValueLength, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalOInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_maxLabelValueLength(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_maxLabelNamesPerSeries(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_maxLabelNamesPerSeries(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.MaxLabelNamesPerSeries, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalOInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_maxLabelNamesPerSeries(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_maxMetadataLength(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_maxMetadataLength(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.MaxMetadataLength, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalOInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_maxMetadataLength(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_creationGracePeriod(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_creationGracePeriod(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CreationGracePeriod, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(model1.Duration)
+	fc.Result = res
+	return ec.marshalODuration2githubᚗcomᚋprometheusᚋcommonᚋmodelᚐDuration(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_creationGracePeriod(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Duration does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_enforceMetadataMetricName(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_enforceMetadataMetricName(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.EnforceMetadataMetricName, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalOBoolean2bool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_enforceMetadataMetricName(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_ingestionTenantShardSize(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_ingestionTenantShardSize(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.IngestionTenantShardSize, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalOInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_ingestionTenantShardSize(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_maxGlobalSeriesPerUser(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_maxGlobalSeriesPerUser(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.MaxGlobalSeriesPerUser, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalOInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_maxGlobalSeriesPerUser(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_maxGlobalSeriesPerMetric(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_maxGlobalSeriesPerMetric(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.MaxGlobalSeriesPerMetric, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalOInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_maxGlobalSeriesPerMetric(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_maxGlobalMetricsWithMetadataPerUser(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_maxGlobalMetricsWithMetadataPerUser(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.MaxGlobalMetricsWithMetadataPerUser, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalOInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_maxGlobalMetricsWithMetadataPerUser(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_maxGlobalMetadataPerMetric(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_maxGlobalMetadataPerMetric(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.MaxGlobalMetadataPerMetric, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalOInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_maxGlobalMetadataPerMetric(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_maxGlobalExemplarsPerUser(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_maxGlobalExemplarsPerUser(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.MaxGlobalExemplarsPerUser, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalOInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_maxGlobalExemplarsPerUser(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_nativeHistogramsIngestionEnabled(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_nativeHistogramsIngestionEnabled(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.NativeHistogramsIngestionEnabled, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalOBoolean2bool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_nativeHistogramsIngestionEnabled(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_outOfOrderTimeWindow(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_outOfOrderTimeWindow(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.OutOfOrderTimeWindow, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(model1.Duration)
+	fc.Result = res
+	return ec.marshalODuration2githubᚗcomᚋprometheusᚋcommonᚋmodelᚐDuration(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_outOfOrderTimeWindow(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Duration does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_outOfOrderBlocksExternalLabelEnabled(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_outOfOrderBlocksExternalLabelEnabled(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.OutOfOrderBlocksExternalLabelEnabled, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalOBoolean2bool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_outOfOrderBlocksExternalLabelEnabled(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_separateMetricsGroupLabel(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_separateMetricsGroupLabel(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.SeparateMetricsGroupLabel, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalOString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_separateMetricsGroupLabel(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_maxChunksPerQuery(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_maxChunksPerQuery(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.MaxChunksPerQuery, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalOInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_maxChunksPerQuery(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_maxFetchedSeriesPerQuery(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_maxFetchedSeriesPerQuery(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.MaxFetchedSeriesPerQuery, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalOInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_maxFetchedSeriesPerQuery(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_maxFetchedChunkBytesPerQuery(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_maxFetchedChunkBytesPerQuery(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.MaxFetchedChunkBytesPerQuery, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalOInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_maxFetchedChunkBytesPerQuery(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_maxQueryLookback(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_maxQueryLookback(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.MaxQueryLookback, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(model1.Duration)
+	fc.Result = res
+	return ec.marshalODuration2githubᚗcomᚋprometheusᚋcommonᚋmodelᚐDuration(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_maxQueryLookback(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Duration does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_maxPartialQueryLength(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_maxPartialQueryLength(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.MaxPartialQueryLength, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(model1.Duration)
+	fc.Result = res
+	return ec.marshalODuration2githubᚗcomᚋprometheusᚋcommonᚋmodelᚐDuration(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_maxPartialQueryLength(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Duration does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_maxQueryParallelism(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_maxQueryParallelism(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.MaxQueryParallelism, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalOInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_maxQueryParallelism(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_maxLabelsQueryLength(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_maxLabelsQueryLength(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.MaxLabelsQueryLength, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(model1.Duration)
+	fc.Result = res
+	return ec.marshalODuration2githubᚗcomᚋprometheusᚋcommonᚋmodelᚐDuration(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_maxLabelsQueryLength(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Duration does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_maxCacheFreshness(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_maxCacheFreshness(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.MaxCacheFreshness, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(model1.Duration)
+	fc.Result = res
+	return ec.marshalODuration2githubᚗcomᚋprometheusᚋcommonᚋmodelᚐDuration(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_maxCacheFreshness(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Duration does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_maxQueriersPerTenant(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_maxQueriersPerTenant(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.MaxQueriersPerTenant, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalOInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_maxQueriersPerTenant(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_queryShardingTotalShards(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_queryShardingTotalShards(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.QueryShardingTotalShards, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalOInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_queryShardingTotalShards(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_queryShardingMaxShardedQueries(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_queryShardingMaxShardedQueries(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.QueryShardingMaxShardedQueries, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalOInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_queryShardingMaxShardedQueries(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_queryShardingMaxRegexpSizeBytes(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_queryShardingMaxRegexpSizeBytes(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.QueryShardingMaxRegexpSizeBytes, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalOInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_queryShardingMaxRegexpSizeBytes(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_splitInstantQueriesByInterval(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_splitInstantQueriesByInterval(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.SplitInstantQueriesByInterval, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(model1.Duration)
+	fc.Result = res
+	return ec.marshalODuration2githubᚗcomᚋprometheusᚋcommonᚋmodelᚐDuration(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_splitInstantQueriesByInterval(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Duration does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_maxTotalQueryLength(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_maxTotalQueryLength(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.MaxTotalQueryLength, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(model1.Duration)
+	fc.Result = res
+	return ec.marshalODuration2githubᚗcomᚋprometheusᚋcommonᚋmodelᚐDuration(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_maxTotalQueryLength(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Duration does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_resultsCacheTTL(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_resultsCacheTTL(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ResultsCacheTTL, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(model1.Duration)
+	fc.Result = res
+	return ec.marshalODuration2githubᚗcomᚋprometheusᚋcommonᚋmodelᚐDuration(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_resultsCacheTTL(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Duration does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_resultsCacheTTLForOutOfOrderTimeWindow(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_resultsCacheTTLForOutOfOrderTimeWindow(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ResultsCacheTTLForOutOfOrderTimeWindow, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(model1.Duration)
+	fc.Result = res
+	return ec.marshalODuration2githubᚗcomᚋprometheusᚋcommonᚋmodelᚐDuration(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_resultsCacheTTLForOutOfOrderTimeWindow(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Duration does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_maxQueryExpressionSizeBytes(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_maxQueryExpressionSizeBytes(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.MaxQueryExpressionSizeBytes, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalOInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_maxQueryExpressionSizeBytes(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_cardinalityAnalysisEnabled(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_cardinalityAnalysisEnabled(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CardinalityAnalysisEnabled, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalOBoolean2bool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_cardinalityAnalysisEnabled(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_labelNamesAndValuesResultsMaxSizeBytes(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_labelNamesAndValuesResultsMaxSizeBytes(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.LabelNamesAndValuesResultsMaxSizeBytes, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalOInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_labelNamesAndValuesResultsMaxSizeBytes(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_labelValuesMaxCardinalityLabelNamesPerRequest(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_labelValuesMaxCardinalityLabelNamesPerRequest(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.LabelValuesMaxCardinalityLabelNamesPerRequest, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalOInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_labelValuesMaxCardinalityLabelNamesPerRequest(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_rulerEvaluationDelay(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_rulerEvaluationDelay(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.RulerEvaluationDelay, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(model1.Duration)
+	fc.Result = res
+	return ec.marshalODuration2githubᚗcomᚋprometheusᚋcommonᚋmodelᚐDuration(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_rulerEvaluationDelay(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Duration does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_rulerTenantShardSize(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_rulerTenantShardSize(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.RulerTenantShardSize, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalOInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_rulerTenantShardSize(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_rulerMaxRulesPerRuleGroup(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_rulerMaxRulesPerRuleGroup(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.RulerMaxRulesPerRuleGroup, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalOInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_rulerMaxRulesPerRuleGroup(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_rulerMaxRuleGroupsPerTenant(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_rulerMaxRuleGroupsPerTenant(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.RulerMaxRuleGroupsPerTenant, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalOInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_rulerMaxRuleGroupsPerTenant(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_rulerRecordingRulesEvaluationEnabled(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_rulerRecordingRulesEvaluationEnabled(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.RulerRecordingRulesEvaluationEnabled, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalOBoolean2bool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_rulerRecordingRulesEvaluationEnabled(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_rulerAlertingRulesEvaluationEnabled(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_rulerAlertingRulesEvaluationEnabled(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.RulerAlertingRulesEvaluationEnabled, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalOBoolean2bool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_rulerAlertingRulesEvaluationEnabled(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_storeGatewayTenantShardSize(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_storeGatewayTenantShardSize(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.StoreGatewayTenantShardSize, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalOInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_storeGatewayTenantShardSize(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_compactorBlocksRetentionPeriod(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_compactorBlocksRetentionPeriod(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CompactorBlocksRetentionPeriod, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(model1.Duration)
+	fc.Result = res
+	return ec.marshalODuration2githubᚗcomᚋprometheusᚋcommonᚋmodelᚐDuration(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_compactorBlocksRetentionPeriod(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Duration does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_compactorSplitAndMergeShards(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_compactorSplitAndMergeShards(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CompactorSplitAndMergeShards, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalOInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_compactorSplitAndMergeShards(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_compactorSplitGroups(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_compactorSplitGroups(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CompactorSplitGroups, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalOInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_compactorSplitGroups(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_compactorTenantShardSize(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_compactorTenantShardSize(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CompactorTenantShardSize, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalOInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_compactorTenantShardSize(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_compactorPartialBlockDeletionDelay(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_compactorPartialBlockDeletionDelay(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CompactorPartialBlockDeletionDelay, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(model1.Duration)
+	fc.Result = res
+	return ec.marshalODuration2githubᚗcomᚋprometheusᚋcommonᚋmodelᚐDuration(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_compactorPartialBlockDeletionDelay(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Duration does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_compactorBlockUploadEnabled(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_compactorBlockUploadEnabled(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CompactorBlockUploadEnabled, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalOBoolean2bool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_compactorBlockUploadEnabled(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_compactorBlockUploadValidationEnabled(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_compactorBlockUploadValidationEnabled(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CompactorBlockUploadValidationEnabled, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalOBoolean2bool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_compactorBlockUploadValidationEnabled(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_compactorBlockUploadVerifyChunks(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_compactorBlockUploadVerifyChunks(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CompactorBlockUploadVerifyChunks, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalOBoolean2bool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_compactorBlockUploadVerifyChunks(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_s3SSEType(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_s3SSEType(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.S3SSEType, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalOString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_s3SSEType(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_s3SSEKMSKeyID(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_s3SSEKMSKeyID(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.S3SSEKMSKeyID, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalOString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_s3SSEKMSKeyID(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_s3SSEKMSEncryptionContext(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_s3SSEKMSEncryptionContext(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.S3SSEKMSEncryptionContext, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalOString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_s3SSEKMSEncryptionContext(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_alertmanagerReceiversBlockCIDRNetworks(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_alertmanagerReceiversBlockCIDRNetworks(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.AlertmanagerReceiversBlockCIDRNetworks, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalOString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_alertmanagerReceiversBlockCIDRNetworks(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_alertmanagerReceiversBlockPrivateAddresses(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_alertmanagerReceiversBlockPrivateAddresses(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.AlertmanagerReceiversBlockPrivateAddresses, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalOBoolean2bool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_alertmanagerReceiversBlockPrivateAddresses(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_notificationRateLimit(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_notificationRateLimit(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.NotificationRateLimit, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(float64)
+	fc.Result = res
+	return ec.marshalOFloat2float64(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_notificationRateLimit(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Float does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_notificationRateLimitPerIntegration(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_notificationRateLimitPerIntegration(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.NotificationRateLimitPerIntegration, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(map[string]float64)
+	fc.Result = res
+	return ec.marshalOFloatMap2map(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_notificationRateLimitPerIntegration(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type FloatMap does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_alertmanagerMaxConfigSizeBytes(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_alertmanagerMaxConfigSizeBytes(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.AlertmanagerMaxConfigSizeBytes, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalOInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_alertmanagerMaxConfigSizeBytes(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_alertmanagerMaxTemplatesCount(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_alertmanagerMaxTemplatesCount(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.AlertmanagerMaxTemplatesCount, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalOInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_alertmanagerMaxTemplatesCount(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_alertmanagerMaxTemplateSizeBytes(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_alertmanagerMaxTemplateSizeBytes(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.AlertmanagerMaxTemplateSizeBytes, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalOInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_alertmanagerMaxTemplateSizeBytes(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_alertmanagerMaxDispatcherAggregationGroups(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_alertmanagerMaxDispatcherAggregationGroups(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.AlertmanagerMaxDispatcherAggregationGroups, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalOInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_alertmanagerMaxDispatcherAggregationGroups(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_alertmanagerMaxAlertsCount(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_alertmanagerMaxAlertsCount(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.AlertmanagerMaxAlertsCount, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalOInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_alertmanagerMaxAlertsCount(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_alertmanagerMaxAlertsSizeBytes(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_alertmanagerMaxAlertsSizeBytes(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.AlertmanagerMaxAlertsSizeBytes, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalOInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_alertmanagerMaxAlertsSizeBytes(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_forwardingEndpoInt(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_forwardingEndpoInt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ForwardingEndpoint, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalOString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_forwardingEndpoInt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_forwardingDropOlderThan(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_forwardingDropOlderThan(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ForwardingDropOlderThan, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(model1.Duration)
+	fc.Result = res
+	return ec.marshalODuration2githubᚗcomᚋprometheusᚋcommonᚋmodelᚐDuration(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_forwardingDropOlderThan(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Duration does not have child fields")
 		},
 	}
 	return fc, nil
@@ -7293,6 +10889,154 @@ func (ec *executionContext) fieldContext_ObservabilityTenantLimits_mimir(ctx con
 			switch field.Name {
 			case "requestRate":
 				return ec.fieldContext_MimirLimits_requestRate(ctx, field)
+			case "requestBurstSize":
+				return ec.fieldContext_MimirLimits_requestBurstSize(ctx, field)
+			case "ingestionRate":
+				return ec.fieldContext_MimirLimits_ingestionRate(ctx, field)
+			case "ingestionBurstSize":
+				return ec.fieldContext_MimirLimits_ingestionBurstSize(ctx, field)
+			case "acceptHASamples":
+				return ec.fieldContext_MimirLimits_acceptHASamples(ctx, field)
+			case "haClusterLabel":
+				return ec.fieldContext_MimirLimits_haClusterLabel(ctx, field)
+			case "haReplicaLabel":
+				return ec.fieldContext_MimirLimits_haReplicaLabel(ctx, field)
+			case "haMaxClusters":
+				return ec.fieldContext_MimirLimits_haMaxClusters(ctx, field)
+			case "dropLabels":
+				return ec.fieldContext_MimirLimits_dropLabels(ctx, field)
+			case "maxLabelNameLength":
+				return ec.fieldContext_MimirLimits_maxLabelNameLength(ctx, field)
+			case "maxLabelValueLength":
+				return ec.fieldContext_MimirLimits_maxLabelValueLength(ctx, field)
+			case "maxLabelNamesPerSeries":
+				return ec.fieldContext_MimirLimits_maxLabelNamesPerSeries(ctx, field)
+			case "maxMetadataLength":
+				return ec.fieldContext_MimirLimits_maxMetadataLength(ctx, field)
+			case "creationGracePeriod":
+				return ec.fieldContext_MimirLimits_creationGracePeriod(ctx, field)
+			case "enforceMetadataMetricName":
+				return ec.fieldContext_MimirLimits_enforceMetadataMetricName(ctx, field)
+			case "ingestionTenantShardSize":
+				return ec.fieldContext_MimirLimits_ingestionTenantShardSize(ctx, field)
+			case "maxGlobalSeriesPerUser":
+				return ec.fieldContext_MimirLimits_maxGlobalSeriesPerUser(ctx, field)
+			case "maxGlobalSeriesPerMetric":
+				return ec.fieldContext_MimirLimits_maxGlobalSeriesPerMetric(ctx, field)
+			case "maxGlobalMetricsWithMetadataPerUser":
+				return ec.fieldContext_MimirLimits_maxGlobalMetricsWithMetadataPerUser(ctx, field)
+			case "maxGlobalMetadataPerMetric":
+				return ec.fieldContext_MimirLimits_maxGlobalMetadataPerMetric(ctx, field)
+			case "maxGlobalExemplarsPerUser":
+				return ec.fieldContext_MimirLimits_maxGlobalExemplarsPerUser(ctx, field)
+			case "nativeHistogramsIngestionEnabled":
+				return ec.fieldContext_MimirLimits_nativeHistogramsIngestionEnabled(ctx, field)
+			case "outOfOrderTimeWindow":
+				return ec.fieldContext_MimirLimits_outOfOrderTimeWindow(ctx, field)
+			case "outOfOrderBlocksExternalLabelEnabled":
+				return ec.fieldContext_MimirLimits_outOfOrderBlocksExternalLabelEnabled(ctx, field)
+			case "separateMetricsGroupLabel":
+				return ec.fieldContext_MimirLimits_separateMetricsGroupLabel(ctx, field)
+			case "maxChunksPerQuery":
+				return ec.fieldContext_MimirLimits_maxChunksPerQuery(ctx, field)
+			case "maxFetchedSeriesPerQuery":
+				return ec.fieldContext_MimirLimits_maxFetchedSeriesPerQuery(ctx, field)
+			case "maxFetchedChunkBytesPerQuery":
+				return ec.fieldContext_MimirLimits_maxFetchedChunkBytesPerQuery(ctx, field)
+			case "maxQueryLookback":
+				return ec.fieldContext_MimirLimits_maxQueryLookback(ctx, field)
+			case "maxPartialQueryLength":
+				return ec.fieldContext_MimirLimits_maxPartialQueryLength(ctx, field)
+			case "maxQueryParallelism":
+				return ec.fieldContext_MimirLimits_maxQueryParallelism(ctx, field)
+			case "maxLabelsQueryLength":
+				return ec.fieldContext_MimirLimits_maxLabelsQueryLength(ctx, field)
+			case "maxCacheFreshness":
+				return ec.fieldContext_MimirLimits_maxCacheFreshness(ctx, field)
+			case "maxQueriersPerTenant":
+				return ec.fieldContext_MimirLimits_maxQueriersPerTenant(ctx, field)
+			case "queryShardingTotalShards":
+				return ec.fieldContext_MimirLimits_queryShardingTotalShards(ctx, field)
+			case "queryShardingMaxShardedQueries":
+				return ec.fieldContext_MimirLimits_queryShardingMaxShardedQueries(ctx, field)
+			case "queryShardingMaxRegexpSizeBytes":
+				return ec.fieldContext_MimirLimits_queryShardingMaxRegexpSizeBytes(ctx, field)
+			case "splitInstantQueriesByInterval":
+				return ec.fieldContext_MimirLimits_splitInstantQueriesByInterval(ctx, field)
+			case "maxTotalQueryLength":
+				return ec.fieldContext_MimirLimits_maxTotalQueryLength(ctx, field)
+			case "resultsCacheTTL":
+				return ec.fieldContext_MimirLimits_resultsCacheTTL(ctx, field)
+			case "resultsCacheTTLForOutOfOrderTimeWindow":
+				return ec.fieldContext_MimirLimits_resultsCacheTTLForOutOfOrderTimeWindow(ctx, field)
+			case "maxQueryExpressionSizeBytes":
+				return ec.fieldContext_MimirLimits_maxQueryExpressionSizeBytes(ctx, field)
+			case "cardinalityAnalysisEnabled":
+				return ec.fieldContext_MimirLimits_cardinalityAnalysisEnabled(ctx, field)
+			case "labelNamesAndValuesResultsMaxSizeBytes":
+				return ec.fieldContext_MimirLimits_labelNamesAndValuesResultsMaxSizeBytes(ctx, field)
+			case "labelValuesMaxCardinalityLabelNamesPerRequest":
+				return ec.fieldContext_MimirLimits_labelValuesMaxCardinalityLabelNamesPerRequest(ctx, field)
+			case "rulerEvaluationDelay":
+				return ec.fieldContext_MimirLimits_rulerEvaluationDelay(ctx, field)
+			case "rulerTenantShardSize":
+				return ec.fieldContext_MimirLimits_rulerTenantShardSize(ctx, field)
+			case "rulerMaxRulesPerRuleGroup":
+				return ec.fieldContext_MimirLimits_rulerMaxRulesPerRuleGroup(ctx, field)
+			case "rulerMaxRuleGroupsPerTenant":
+				return ec.fieldContext_MimirLimits_rulerMaxRuleGroupsPerTenant(ctx, field)
+			case "rulerRecordingRulesEvaluationEnabled":
+				return ec.fieldContext_MimirLimits_rulerRecordingRulesEvaluationEnabled(ctx, field)
+			case "rulerAlertingRulesEvaluationEnabled":
+				return ec.fieldContext_MimirLimits_rulerAlertingRulesEvaluationEnabled(ctx, field)
+			case "storeGatewayTenantShardSize":
+				return ec.fieldContext_MimirLimits_storeGatewayTenantShardSize(ctx, field)
+			case "compactorBlocksRetentionPeriod":
+				return ec.fieldContext_MimirLimits_compactorBlocksRetentionPeriod(ctx, field)
+			case "compactorSplitAndMergeShards":
+				return ec.fieldContext_MimirLimits_compactorSplitAndMergeShards(ctx, field)
+			case "compactorSplitGroups":
+				return ec.fieldContext_MimirLimits_compactorSplitGroups(ctx, field)
+			case "compactorTenantShardSize":
+				return ec.fieldContext_MimirLimits_compactorTenantShardSize(ctx, field)
+			case "compactorPartialBlockDeletionDelay":
+				return ec.fieldContext_MimirLimits_compactorPartialBlockDeletionDelay(ctx, field)
+			case "compactorBlockUploadEnabled":
+				return ec.fieldContext_MimirLimits_compactorBlockUploadEnabled(ctx, field)
+			case "compactorBlockUploadValidationEnabled":
+				return ec.fieldContext_MimirLimits_compactorBlockUploadValidationEnabled(ctx, field)
+			case "compactorBlockUploadVerifyChunks":
+				return ec.fieldContext_MimirLimits_compactorBlockUploadVerifyChunks(ctx, field)
+			case "s3SSEType":
+				return ec.fieldContext_MimirLimits_s3SSEType(ctx, field)
+			case "s3SSEKMSKeyID":
+				return ec.fieldContext_MimirLimits_s3SSEKMSKeyID(ctx, field)
+			case "s3SSEKMSEncryptionContext":
+				return ec.fieldContext_MimirLimits_s3SSEKMSEncryptionContext(ctx, field)
+			case "alertmanagerReceiversBlockCIDRNetworks":
+				return ec.fieldContext_MimirLimits_alertmanagerReceiversBlockCIDRNetworks(ctx, field)
+			case "alertmanagerReceiversBlockPrivateAddresses":
+				return ec.fieldContext_MimirLimits_alertmanagerReceiversBlockPrivateAddresses(ctx, field)
+			case "notificationRateLimit":
+				return ec.fieldContext_MimirLimits_notificationRateLimit(ctx, field)
+			case "notificationRateLimitPerIntegration":
+				return ec.fieldContext_MimirLimits_notificationRateLimitPerIntegration(ctx, field)
+			case "alertmanagerMaxConfigSizeBytes":
+				return ec.fieldContext_MimirLimits_alertmanagerMaxConfigSizeBytes(ctx, field)
+			case "alertmanagerMaxTemplatesCount":
+				return ec.fieldContext_MimirLimits_alertmanagerMaxTemplatesCount(ctx, field)
+			case "alertmanagerMaxTemplateSizeBytes":
+				return ec.fieldContext_MimirLimits_alertmanagerMaxTemplateSizeBytes(ctx, field)
+			case "alertmanagerMaxDispatcherAggregationGroups":
+				return ec.fieldContext_MimirLimits_alertmanagerMaxDispatcherAggregationGroups(ctx, field)
+			case "alertmanagerMaxAlertsCount":
+				return ec.fieldContext_MimirLimits_alertmanagerMaxAlertsCount(ctx, field)
+			case "alertmanagerMaxAlertsSizeBytes":
+				return ec.fieldContext_MimirLimits_alertmanagerMaxAlertsSizeBytes(ctx, field)
+			case "forwardingEndpoInt":
+				return ec.fieldContext_MimirLimits_forwardingEndpoInt(ctx, field)
+			case "forwardingDropOlderThan":
+				return ec.fieldContext_MimirLimits_forwardingDropOlderThan(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type MimirLimits", field.Name)
 		},
@@ -11297,6 +15041,302 @@ func (ec *executionContext) _MimirLimits(ctx context.Context, sel ast.SelectionS
 
 			out.Values[i] = ec._MimirLimits_requestRate(ctx, field, obj)
 
+		case "requestBurstSize":
+
+			out.Values[i] = ec._MimirLimits_requestBurstSize(ctx, field, obj)
+
+		case "ingestionRate":
+
+			out.Values[i] = ec._MimirLimits_ingestionRate(ctx, field, obj)
+
+		case "ingestionBurstSize":
+
+			out.Values[i] = ec._MimirLimits_ingestionBurstSize(ctx, field, obj)
+
+		case "acceptHASamples":
+
+			out.Values[i] = ec._MimirLimits_acceptHASamples(ctx, field, obj)
+
+		case "haClusterLabel":
+
+			out.Values[i] = ec._MimirLimits_haClusterLabel(ctx, field, obj)
+
+		case "haReplicaLabel":
+
+			out.Values[i] = ec._MimirLimits_haReplicaLabel(ctx, field, obj)
+
+		case "haMaxClusters":
+
+			out.Values[i] = ec._MimirLimits_haMaxClusters(ctx, field, obj)
+
+		case "dropLabels":
+
+			out.Values[i] = ec._MimirLimits_dropLabels(ctx, field, obj)
+
+		case "maxLabelNameLength":
+
+			out.Values[i] = ec._MimirLimits_maxLabelNameLength(ctx, field, obj)
+
+		case "maxLabelValueLength":
+
+			out.Values[i] = ec._MimirLimits_maxLabelValueLength(ctx, field, obj)
+
+		case "maxLabelNamesPerSeries":
+
+			out.Values[i] = ec._MimirLimits_maxLabelNamesPerSeries(ctx, field, obj)
+
+		case "maxMetadataLength":
+
+			out.Values[i] = ec._MimirLimits_maxMetadataLength(ctx, field, obj)
+
+		case "creationGracePeriod":
+
+			out.Values[i] = ec._MimirLimits_creationGracePeriod(ctx, field, obj)
+
+		case "enforceMetadataMetricName":
+
+			out.Values[i] = ec._MimirLimits_enforceMetadataMetricName(ctx, field, obj)
+
+		case "ingestionTenantShardSize":
+
+			out.Values[i] = ec._MimirLimits_ingestionTenantShardSize(ctx, field, obj)
+
+		case "maxGlobalSeriesPerUser":
+
+			out.Values[i] = ec._MimirLimits_maxGlobalSeriesPerUser(ctx, field, obj)
+
+		case "maxGlobalSeriesPerMetric":
+
+			out.Values[i] = ec._MimirLimits_maxGlobalSeriesPerMetric(ctx, field, obj)
+
+		case "maxGlobalMetricsWithMetadataPerUser":
+
+			out.Values[i] = ec._MimirLimits_maxGlobalMetricsWithMetadataPerUser(ctx, field, obj)
+
+		case "maxGlobalMetadataPerMetric":
+
+			out.Values[i] = ec._MimirLimits_maxGlobalMetadataPerMetric(ctx, field, obj)
+
+		case "maxGlobalExemplarsPerUser":
+
+			out.Values[i] = ec._MimirLimits_maxGlobalExemplarsPerUser(ctx, field, obj)
+
+		case "nativeHistogramsIngestionEnabled":
+
+			out.Values[i] = ec._MimirLimits_nativeHistogramsIngestionEnabled(ctx, field, obj)
+
+		case "outOfOrderTimeWindow":
+
+			out.Values[i] = ec._MimirLimits_outOfOrderTimeWindow(ctx, field, obj)
+
+		case "outOfOrderBlocksExternalLabelEnabled":
+
+			out.Values[i] = ec._MimirLimits_outOfOrderBlocksExternalLabelEnabled(ctx, field, obj)
+
+		case "separateMetricsGroupLabel":
+
+			out.Values[i] = ec._MimirLimits_separateMetricsGroupLabel(ctx, field, obj)
+
+		case "maxChunksPerQuery":
+
+			out.Values[i] = ec._MimirLimits_maxChunksPerQuery(ctx, field, obj)
+
+		case "maxFetchedSeriesPerQuery":
+
+			out.Values[i] = ec._MimirLimits_maxFetchedSeriesPerQuery(ctx, field, obj)
+
+		case "maxFetchedChunkBytesPerQuery":
+
+			out.Values[i] = ec._MimirLimits_maxFetchedChunkBytesPerQuery(ctx, field, obj)
+
+		case "maxQueryLookback":
+
+			out.Values[i] = ec._MimirLimits_maxQueryLookback(ctx, field, obj)
+
+		case "maxPartialQueryLength":
+
+			out.Values[i] = ec._MimirLimits_maxPartialQueryLength(ctx, field, obj)
+
+		case "maxQueryParallelism":
+
+			out.Values[i] = ec._MimirLimits_maxQueryParallelism(ctx, field, obj)
+
+		case "maxLabelsQueryLength":
+
+			out.Values[i] = ec._MimirLimits_maxLabelsQueryLength(ctx, field, obj)
+
+		case "maxCacheFreshness":
+
+			out.Values[i] = ec._MimirLimits_maxCacheFreshness(ctx, field, obj)
+
+		case "maxQueriersPerTenant":
+
+			out.Values[i] = ec._MimirLimits_maxQueriersPerTenant(ctx, field, obj)
+
+		case "queryShardingTotalShards":
+
+			out.Values[i] = ec._MimirLimits_queryShardingTotalShards(ctx, field, obj)
+
+		case "queryShardingMaxShardedQueries":
+
+			out.Values[i] = ec._MimirLimits_queryShardingMaxShardedQueries(ctx, field, obj)
+
+		case "queryShardingMaxRegexpSizeBytes":
+
+			out.Values[i] = ec._MimirLimits_queryShardingMaxRegexpSizeBytes(ctx, field, obj)
+
+		case "splitInstantQueriesByInterval":
+
+			out.Values[i] = ec._MimirLimits_splitInstantQueriesByInterval(ctx, field, obj)
+
+		case "maxTotalQueryLength":
+
+			out.Values[i] = ec._MimirLimits_maxTotalQueryLength(ctx, field, obj)
+
+		case "resultsCacheTTL":
+
+			out.Values[i] = ec._MimirLimits_resultsCacheTTL(ctx, field, obj)
+
+		case "resultsCacheTTLForOutOfOrderTimeWindow":
+
+			out.Values[i] = ec._MimirLimits_resultsCacheTTLForOutOfOrderTimeWindow(ctx, field, obj)
+
+		case "maxQueryExpressionSizeBytes":
+
+			out.Values[i] = ec._MimirLimits_maxQueryExpressionSizeBytes(ctx, field, obj)
+
+		case "cardinalityAnalysisEnabled":
+
+			out.Values[i] = ec._MimirLimits_cardinalityAnalysisEnabled(ctx, field, obj)
+
+		case "labelNamesAndValuesResultsMaxSizeBytes":
+
+			out.Values[i] = ec._MimirLimits_labelNamesAndValuesResultsMaxSizeBytes(ctx, field, obj)
+
+		case "labelValuesMaxCardinalityLabelNamesPerRequest":
+
+			out.Values[i] = ec._MimirLimits_labelValuesMaxCardinalityLabelNamesPerRequest(ctx, field, obj)
+
+		case "rulerEvaluationDelay":
+
+			out.Values[i] = ec._MimirLimits_rulerEvaluationDelay(ctx, field, obj)
+
+		case "rulerTenantShardSize":
+
+			out.Values[i] = ec._MimirLimits_rulerTenantShardSize(ctx, field, obj)
+
+		case "rulerMaxRulesPerRuleGroup":
+
+			out.Values[i] = ec._MimirLimits_rulerMaxRulesPerRuleGroup(ctx, field, obj)
+
+		case "rulerMaxRuleGroupsPerTenant":
+
+			out.Values[i] = ec._MimirLimits_rulerMaxRuleGroupsPerTenant(ctx, field, obj)
+
+		case "rulerRecordingRulesEvaluationEnabled":
+
+			out.Values[i] = ec._MimirLimits_rulerRecordingRulesEvaluationEnabled(ctx, field, obj)
+
+		case "rulerAlertingRulesEvaluationEnabled":
+
+			out.Values[i] = ec._MimirLimits_rulerAlertingRulesEvaluationEnabled(ctx, field, obj)
+
+		case "storeGatewayTenantShardSize":
+
+			out.Values[i] = ec._MimirLimits_storeGatewayTenantShardSize(ctx, field, obj)
+
+		case "compactorBlocksRetentionPeriod":
+
+			out.Values[i] = ec._MimirLimits_compactorBlocksRetentionPeriod(ctx, field, obj)
+
+		case "compactorSplitAndMergeShards":
+
+			out.Values[i] = ec._MimirLimits_compactorSplitAndMergeShards(ctx, field, obj)
+
+		case "compactorSplitGroups":
+
+			out.Values[i] = ec._MimirLimits_compactorSplitGroups(ctx, field, obj)
+
+		case "compactorTenantShardSize":
+
+			out.Values[i] = ec._MimirLimits_compactorTenantShardSize(ctx, field, obj)
+
+		case "compactorPartialBlockDeletionDelay":
+
+			out.Values[i] = ec._MimirLimits_compactorPartialBlockDeletionDelay(ctx, field, obj)
+
+		case "compactorBlockUploadEnabled":
+
+			out.Values[i] = ec._MimirLimits_compactorBlockUploadEnabled(ctx, field, obj)
+
+		case "compactorBlockUploadValidationEnabled":
+
+			out.Values[i] = ec._MimirLimits_compactorBlockUploadValidationEnabled(ctx, field, obj)
+
+		case "compactorBlockUploadVerifyChunks":
+
+			out.Values[i] = ec._MimirLimits_compactorBlockUploadVerifyChunks(ctx, field, obj)
+
+		case "s3SSEType":
+
+			out.Values[i] = ec._MimirLimits_s3SSEType(ctx, field, obj)
+
+		case "s3SSEKMSKeyID":
+
+			out.Values[i] = ec._MimirLimits_s3SSEKMSKeyID(ctx, field, obj)
+
+		case "s3SSEKMSEncryptionContext":
+
+			out.Values[i] = ec._MimirLimits_s3SSEKMSEncryptionContext(ctx, field, obj)
+
+		case "alertmanagerReceiversBlockCIDRNetworks":
+
+			out.Values[i] = ec._MimirLimits_alertmanagerReceiversBlockCIDRNetworks(ctx, field, obj)
+
+		case "alertmanagerReceiversBlockPrivateAddresses":
+
+			out.Values[i] = ec._MimirLimits_alertmanagerReceiversBlockPrivateAddresses(ctx, field, obj)
+
+		case "notificationRateLimit":
+
+			out.Values[i] = ec._MimirLimits_notificationRateLimit(ctx, field, obj)
+
+		case "notificationRateLimitPerIntegration":
+
+			out.Values[i] = ec._MimirLimits_notificationRateLimitPerIntegration(ctx, field, obj)
+
+		case "alertmanagerMaxConfigSizeBytes":
+
+			out.Values[i] = ec._MimirLimits_alertmanagerMaxConfigSizeBytes(ctx, field, obj)
+
+		case "alertmanagerMaxTemplatesCount":
+
+			out.Values[i] = ec._MimirLimits_alertmanagerMaxTemplatesCount(ctx, field, obj)
+
+		case "alertmanagerMaxTemplateSizeBytes":
+
+			out.Values[i] = ec._MimirLimits_alertmanagerMaxTemplateSizeBytes(ctx, field, obj)
+
+		case "alertmanagerMaxDispatcherAggregationGroups":
+
+			out.Values[i] = ec._MimirLimits_alertmanagerMaxDispatcherAggregationGroups(ctx, field, obj)
+
+		case "alertmanagerMaxAlertsCount":
+
+			out.Values[i] = ec._MimirLimits_alertmanagerMaxAlertsCount(ctx, field, obj)
+
+		case "alertmanagerMaxAlertsSizeBytes":
+
+			out.Values[i] = ec._MimirLimits_alertmanagerMaxAlertsSizeBytes(ctx, field, obj)
+
+		case "forwardingEndpoInt":
+
+			out.Values[i] = ec._MimirLimits_forwardingEndpoInt(ctx, field, obj)
+
+		case "forwardingDropOlderThan":
+
+			out.Values[i] = ec._MimirLimits_forwardingDropOlderThan(ctx, field, obj)
+
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -13350,6 +17390,26 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 	return res
 }
 
+func (ec *executionContext) unmarshalODuration2githubᚗcomᚋprometheusᚋcommonᚋmodelᚐDuration(ctx context.Context, v interface{}) (model1.Duration, error) {
+	res, err := custom.UnmarshalDuration(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalODuration2githubᚗcomᚋprometheusᚋcommonᚋmodelᚐDuration(ctx context.Context, sel ast.SelectionSet, v model1.Duration) graphql.Marshaler {
+	res := custom.MarshalDuration(v)
+	return res
+}
+
+func (ec *executionContext) unmarshalOFloat2float64(ctx context.Context, v interface{}) (float64, error) {
+	res, err := graphql.UnmarshalFloat(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOFloat2float64(ctx context.Context, sel ast.SelectionSet, v float64) graphql.Marshaler {
+	res := graphql.MarshalFloat(v)
+	return res
+}
+
 func (ec *executionContext) unmarshalOFloat2ᚖfloat64(ctx context.Context, v interface{}) (*float64, error) {
 	if v == nil {
 		return nil, nil
@@ -13363,6 +17423,22 @@ func (ec *executionContext) marshalOFloat2ᚖfloat64(ctx context.Context, sel as
 		return graphql.Null
 	}
 	res := graphql.MarshalFloat(*v)
+	return res
+}
+
+func (ec *executionContext) unmarshalOFloatMap2map(ctx context.Context, v interface{}) (map[string]float64, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := custom.UnmarshalFloatMap(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOFloatMap2map(ctx context.Context, sel ast.SelectionSet, v map[string]float64) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	res := custom.MarshalFloatMap(v)
 	return res
 }
 
@@ -13449,6 +17525,16 @@ func (ec *executionContext) marshalOID2ᚕstringᚄ(ctx context.Context, sel ast
 	}
 
 	return ret
+}
+
+func (ec *executionContext) unmarshalOInt2int(ctx context.Context, v interface{}) (int, error) {
+	res, err := graphql.UnmarshalInt(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOInt2int(ctx context.Context, sel ast.SelectionSet, v int) graphql.Marshaler {
+	res := graphql.MarshalInt(v)
+	return res
 }
 
 func (ec *executionContext) unmarshalOInt2ᚖint64(ctx context.Context, v interface{}) (*int64, error) {
@@ -13630,6 +17716,48 @@ func (ec *executionContext) marshalOOidcContext2ᚖgithubᚗcomᚋpluralshᚋoau
 		return graphql.Null
 	}
 	return ec._OidcContext(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalOString2string(ctx context.Context, v interface{}) (string, error) {
+	res, err := graphql.UnmarshalString(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOString2string(ctx context.Context, sel ast.SelectionSet, v string) graphql.Marshaler {
+	res := graphql.MarshalString(v)
+	return res
+}
+
+func (ec *executionContext) unmarshalOString2ᚕstring(ctx context.Context, v interface{}) ([]string, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var vSlice []interface{}
+	if v != nil {
+		vSlice = graphql.CoerceList(v)
+	}
+	var err error
+	res := make([]string, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalOString2string(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) marshalOString2ᚕstring(ctx context.Context, sel ast.SelectionSet, v []string) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	for i := range v {
+		ret[i] = ec.marshalOString2string(ctx, sel, v[i])
+	}
+
+	return ret
 }
 
 func (ec *executionContext) unmarshalOString2ᚕstringᚄ(ctx context.Context, v interface{}) ([]string, error) {

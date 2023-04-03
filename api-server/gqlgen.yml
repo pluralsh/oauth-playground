@@ -43,7 +43,7 @@ resolver:
 # gqlgen will search for any type names in the schema in these go packages
 # if they match it will use them, otherwise it will generate them.
 autobind:
-#  - "github.com/pluralsh/oauth-playground/api-server/graph/model"
+ - "github.com/pluralsh/oauth-playground/api-server/graph/model"
 
 # This section declares type mapping between the GraphQL and go type systems
 #
@@ -65,6 +65,12 @@ models:
   Float:
     model:
       - github.com/99designs/gqlgen/graphql.Float
+  Duration:
+    model:
+      - github.com/pluralsh/oauth-playground/api-server/graph/custom.Duration
+  FloatMap:
+    model:
+      - github.com/pluralsh/oauth-playground/api-server/graph/custom.FloatMap
   User:
     fields:
       groups:
