@@ -159,7 +159,7 @@ type ComplexityRoot struct {
 	Mutation struct {
 		AcceptOAuth2ConsentRequest func(childComplexity int, challenge string, grantAccessTokenAudience []string, grantScope []string, remember *bool, rememberFor *int64, session *model.AcceptOAuth2ConsentRequestSession) int
 		CreateOAuth2Client         func(childComplexity int, allowedCorsOrigins []string, audience []string, authorizationCodeGrantAccessTokenLifespan *string, authorizationCodeGrantIDTokenLifespan *string, authorizationCodeGrantRefreshTokenLifespan *string, backChannelLogoutSessionRequired *bool, backChannelLogoutURI *string, clientCredentialsGrantAccessTokenLifespan *string, clientName *string, clientSecret *string, clientSecretExpiresAt *int64, clientURI *string, contacts []string, frontchannelLogoutSessionRequired *bool, frontchannelLogoutURI *string, grantTypes []string, implicitGrantAccessTokenLifespan *string, implicitGrantIDTokenLifespan *string, jwks map[string]interface{}, jwksURI *string, jwtBearerGrantAccessTokenLifespan *string, logoURI *string, metadata map[string]interface{}, policyURI *string, postLogoutRedirectUris []string, redirectUris []string, responseTypes []string, scope *string, sectorIdentifierURI *string, subjectType *string, tokenEndpointAuthMethod *string, tokenEndpointAuthSigningAlgorithm *string, tosURI *string, userinfoSignedResponseAlgorithm *string, loginBindings *model.LoginBindingsInput) int
-		CreateObservabilityTenant  func(childComplexity int, name string, viewers *model.ObservabilityTenantViewersInput, editors *model.ObservabilityTenantEditorsInput) int
+		CreateObservabilityTenant  func(childComplexity int, name string, viewers *model.ObservabilityTenantViewersInput, editors *model.ObservabilityTenantEditorsInput, limits *model.ObservabilityTenantLimitsInput) int
 		CreateUser                 func(childComplexity int, email string, name *model.NameInput) int
 		DeleteGroup                func(childComplexity int, name string) int
 		DeleteOAuth2Client         func(childComplexity int, clientID string) int
@@ -169,7 +169,7 @@ type ComplexityRoot struct {
 		Organization               func(childComplexity int, name string, admins []string) int
 		RejectOAuth2ConsentRequest func(childComplexity int, challenge string) int
 		UpdateOAuth2Client         func(childComplexity int, allowedCorsOrigins []string, audience []string, authorizationCodeGrantAccessTokenLifespan *string, authorizationCodeGrantIDTokenLifespan *string, authorizationCodeGrantRefreshTokenLifespan *string, backChannelLogoutSessionRequired *bool, backChannelLogoutURI *string, clientCredentialsGrantAccessTokenLifespan *string, clientID string, clientName *string, clientSecret *string, clientSecretExpiresAt *int64, clientURI *string, contacts []string, frontchannelLogoutSessionRequired *bool, frontchannelLogoutURI *string, grantTypes []string, implicitGrantAccessTokenLifespan *string, implicitGrantIDTokenLifespan *string, jwks map[string]interface{}, jwksURI *string, jwtBearerGrantAccessTokenLifespan *string, logoURI *string, metadata map[string]interface{}, policyURI *string, postLogoutRedirectUris []string, redirectUris []string, responseTypes []string, scope *string, sectorIdentifierURI *string, subjectType *string, tokenEndpointAuthMethod *string, tokenEndpointAuthSigningAlgorithm *string, tosURI *string, userinfoSignedResponseAlgorithm *string, loginBindings *model.LoginBindingsInput) int
-		UpdateObservabilityTenant  func(childComplexity int, name string, viewers *model.ObservabilityTenantViewersInput, editors *model.ObservabilityTenantEditorsInput) int
+		UpdateObservabilityTenant  func(childComplexity int, name string, viewers *model.ObservabilityTenantViewersInput, editors *model.ObservabilityTenantEditorsInput, limits *model.ObservabilityTenantLimitsInput) int
 	}
 
 	Name struct {
@@ -255,9 +255,7 @@ type ComplexityRoot struct {
 	}
 
 	ObservabilityTenantLimits struct {
-		Loki  func(childComplexity int) int
 		Mimir func(childComplexity int) int
-		Tempo func(childComplexity int) int
 	}
 
 	ObservabilityTenantViewers struct {
@@ -323,8 +321,8 @@ type MutationResolver interface {
 	DeleteOAuth2Client(ctx context.Context, clientID string) (*model.OAuth2Client, error)
 	AcceptOAuth2ConsentRequest(ctx context.Context, challenge string, grantAccessTokenAudience []string, grantScope []string, remember *bool, rememberFor *int64, session *model.AcceptOAuth2ConsentRequestSession) (*model.OAuth2RedirectTo, error)
 	RejectOAuth2ConsentRequest(ctx context.Context, challenge string) (*model.OAuth2RedirectTo, error)
-	CreateObservabilityTenant(ctx context.Context, name string, viewers *model.ObservabilityTenantViewersInput, editors *model.ObservabilityTenantEditorsInput) (*model.ObservabilityTenant, error)
-	UpdateObservabilityTenant(ctx context.Context, name string, viewers *model.ObservabilityTenantViewersInput, editors *model.ObservabilityTenantEditorsInput) (*model.ObservabilityTenant, error)
+	CreateObservabilityTenant(ctx context.Context, name string, viewers *model.ObservabilityTenantViewersInput, editors *model.ObservabilityTenantEditorsInput, limits *model.ObservabilityTenantLimitsInput) (*model.ObservabilityTenant, error)
+	UpdateObservabilityTenant(ctx context.Context, name string, viewers *model.ObservabilityTenantViewersInput, editors *model.ObservabilityTenantEditorsInput, limits *model.ObservabilityTenantLimitsInput) (*model.ObservabilityTenant, error)
 	DeleteObservabilityTenant(ctx context.Context, name string) (*model.ObservabilityTenant, error)
 	Organization(ctx context.Context, name string, admins []string) (*model.Organization, error)
 }
@@ -995,7 +993,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateObservabilityTenant(childComplexity, args["name"].(string), args["viewers"].(*model.ObservabilityTenantViewersInput), args["editors"].(*model.ObservabilityTenantEditorsInput)), true
+		return e.complexity.Mutation.CreateObservabilityTenant(childComplexity, args["name"].(string), args["viewers"].(*model.ObservabilityTenantViewersInput), args["editors"].(*model.ObservabilityTenantEditorsInput), args["limits"].(*model.ObservabilityTenantLimitsInput)), true
 
 	case "Mutation.createUser":
 		if e.complexity.Mutation.CreateUser == nil {
@@ -1115,7 +1113,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateObservabilityTenant(childComplexity, args["name"].(string), args["viewers"].(*model.ObservabilityTenantViewersInput), args["editors"].(*model.ObservabilityTenantEditorsInput)), true
+		return e.complexity.Mutation.UpdateObservabilityTenant(childComplexity, args["name"].(string), args["viewers"].(*model.ObservabilityTenantViewersInput), args["editors"].(*model.ObservabilityTenantEditorsInput), args["limits"].(*model.ObservabilityTenantLimitsInput)), true
 
 	case "Name.first":
 		if e.complexity.Name.First == nil {
@@ -1565,26 +1563,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.ObservabilityTenantEditors.Users(childComplexity), true
 
-	case "ObservabilityTenantLimits.loki":
-		if e.complexity.ObservabilityTenantLimits.Loki == nil {
-			break
-		}
-
-		return e.complexity.ObservabilityTenantLimits.Loki(childComplexity), true
-
 	case "ObservabilityTenantLimits.mimir":
 		if e.complexity.ObservabilityTenantLimits.Mimir == nil {
 			break
 		}
 
 		return e.complexity.ObservabilityTenantLimits.Mimir(childComplexity), true
-
-	case "ObservabilityTenantLimits.tempo":
-		if e.complexity.ObservabilityTenantLimits.Tempo == nil {
-			break
-		}
-
-		return e.complexity.ObservabilityTenantLimits.Tempo(childComplexity), true
 
 	case "ObservabilityTenantViewers.groups":
 		if e.complexity.ObservabilityTenantViewers.Groups == nil {
@@ -1811,8 +1795,10 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputAcceptOAuth2ConsentRequestSession,
 		ec.unmarshalInputAdmin,
 		ec.unmarshalInputLoginBindingsInput,
+		ec.unmarshalInputMimirLimitsInput,
 		ec.unmarshalInputNameInput,
 		ec.unmarshalInputObservabilityTenantEditorsInput,
+		ec.unmarshalInputObservabilityTenantLimitsInput,
 		ec.unmarshalInputObservabilityTenantViewersInput,
 	)
 	first := true
@@ -2433,13 +2419,24 @@ type ObservabilityTenantLimits {
   "The limits for Mimir for the tenant."
   mimir: MimirLimits
 
-  "The limits for Loki for the tenant."
-  loki: LokiLimits
+  # "The limits for Loki for the tenant."
+  # loki: LokiLimits
 
-  "The limits for Tempo for the tenant."
-  tempo: TempoLimits
+  # "The limits for Tempo for the tenant."
+  # tempo: TempoLimits
 }
 
+"Inputs for the limits of a tenant."
+input ObservabilityTenantLimitsInput {
+  "The limits for Mimir for the tenant."
+  mimir: MimirLimitsInput
+
+  # "The limits for Loki for the tenant."
+  # loki: LokiLimitsInput
+
+  # "The limits for Tempo for the tenant."
+  # tempo: TempoLimitsInput
+}
 
 scalar Duration
 scalar FloatMap
@@ -2447,6 +2444,198 @@ scalar ForwardingRuleMap
 
 "Representation of the limits for Mimir for a tenant."
 type MimirLimits {
+  requestRate: Float
+
+  requestBurstSize: Int
+	
+	ingestionRate: Float
+	
+	ingestionBurstSize: Int
+	
+	acceptHASamples: Boolean
+	
+	haClusterLabel: String
+	
+	haReplicaLabel: String
+	
+	haMaxClusters: Int
+	
+	dropLabels: [String]
+	
+	maxLabelNameLength: Int
+	
+	maxLabelValueLength: Int
+	
+	maxLabelNamesPerSeries: Int
+	
+	maxMetadataLength: Int
+	
+	creationGracePeriod: Duration
+	
+	enforceMetadataMetricName: Boolean
+	
+	ingestionTenantShardSize: Int
+	
+  # metricRelabelConfigs
+	
+	
+
+	
+	
+	
+	maxGlobalSeriesPerUser: Int
+	
+	maxGlobalSeriesPerMetric: Int
+	
+	
+	maxGlobalMetricsWithMetadataPerUser: Int
+	
+	maxGlobalMetadataPerMetric: Int
+	
+	
+	
+	maxGlobalExemplarsPerUser: Int
+	
+	
+	nativeHistogramsIngestionEnabled: Boolean
+	
+	# activeSeriesCustomTrackersConfig: 
+	
+	
+	outOfOrderTimeWindow: Duration
+	
+	outOfOrderBlocksExternalLabelEnabled: Boolean
+	
+
+	
+	
+	separateMetricsGroupLabel: String
+
+	
+	
+	maxChunksPerQuery: Int
+	
+	maxFetchedSeriesPerQuery: Int
+	
+	maxFetchedChunkBytesPerQuery: Int
+	
+	maxQueryLookback: Duration
+	
+	maxPartialQueryLength: Duration
+	
+	maxQueryParallelism: Int
+	
+	maxLabelsQueryLength: Duration
+	
+	maxCacheFreshness: Duration
+	
+	maxQueriersPerTenant: Int
+	
+	queryShardingTotalShards: Int
+	
+	queryShardingMaxShardedQueries: Int
+	
+	queryShardingMaxRegexpSizeBytes: Int
+	
+	splitInstantQueriesByInterval: Duration
+
+	
+	
+	maxTotalQueryLength: Duration
+	
+	resultsCacheTTL: Duration
+	
+	resultsCacheTTLForOutOfOrderTimeWindow: Duration
+	
+	maxQueryExpressionSizeBytes: Int
+
+	
+	
+	cardinalityAnalysisEnabled: Boolean
+	
+	labelNamesAndValuesResultsMaxSizeBytes: Int
+	
+	labelValuesMaxCardinalityLabelNamesPerRequest: Int
+
+	
+	
+	rulerEvaluationDelay: Duration
+	
+	rulerTenantShardSize: Int
+	
+	rulerMaxRulesPerRuleGroup: Int
+	
+	rulerMaxRuleGroupsPerTenant: Int
+	
+	rulerRecordingRulesEvaluationEnabled: Boolean
+	
+	rulerAlertingRulesEvaluationEnabled: Boolean
+
+	
+	
+	storeGatewayTenantShardSize: Int
+
+	
+	
+	compactorBlocksRetentionPeriod: Duration
+	
+	compactorSplitAndMergeShards: Int
+	
+	compactorSplitGroups: Int
+	
+	compactorTenantShardSize: Int
+	
+	compactorPartialBlockDeletionDelay: Duration
+	
+	compactorBlockUploadEnabled: Boolean
+	
+	compactorBlockUploadValidationEnabled: Boolean
+	
+	compactorBlockUploadVerifyChunks: Boolean
+
+	
+	
+	
+	s3SSEType: String
+	
+	s3SSEKMSKeyID: String
+	
+	s3SSEKMSEncryptionContext: String
+
+	
+	
+	
+	alertmanagerReceiversBlockCIDRNetworks: String
+	
+	alertmanagerReceiversBlockPrivateAddresses: Boolean
+
+	
+	notificationRateLimit: Float
+	
+	notificationRateLimitPerIntegration: FloatMap
+
+	
+	alertmanagerMaxConfigSizeBytes: Int
+	
+	alertmanagerMaxTemplatesCount: Int
+	
+	alertmanagerMaxTemplateSizeBytes: Int
+	
+	alertmanagerMaxDispatcherAggregationGroups: Int
+	
+	alertmanagerMaxAlertsCount: Int
+	
+	alertmanagerMaxAlertsSizeBytes: Int
+
+	
+	forwardingEndpoint: String
+	
+	forwardingDropOlderThan: Duration
+	
+	forwardingRules: ForwardingRuleMap
+}
+
+input MimirLimitsInput {
   requestRate: Float
 
   requestBurstSize: Int
@@ -2712,6 +2901,8 @@ extend type Mutation {
     viewers: ObservabilityTenantViewersInput
     "The users and groups that can edit a tenant to add users, groups or oauth2 clients to it."
     editors: ObservabilityTenantEditorsInput
+    "The limits for the tenant."
+    limits: ObservabilityTenantLimitsInput
   ): ObservabilityTenant! @checkPermissions @isAuthenticated
 
   "Update an observability tenant."
@@ -2722,6 +2913,8 @@ extend type Mutation {
     viewers: ObservabilityTenantViewersInput
     "The users and groups that can edit a tenant to add users, groups or oauth2 clients to it."
     editors: ObservabilityTenantEditorsInput
+    "The limits for the tenant."
+    limits: ObservabilityTenantLimitsInput
   ): ObservabilityTenant! @checkPermissions @isAuthenticated
 
   "Delete an observability tenant."
@@ -3250,6 +3443,15 @@ func (ec *executionContext) field_Mutation_createObservabilityTenant_args(ctx co
 		}
 	}
 	args["editors"] = arg2
+	var arg3 *model.ObservabilityTenantLimitsInput
+	if tmp, ok := rawArgs["limits"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("limits"))
+		arg3, err = ec.unmarshalOObservabilityTenantLimitsInput2ᚖgithubᚗcomᚋpluralshᚋoauthᚑplaygroundᚋapiᚑserverᚋgraphᚋmodelᚐObservabilityTenantLimitsInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["limits"] = arg3
 	return args, nil
 }
 
@@ -3760,6 +3962,15 @@ func (ec *executionContext) field_Mutation_updateObservabilityTenant_args(ctx co
 		}
 	}
 	args["editors"] = arg2
+	var arg3 *model.ObservabilityTenantLimitsInput
+	if tmp, ok := rawArgs["limits"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("limits"))
+		arg3, err = ec.unmarshalOObservabilityTenantLimitsInput2ᚖgithubᚗcomᚋpluralshᚋoauthᚑplaygroundᚋapiᚑserverᚋgraphᚋmodelᚐObservabilityTenantLimitsInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["limits"] = arg3
 	return args, nil
 }
 
@@ -8156,7 +8367,7 @@ func (ec *executionContext) _Mutation_createObservabilityTenant(ctx context.Cont
 	resTmp := ec._fieldMiddleware(ctx, nil, func(rctx context.Context) (interface{}, error) {
 		directive0 := func(rctx context.Context) (interface{}, error) {
 			ctx = rctx // use context from middleware stack in children
-			return ec.resolvers.Mutation().CreateObservabilityTenant(rctx, fc.Args["name"].(string), fc.Args["viewers"].(*model.ObservabilityTenantViewersInput), fc.Args["editors"].(*model.ObservabilityTenantEditorsInput))
+			return ec.resolvers.Mutation().CreateObservabilityTenant(rctx, fc.Args["name"].(string), fc.Args["viewers"].(*model.ObservabilityTenantViewersInput), fc.Args["editors"].(*model.ObservabilityTenantEditorsInput), fc.Args["limits"].(*model.ObservabilityTenantLimitsInput))
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
 			if ec.directives.CheckPermissions == nil {
@@ -8246,7 +8457,7 @@ func (ec *executionContext) _Mutation_updateObservabilityTenant(ctx context.Cont
 	resTmp := ec._fieldMiddleware(ctx, nil, func(rctx context.Context) (interface{}, error) {
 		directive0 := func(rctx context.Context) (interface{}, error) {
 			ctx = rctx // use context from middleware stack in children
-			return ec.resolvers.Mutation().UpdateObservabilityTenant(rctx, fc.Args["name"].(string), fc.Args["viewers"].(*model.ObservabilityTenantViewersInput), fc.Args["editors"].(*model.ObservabilityTenantEditorsInput))
+			return ec.resolvers.Mutation().UpdateObservabilityTenant(rctx, fc.Args["name"].(string), fc.Args["viewers"].(*model.ObservabilityTenantViewersInput), fc.Args["editors"].(*model.ObservabilityTenantEditorsInput), fc.Args["limits"].(*model.ObservabilityTenantLimitsInput))
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
 			if ec.directives.CheckPermissions == nil {
@@ -10995,10 +11206,6 @@ func (ec *executionContext) fieldContext_ObservabilityTenant_limits(ctx context.
 			switch field.Name {
 			case "mimir":
 				return ec.fieldContext_ObservabilityTenantLimits_mimir(ctx, field)
-			case "loki":
-				return ec.fieldContext_ObservabilityTenantLimits_loki(ctx, field)
-			case "tempo":
-				return ec.fieldContext_ObservabilityTenantLimits_tempo(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type ObservabilityTenantLimits", field.Name)
 		},
@@ -11291,90 +11498,6 @@ func (ec *executionContext) fieldContext_ObservabilityTenantLimits_mimir(ctx con
 				return ec.fieldContext_MimirLimits_forwardingRules(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type MimirLimits", field.Name)
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _ObservabilityTenantLimits_loki(ctx context.Context, field graphql.CollectedField, obj *model.ObservabilityTenantLimits) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ObservabilityTenantLimits_loki(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Loki, nil
-	})
-
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*model.LokiLimits)
-	fc.Result = res
-	return ec.marshalOLokiLimits2ᚖgithubᚗcomᚋpluralshᚋoauthᚑplaygroundᚋapiᚑserverᚋgraphᚋmodelᚐLokiLimits(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_ObservabilityTenantLimits_loki(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ObservabilityTenantLimits",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "requestRate":
-				return ec.fieldContext_LokiLimits_requestRate(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type LokiLimits", field.Name)
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _ObservabilityTenantLimits_tempo(ctx context.Context, field graphql.CollectedField, obj *model.ObservabilityTenantLimits) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_ObservabilityTenantLimits_tempo(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Tempo, nil
-	})
-
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*model.TempoLimits)
-	fc.Result = res
-	return ec.marshalOTempoLimits2ᚖgithubᚗcomᚋpluralshᚋoauthᚑplaygroundᚋapiᚑserverᚋgraphᚋmodelᚐTempoLimits(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_ObservabilityTenantLimits_tempo(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "ObservabilityTenantLimits",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "requestRate":
-				return ec.fieldContext_TempoLimits_requestRate(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type TempoLimits", field.Name)
 		},
 	}
 	return fc, nil
@@ -15023,6 +15146,634 @@ func (ec *executionContext) unmarshalInputLoginBindingsInput(ctx context.Context
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputMimirLimitsInput(ctx context.Context, obj interface{}) (v1alpha1.MimirLimitsInput, error) {
+	var it v1alpha1.MimirLimitsInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"requestRate", "requestBurstSize", "ingestionRate", "ingestionBurstSize", "acceptHASamples", "haClusterLabel", "haReplicaLabel", "haMaxClusters", "dropLabels", "maxLabelNameLength", "maxLabelValueLength", "maxLabelNamesPerSeries", "maxMetadataLength", "creationGracePeriod", "enforceMetadataMetricName", "ingestionTenantShardSize", "maxGlobalSeriesPerUser", "maxGlobalSeriesPerMetric", "maxGlobalMetricsWithMetadataPerUser", "maxGlobalMetadataPerMetric", "maxGlobalExemplarsPerUser", "nativeHistogramsIngestionEnabled", "outOfOrderTimeWindow", "outOfOrderBlocksExternalLabelEnabled", "separateMetricsGroupLabel", "maxChunksPerQuery", "maxFetchedSeriesPerQuery", "maxFetchedChunkBytesPerQuery", "maxQueryLookback", "maxPartialQueryLength", "maxQueryParallelism", "maxLabelsQueryLength", "maxCacheFreshness", "maxQueriersPerTenant", "queryShardingTotalShards", "queryShardingMaxShardedQueries", "queryShardingMaxRegexpSizeBytes", "splitInstantQueriesByInterval", "maxTotalQueryLength", "resultsCacheTTL", "resultsCacheTTLForOutOfOrderTimeWindow", "maxQueryExpressionSizeBytes", "cardinalityAnalysisEnabled", "labelNamesAndValuesResultsMaxSizeBytes", "labelValuesMaxCardinalityLabelNamesPerRequest", "rulerEvaluationDelay", "rulerTenantShardSize", "rulerMaxRulesPerRuleGroup", "rulerMaxRuleGroupsPerTenant", "rulerRecordingRulesEvaluationEnabled", "rulerAlertingRulesEvaluationEnabled", "storeGatewayTenantShardSize", "compactorBlocksRetentionPeriod", "compactorSplitAndMergeShards", "compactorSplitGroups", "compactorTenantShardSize", "compactorPartialBlockDeletionDelay", "compactorBlockUploadEnabled", "compactorBlockUploadValidationEnabled", "compactorBlockUploadVerifyChunks", "s3SSEType", "s3SSEKMSKeyID", "s3SSEKMSEncryptionContext", "alertmanagerReceiversBlockCIDRNetworks", "alertmanagerReceiversBlockPrivateAddresses", "notificationRateLimit", "notificationRateLimitPerIntegration", "alertmanagerMaxConfigSizeBytes", "alertmanagerMaxTemplatesCount", "alertmanagerMaxTemplateSizeBytes", "alertmanagerMaxDispatcherAggregationGroups", "alertmanagerMaxAlertsCount", "alertmanagerMaxAlertsSizeBytes", "forwardingEndpoint", "forwardingDropOlderThan", "forwardingRules"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "requestRate":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("requestRate"))
+			it.RequestRate, err = ec.unmarshalOFloat2ᚖfloat64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "requestBurstSize":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("requestBurstSize"))
+			it.RequestBurstSize, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "ingestionRate":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ingestionRate"))
+			it.IngestionRate, err = ec.unmarshalOFloat2ᚖfloat64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "ingestionBurstSize":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ingestionBurstSize"))
+			it.IngestionBurstSize, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "acceptHASamples":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("acceptHASamples"))
+			it.AcceptHASamples, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "haClusterLabel":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("haClusterLabel"))
+			it.HAClusterLabel, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "haReplicaLabel":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("haReplicaLabel"))
+			it.HAReplicaLabel, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "haMaxClusters":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("haMaxClusters"))
+			it.HAMaxClusters, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "dropLabels":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("dropLabels"))
+			it.DropLabels, err = ec.unmarshalOString2ᚕᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "maxLabelNameLength":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("maxLabelNameLength"))
+			it.MaxLabelNameLength, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "maxLabelValueLength":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("maxLabelValueLength"))
+			it.MaxLabelValueLength, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "maxLabelNamesPerSeries":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("maxLabelNamesPerSeries"))
+			it.MaxLabelNamesPerSeries, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "maxMetadataLength":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("maxMetadataLength"))
+			it.MaxMetadataLength, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "creationGracePeriod":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("creationGracePeriod"))
+			it.CreationGracePeriod, err = ec.unmarshalODuration2ᚖk8sᚗioᚋapimachineryᚋpkgᚋapisᚋmetaᚋv1ᚐDuration(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "enforceMetadataMetricName":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("enforceMetadataMetricName"))
+			it.EnforceMetadataMetricName, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "ingestionTenantShardSize":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ingestionTenantShardSize"))
+			it.IngestionTenantShardSize, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "maxGlobalSeriesPerUser":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("maxGlobalSeriesPerUser"))
+			it.MaxGlobalSeriesPerUser, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "maxGlobalSeriesPerMetric":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("maxGlobalSeriesPerMetric"))
+			it.MaxGlobalSeriesPerMetric, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "maxGlobalMetricsWithMetadataPerUser":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("maxGlobalMetricsWithMetadataPerUser"))
+			it.MaxGlobalMetricsWithMetadataPerUser, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "maxGlobalMetadataPerMetric":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("maxGlobalMetadataPerMetric"))
+			it.MaxGlobalMetadataPerMetric, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "maxGlobalExemplarsPerUser":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("maxGlobalExemplarsPerUser"))
+			it.MaxGlobalExemplarsPerUser, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "nativeHistogramsIngestionEnabled":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nativeHistogramsIngestionEnabled"))
+			it.NativeHistogramsIngestionEnabled, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "outOfOrderTimeWindow":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("outOfOrderTimeWindow"))
+			it.OutOfOrderTimeWindow, err = ec.unmarshalODuration2ᚖk8sᚗioᚋapimachineryᚋpkgᚋapisᚋmetaᚋv1ᚐDuration(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "outOfOrderBlocksExternalLabelEnabled":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("outOfOrderBlocksExternalLabelEnabled"))
+			it.OutOfOrderBlocksExternalLabelEnabled, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "separateMetricsGroupLabel":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("separateMetricsGroupLabel"))
+			it.SeparateMetricsGroupLabel, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "maxChunksPerQuery":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("maxChunksPerQuery"))
+			it.MaxChunksPerQuery, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "maxFetchedSeriesPerQuery":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("maxFetchedSeriesPerQuery"))
+			it.MaxFetchedSeriesPerQuery, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "maxFetchedChunkBytesPerQuery":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("maxFetchedChunkBytesPerQuery"))
+			it.MaxFetchedChunkBytesPerQuery, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "maxQueryLookback":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("maxQueryLookback"))
+			it.MaxQueryLookback, err = ec.unmarshalODuration2ᚖk8sᚗioᚋapimachineryᚋpkgᚋapisᚋmetaᚋv1ᚐDuration(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "maxPartialQueryLength":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("maxPartialQueryLength"))
+			it.MaxPartialQueryLength, err = ec.unmarshalODuration2ᚖk8sᚗioᚋapimachineryᚋpkgᚋapisᚋmetaᚋv1ᚐDuration(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "maxQueryParallelism":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("maxQueryParallelism"))
+			it.MaxQueryParallelism, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "maxLabelsQueryLength":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("maxLabelsQueryLength"))
+			it.MaxLabelsQueryLength, err = ec.unmarshalODuration2ᚖk8sᚗioᚋapimachineryᚋpkgᚋapisᚋmetaᚋv1ᚐDuration(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "maxCacheFreshness":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("maxCacheFreshness"))
+			it.MaxCacheFreshness, err = ec.unmarshalODuration2ᚖk8sᚗioᚋapimachineryᚋpkgᚋapisᚋmetaᚋv1ᚐDuration(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "maxQueriersPerTenant":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("maxQueriersPerTenant"))
+			it.MaxQueriersPerTenant, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "queryShardingTotalShards":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("queryShardingTotalShards"))
+			it.QueryShardingTotalShards, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "queryShardingMaxShardedQueries":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("queryShardingMaxShardedQueries"))
+			it.QueryShardingMaxShardedQueries, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "queryShardingMaxRegexpSizeBytes":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("queryShardingMaxRegexpSizeBytes"))
+			it.QueryShardingMaxRegexpSizeBytes, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "splitInstantQueriesByInterval":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("splitInstantQueriesByInterval"))
+			it.SplitInstantQueriesByInterval, err = ec.unmarshalODuration2ᚖk8sᚗioᚋapimachineryᚋpkgᚋapisᚋmetaᚋv1ᚐDuration(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "maxTotalQueryLength":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("maxTotalQueryLength"))
+			it.MaxTotalQueryLength, err = ec.unmarshalODuration2ᚖk8sᚗioᚋapimachineryᚋpkgᚋapisᚋmetaᚋv1ᚐDuration(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "resultsCacheTTL":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("resultsCacheTTL"))
+			it.ResultsCacheTTL, err = ec.unmarshalODuration2ᚖk8sᚗioᚋapimachineryᚋpkgᚋapisᚋmetaᚋv1ᚐDuration(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "resultsCacheTTLForOutOfOrderTimeWindow":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("resultsCacheTTLForOutOfOrderTimeWindow"))
+			it.ResultsCacheTTLForOutOfOrderTimeWindow, err = ec.unmarshalODuration2ᚖk8sᚗioᚋapimachineryᚋpkgᚋapisᚋmetaᚋv1ᚐDuration(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "maxQueryExpressionSizeBytes":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("maxQueryExpressionSizeBytes"))
+			it.MaxQueryExpressionSizeBytes, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "cardinalityAnalysisEnabled":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("cardinalityAnalysisEnabled"))
+			it.CardinalityAnalysisEnabled, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "labelNamesAndValuesResultsMaxSizeBytes":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("labelNamesAndValuesResultsMaxSizeBytes"))
+			it.LabelNamesAndValuesResultsMaxSizeBytes, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "labelValuesMaxCardinalityLabelNamesPerRequest":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("labelValuesMaxCardinalityLabelNamesPerRequest"))
+			it.LabelValuesMaxCardinalityLabelNamesPerRequest, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "rulerEvaluationDelay":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("rulerEvaluationDelay"))
+			it.RulerEvaluationDelay, err = ec.unmarshalODuration2ᚖk8sᚗioᚋapimachineryᚋpkgᚋapisᚋmetaᚋv1ᚐDuration(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "rulerTenantShardSize":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("rulerTenantShardSize"))
+			it.RulerTenantShardSize, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "rulerMaxRulesPerRuleGroup":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("rulerMaxRulesPerRuleGroup"))
+			it.RulerMaxRulesPerRuleGroup, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "rulerMaxRuleGroupsPerTenant":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("rulerMaxRuleGroupsPerTenant"))
+			it.RulerMaxRuleGroupsPerTenant, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "rulerRecordingRulesEvaluationEnabled":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("rulerRecordingRulesEvaluationEnabled"))
+			it.RulerRecordingRulesEvaluationEnabled, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "rulerAlertingRulesEvaluationEnabled":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("rulerAlertingRulesEvaluationEnabled"))
+			it.RulerAlertingRulesEvaluationEnabled, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "storeGatewayTenantShardSize":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("storeGatewayTenantShardSize"))
+			it.StoreGatewayTenantShardSize, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "compactorBlocksRetentionPeriod":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("compactorBlocksRetentionPeriod"))
+			it.CompactorBlocksRetentionPeriod, err = ec.unmarshalODuration2ᚖk8sᚗioᚋapimachineryᚋpkgᚋapisᚋmetaᚋv1ᚐDuration(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "compactorSplitAndMergeShards":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("compactorSplitAndMergeShards"))
+			it.CompactorSplitAndMergeShards, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "compactorSplitGroups":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("compactorSplitGroups"))
+			it.CompactorSplitGroups, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "compactorTenantShardSize":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("compactorTenantShardSize"))
+			it.CompactorTenantShardSize, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "compactorPartialBlockDeletionDelay":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("compactorPartialBlockDeletionDelay"))
+			it.CompactorPartialBlockDeletionDelay, err = ec.unmarshalODuration2ᚖk8sᚗioᚋapimachineryᚋpkgᚋapisᚋmetaᚋv1ᚐDuration(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "compactorBlockUploadEnabled":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("compactorBlockUploadEnabled"))
+			it.CompactorBlockUploadEnabled, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "compactorBlockUploadValidationEnabled":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("compactorBlockUploadValidationEnabled"))
+			it.CompactorBlockUploadValidationEnabled, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "compactorBlockUploadVerifyChunks":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("compactorBlockUploadVerifyChunks"))
+			it.CompactorBlockUploadVerifyChunks, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "s3SSEType":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("s3SSEType"))
+			it.S3SSEType, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "s3SSEKMSKeyID":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("s3SSEKMSKeyID"))
+			it.S3SSEKMSKeyID, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "s3SSEKMSEncryptionContext":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("s3SSEKMSEncryptionContext"))
+			it.S3SSEKMSEncryptionContext, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "alertmanagerReceiversBlockCIDRNetworks":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("alertmanagerReceiversBlockCIDRNetworks"))
+			it.AlertmanagerReceiversBlockCIDRNetworks, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "alertmanagerReceiversBlockPrivateAddresses":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("alertmanagerReceiversBlockPrivateAddresses"))
+			it.AlertmanagerReceiversBlockPrivateAddresses, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "notificationRateLimit":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("notificationRateLimit"))
+			it.NotificationRateLimit, err = ec.unmarshalOFloat2ᚖfloat64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "notificationRateLimitPerIntegration":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("notificationRateLimitPerIntegration"))
+			it.NotificationRateLimitPerIntegration, err = ec.unmarshalOFloatMap2map(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "alertmanagerMaxConfigSizeBytes":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("alertmanagerMaxConfigSizeBytes"))
+			it.AlertmanagerMaxConfigSizeBytes, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "alertmanagerMaxTemplatesCount":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("alertmanagerMaxTemplatesCount"))
+			it.AlertmanagerMaxTemplatesCount, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "alertmanagerMaxTemplateSizeBytes":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("alertmanagerMaxTemplateSizeBytes"))
+			it.AlertmanagerMaxTemplateSizeBytes, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "alertmanagerMaxDispatcherAggregationGroups":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("alertmanagerMaxDispatcherAggregationGroups"))
+			it.AlertmanagerMaxDispatcherAggregationGroups, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "alertmanagerMaxAlertsCount":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("alertmanagerMaxAlertsCount"))
+			it.AlertmanagerMaxAlertsCount, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "alertmanagerMaxAlertsSizeBytes":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("alertmanagerMaxAlertsSizeBytes"))
+			it.AlertmanagerMaxAlertsSizeBytes, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "forwardingEndpoint":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("forwardingEndpoint"))
+			it.ForwardingEndpoint, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "forwardingDropOlderThan":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("forwardingDropOlderThan"))
+			it.ForwardingDropOlderThan, err = ec.unmarshalODuration2ᚖk8sᚗioᚋapimachineryᚋpkgᚋapisᚋmetaᚋv1ᚐDuration(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "forwardingRules":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("forwardingRules"))
+			it.ForwardingRules, err = ec.unmarshalOForwardingRuleMap2map(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputNameInput(ctx context.Context, obj interface{}) (model.NameInput, error) {
 	var it model.NameInput
 	asMap := map[string]interface{}{}
@@ -15086,6 +15837,34 @@ func (ec *executionContext) unmarshalInputObservabilityTenantEditorsInput(ctx co
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("groups"))
 			it.Groups, err = ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputObservabilityTenantLimitsInput(ctx context.Context, obj interface{}) (model.ObservabilityTenantLimitsInput, error) {
+	var it model.ObservabilityTenantLimitsInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"mimir"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "mimir":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("mimir"))
+			it.Mimir, err = ec.unmarshalOMimirLimitsInput2ᚖgithubᚗcomᚋpluralshᚋtraceᚑshieldᚑcontrollerᚋapiᚋobservabilityᚋv1alpha1ᚐMimirLimitsInput(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -16227,14 +17006,6 @@ func (ec *executionContext) _ObservabilityTenantLimits(ctx context.Context, sel 
 		case "mimir":
 
 			out.Values[i] = ec._ObservabilityTenantLimits_mimir(ctx, field, obj)
-
-		case "loki":
-
-			out.Values[i] = ec._ObservabilityTenantLimits_loki(ctx, field, obj)
-
-		case "tempo":
-
-			out.Values[i] = ec._ObservabilityTenantLimits_tempo(ctx, field, obj)
 
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
@@ -17873,13 +18644,6 @@ func (ec *executionContext) unmarshalOLoginBindingsInput2ᚖgithubᚗcomᚋplura
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalOLokiLimits2ᚖgithubᚗcomᚋpluralshᚋoauthᚑplaygroundᚋapiᚑserverᚋgraphᚋmodelᚐLokiLimits(ctx context.Context, sel ast.SelectionSet, v *model.LokiLimits) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._LokiLimits(ctx, sel, v)
-}
-
 func (ec *executionContext) unmarshalOMap2map(ctx context.Context, v interface{}) (map[string]interface{}, error) {
 	if v == nil {
 		return nil, nil
@@ -17901,6 +18665,14 @@ func (ec *executionContext) marshalOMimirLimits2ᚖgithubᚗcomᚋpluralshᚋtra
 		return graphql.Null
 	}
 	return ec._MimirLimits(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalOMimirLimitsInput2ᚖgithubᚗcomᚋpluralshᚋtraceᚑshieldᚑcontrollerᚋapiᚋobservabilityᚋv1alpha1ᚐMimirLimitsInput(ctx context.Context, v interface{}) (*v1alpha1.MimirLimitsInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputMimirLimitsInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) marshalOName2ᚖgithubᚗcomᚋpluralshᚋoauthᚑplaygroundᚋapiᚑserverᚋgraphᚋmodelᚐName(ctx context.Context, sel ast.SelectionSet, v *model.Name) graphql.Marshaler {
@@ -17999,6 +18771,14 @@ func (ec *executionContext) marshalOObservabilityTenantLimits2ᚖgithubᚗcomᚋ
 		return graphql.Null
 	}
 	return ec._ObservabilityTenantLimits(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalOObservabilityTenantLimitsInput2ᚖgithubᚗcomᚋpluralshᚋoauthᚑplaygroundᚋapiᚑserverᚋgraphᚋmodelᚐObservabilityTenantLimitsInput(ctx context.Context, v interface{}) (*model.ObservabilityTenantLimitsInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputObservabilityTenantLimitsInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) marshalOObservabilityTenantViewers2ᚖgithubᚗcomᚋpluralshᚋoauthᚑplaygroundᚋapiᚑserverᚋgraphᚋmodelᚐObservabilityTenantViewers(ctx context.Context, sel ast.SelectionSet, v *model.ObservabilityTenantViewers) graphql.Marshaler {
@@ -18107,13 +18887,6 @@ func (ec *executionContext) marshalOString2ᚖstring(ctx context.Context, sel as
 	}
 	res := graphql.MarshalString(*v)
 	return res
-}
-
-func (ec *executionContext) marshalOTempoLimits2ᚖgithubᚗcomᚋpluralshᚋoauthᚑplaygroundᚋapiᚑserverᚋgraphᚋmodelᚐTempoLimits(ctx context.Context, sel ast.SelectionSet, v *model.TempoLimits) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._TempoLimits(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalOTime2ᚖtimeᚐTime(ctx context.Context, v interface{}) (*time.Time, error) {

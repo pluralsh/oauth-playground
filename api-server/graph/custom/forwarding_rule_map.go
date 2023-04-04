@@ -20,6 +20,7 @@ func MarshalForwardingRuleMap(val map[string]*observabilityv1alpha1.ForwardingRu
 	})
 }
 
+// TODO: this unmarshaler is not working and is needed for input types
 func UnmarshalForwardingRuleMap(v interface{}) (map[string]*observabilityv1alpha1.ForwardingRule, error) {
 	if m, ok := v.(map[string]*observabilityv1alpha1.ForwardingRule); ok {
 		return m, nil

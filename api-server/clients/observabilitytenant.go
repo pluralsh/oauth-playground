@@ -7,6 +7,7 @@ import (
 	rts "github.com/ory/keto/proto/ory/keto/relation_tuples/v1alpha2"
 	px "github.com/ory/x/pointerx"
 	"github.com/pluralsh/oauth-playground/api-server/graph/model"
+	observabilityv1alpha1 "github.com/pluralsh/trace-shield-controller/api/observability/v1alpha1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -17,7 +18,94 @@ const (
 	ObservabilityTenantPermissionEdit ObservabilityTenantPermission = "editors"
 )
 
-func (c *ClientWrapper) MutateObservabilityTenant(ctx context.Context, name string, viewers *model.ObservabilityTenantViewersInput, editors *model.ObservabilityTenantEditorsInput) (*model.ObservabilityTenant, error) {
+func (c *ClientWrapper) CreateObservabilityTenant(ctx context.Context, name string, viewers *model.ObservabilityTenantViewersInput, editors *model.ObservabilityTenantEditorsInput, limits *model.ObservabilityTenantLimitsInput) (*model.ObservabilityTenant, error) {
+	log := c.Log.WithName("CreateObservabilityTenant").WithValues("Name", name)
+
+	var mimirLimits *observabilityv1alpha1.MimirLimits
+
+	if limits != nil && limits.Mimir != nil {
+		tmpMimirLimits := observabilityv1alpha1.MimirLimits(*limits.Mimir)
+		mimirLimits = &tmpMimirLimits
+	}
+
+	tenantStruct := &observabilityv1alpha1.Tenant{
+		ObjectMeta: metav1.ObjectMeta{
+			Name: name,
+		},
+		Spec: observabilityv1alpha1.TenantSpec{
+			Limits: &observabilityv1alpha1.LimitSpec{
+				Mimir: mimirLimits,
+			},
+		},
+	}
+
+	tenant, err := c.ControllerClient.ObservabilityV1alpha1().Tenants().Create(ctx, tenantStruct, metav1.CreateOptions{})
+	if err != nil {
+		log.Error(err, "Failed to create observability tenant")
+		return nil, err
+	}
+
+	if err := c.MutateObservabilityTenantInKeto(ctx, name, viewers, editors); err != nil {
+		log.Error(err, "Failed to mutate observability tenant in keto")
+		return nil, err
+	}
+
+	return &model.ObservabilityTenant{
+		Name: tenant.Name,
+		Limits: &model.ObservabilityTenantLimits{
+			Mimir: tenant.Spec.Limits.Mimir,
+		},
+	}, nil
+}
+
+func (c *ClientWrapper) UpdateObservabilityTenant(ctx context.Context, name string, viewers *model.ObservabilityTenantViewersInput, editors *model.ObservabilityTenantEditorsInput, limits *model.ObservabilityTenantLimitsInput) (*model.ObservabilityTenant, error) {
+	log := c.Log.WithName("UpdateObservabilityTenant").WithValues("Name", name)
+
+	var mimirLimits *observabilityv1alpha1.MimirLimits
+
+	if limits != nil && limits.Mimir != nil {
+		tmpMimirLimits := observabilityv1alpha1.MimirLimits(*limits.Mimir)
+		mimirLimits = &tmpMimirLimits
+	}
+
+	existingTenant, err := c.ControllerClient.ObservabilityV1alpha1().Tenants().Get(ctx, name, metav1.GetOptions{})
+	if err != nil {
+		log.Error(err, "Failed to get observability tenant")
+		return nil, err
+	}
+
+	tenantStruct := &observabilityv1alpha1.Tenant{
+		ObjectMeta: metav1.ObjectMeta{
+			Name:            name,
+			ResourceVersion: existingTenant.GetResourceVersion(),
+		},
+		Spec: observabilityv1alpha1.TenantSpec{
+			Limits: &observabilityv1alpha1.LimitSpec{
+				Mimir: mimirLimits,
+			},
+		},
+	}
+
+	tenant, err := c.ControllerClient.ObservabilityV1alpha1().Tenants().Update(ctx, tenantStruct, metav1.UpdateOptions{})
+	if err != nil {
+		log.Error(err, "Failed to update observability tenant")
+		return nil, err
+	}
+
+	if err := c.MutateObservabilityTenantInKeto(ctx, name, viewers, editors); err != nil {
+		log.Error(err, "Failed to mutate observability tenant in keto")
+		return nil, err
+	}
+
+	return &model.ObservabilityTenant{
+		Name: tenant.Name,
+		Limits: &model.ObservabilityTenantLimits{
+			Mimir: tenant.Spec.Limits.Mimir,
+		},
+	}, nil
+}
+
+func (c *ClientWrapper) MutateObservabilityTenantInKeto(ctx context.Context, name string, viewers *model.ObservabilityTenantViewersInput, editors *model.ObservabilityTenantEditorsInput) error {
 
 	// TODO: figure out which members to add or remove
 	log := c.Log.WithName("ObservabilityTenant").WithValues("Name", name)
@@ -26,24 +114,24 @@ func (c *ClientWrapper) MutateObservabilityTenant(ctx context.Context, name stri
 	// updating a group would require that we first check if it exists and if a user is allowed to update it
 	// creating a group would require that we first check if it exists and if a user is allowed to create it
 
-	tenantpExists, err := c.ObservabilityTenantExistsInKeto(ctx, name)
-	if err != nil {
-		log.Error(err, "Failed to check if observability tenant already exists in keto")
-		return nil, err
-	}
+	// tenantpExists, err := c.ObservabilityTenantExistsInKeto(ctx, name)
+	// if err != nil {
+	// 	log.Error(err, "Failed to check if observability tenant already exists in keto")
+	// 	return nil, err
+	// }
 
-	if !tenantpExists {
-		err := c.CreateObservabilityTenantInKeto(ctx, name)
-		if err != nil {
-			log.Error(err, "Failed to create observability tenant in keto")
-			return nil, err
-		}
-	}
+	// if !tenantpExists {
+	// 	err := c.CreateObservabilityTenantInKeto(ctx, name)
+	// 	if err != nil {
+	// 		log.Error(err, "Failed to create observability tenant in keto")
+	// 		return nil, err
+	// 	}
+	// }
 
 	viewUsersToAdd, viewUsersToRemove, viewGroupsToAdd, viewGroupsToRemove, viewClientsToAdd, viewClientsToRemove, err := c.OsTenantChangeset(ctx, name, viewers, nil, ObservabilityTenantPermissionView)
 	if err != nil {
 		log.Error(err, "Failed to get observability tenant changeset")
-		return nil, err
+		return err
 	}
 
 	if err := c.AddUsersToTenantInKeto(ctx, name, viewUsersToAdd, ObservabilityTenantPermissionView); err != nil {
@@ -79,7 +167,7 @@ func (c *ClientWrapper) MutateObservabilityTenant(ctx context.Context, name stri
 	editUsersToAdd, editUsersToRemove, editGroupsToAdd, editGroupsToRemove, _, _, err := c.OsTenantChangeset(ctx, name, nil, editors, ObservabilityTenantPermissionEdit)
 	if err != nil {
 		log.Error(err, "Failed to get observability tenant changeset")
-		return nil, err
+		return err
 	}
 
 	if err := c.AddUsersToTenantInKeto(ctx, name, editUsersToAdd, ObservabilityTenantPermissionEdit); err != nil {
@@ -102,12 +190,7 @@ func (c *ClientWrapper) MutateObservabilityTenant(ctx context.Context, name stri
 		// return nil, err // TODO: add some way to wrap errors
 	}
 
-	return &model.ObservabilityTenant{
-		Name: name,
-		Organization: &model.Organization{
-			Name: "main", //TODO: decide whether to hardcode this or not
-		},
-	}, nil
+	return nil
 }
 
 // function that checks if an observability tenant exists in keto

@@ -17,6 +17,7 @@ func MarshalFloatMap(val map[string]*float64) graphql.Marshaler {
 	})
 }
 
+// TODO: this unmarshaler is not working and is needed for input types
 func UnmarshalFloatMap(v interface{}) (map[string]*float64, error) {
 	if m, ok := v.(map[string]*float64); ok {
 		return m, nil

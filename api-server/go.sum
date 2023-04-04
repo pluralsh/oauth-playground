@@ -1209,8 +1209,8 @@ github.com/pkg/sftp v1.10.1/go.mod h1:lYOWFsE0bwd1+KfKJaKeuokY15vzFx25BLbzYYoAxZ
 github.com/pkg/sftp v1.13.1/go.mod h1:3HaPG6Dq1ILlpPZRO0HVMrsydcdLt6HRDccSgb87qRg=
 github.com/pluralsh/controller-reconcile-helper v0.0.4 h1:1o+7qYSyoeqKFjx+WgQTxDz4Q2VMpzprJIIKShxqG0E=
 github.com/pluralsh/controller-reconcile-helper v0.0.4/go.mod h1:AfY0gtteD6veBjmB6jiRx/aR4yevEf6K0M13/pGan/s=
-github.com/pluralsh/trace-shield-controller v0.0.0-20230404161307-a98fd77d4d44 h1:bbcN7OGV4vrYcrk4AHiICMmV3VA393NnQv8ronuSF7A=
-github.com/pluralsh/trace-shield-controller v0.0.0-20230404161307-a98fd77d4d44/go.mod h1:Mjf4+X7fVZhc1nK0DhtrYiB588QpvGt+IYE0Ob5pMi0=
+github.com/pluralsh/trace-shield-controller v0.0.0-20230404170210-f84361cc9dee h1:cFN6H82uHFULmm6UAb60ORM0Zy8mfsfn4i3l2aLtYUw=
+github.com/pluralsh/trace-shield-controller v0.0.0-20230404170210-f84361cc9dee/go.mod h1:Mjf4+X7fVZhc1nK0DhtrYiB588QpvGt+IYE0Ob5pMi0=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 h1:Jamvg5psRIccs7FGNTlIRMkT8wgtp5eCXdBlqhYGL6U=
 github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=

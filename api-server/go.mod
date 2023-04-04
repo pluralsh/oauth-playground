@@ -8,7 +8,7 @@ require (
 	github.com/go-logr/logr v1.2.3
 	github.com/ory/keto/proto v0.11.1-alpha.0
 	github.com/ory/kratos-client-go v0.11.1
-	github.com/pluralsh/trace-shield-controller v0.0.0-20230404161307-a98fd77d4d44
+	github.com/pluralsh/trace-shield-controller v0.0.0-20230404170210-f84361cc9dee
 	github.com/rs/cors v1.8.3
 	github.com/vektah/gqlparser/v2 v2.5.1
 	sigs.k8s.io/controller-runtime v0.14.4

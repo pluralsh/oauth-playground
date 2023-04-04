@@ -12,13 +12,13 @@ import (
 )
 
 // CreateObservabilityTenant is the resolver for the createObservabilityTenant field.
-func (r *mutationResolver) CreateObservabilityTenant(ctx context.Context, name string, viewers *model.ObservabilityTenantViewersInput, editors *model.ObservabilityTenantEditorsInput) (*model.ObservabilityTenant, error) {
-	return r.C.MutateObservabilityTenant(ctx, name, viewers, editors)
+func (r *mutationResolver) CreateObservabilityTenant(ctx context.Context, name string, viewers *model.ObservabilityTenantViewersInput, editors *model.ObservabilityTenantEditorsInput, limits *model.ObservabilityTenantLimitsInput) (*model.ObservabilityTenant, error) {
+	return r.C.CreateObservabilityTenant(ctx, name, viewers, editors, limits)
 }
 
 // UpdateObservabilityTenant is the resolver for the updateObservabilityTenant field.
-func (r *mutationResolver) UpdateObservabilityTenant(ctx context.Context, name string, viewers *model.ObservabilityTenantViewersInput, editors *model.ObservabilityTenantEditorsInput) (*model.ObservabilityTenant, error) {
-	return r.C.MutateObservabilityTenant(ctx, name, viewers, editors)
+func (r *mutationResolver) UpdateObservabilityTenant(ctx context.Context, name string, viewers *model.ObservabilityTenantViewersInput, editors *model.ObservabilityTenantEditorsInput, limits *model.ObservabilityTenantLimitsInput) (*model.ObservabilityTenant, error) {
+	return r.C.UpdateObservabilityTenant(ctx, name, viewers, editors, limits)
 }
 
 // DeleteObservabilityTenant is the resolver for the deleteObservabilityTenant field.

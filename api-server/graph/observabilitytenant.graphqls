@@ -21,11 +21,23 @@ type ObservabilityTenantLimits {
   "The limits for Mimir for the tenant."
   mimir: MimirLimits
 
-  "The limits for Loki for the tenant."
-  loki: LokiLimits
+  # "The limits for Loki for the tenant."
+  # loki: LokiLimits
 
-  "The limits for Tempo for the tenant."
-  tempo: TempoLimits
+  # "The limits for Tempo for the tenant."
+  # tempo: TempoLimits
+}
+
+"Inputs for the limits of a tenant."
+input ObservabilityTenantLimitsInput {
+  "The limits for Mimir for the tenant."
+  mimir: MimirLimitsInput
+
+  # "The limits for Loki for the tenant."
+  # loki: LokiLimitsInput
+
+  # "The limits for Tempo for the tenant."
+  # tempo: TempoLimitsInput
 }
 
 scalar Duration
@@ -34,6 +46,198 @@ scalar ForwardingRuleMap
 
 "Representation of the limits for Mimir for a tenant."
 type MimirLimits {
+  requestRate: Float
+
+  requestBurstSize: Int
+	
+	ingestionRate: Float
+	
+	ingestionBurstSize: Int
+	
+	acceptHASamples: Boolean
+	
+	haClusterLabel: String
+	
+	haReplicaLabel: String
+	
+	haMaxClusters: Int
+	
+	dropLabels: [String]
+	
+	maxLabelNameLength: Int
+	
+	maxLabelValueLength: Int
+	
+	maxLabelNamesPerSeries: Int
+	
+	maxMetadataLength: Int
+	
+	creationGracePeriod: Duration
+	
+	enforceMetadataMetricName: Boolean
+	
+	ingestionTenantShardSize: Int
+	
+  # metricRelabelConfigs
+	
+	
+
+	
+	
+	
+	maxGlobalSeriesPerUser: Int
+	
+	maxGlobalSeriesPerMetric: Int
+	
+	
+	maxGlobalMetricsWithMetadataPerUser: Int
+	
+	maxGlobalMetadataPerMetric: Int
+	
+	
+	
+	maxGlobalExemplarsPerUser: Int
+	
+	
+	nativeHistogramsIngestionEnabled: Boolean
+	
+	# activeSeriesCustomTrackersConfig: 
+	
+	
+	outOfOrderTimeWindow: Duration
+	
+	outOfOrderBlocksExternalLabelEnabled: Boolean
+	
+
+	
+	
+	separateMetricsGroupLabel: String
+
+	
+	
+	maxChunksPerQuery: Int
+	
+	maxFetchedSeriesPerQuery: Int
+	
+	maxFetchedChunkBytesPerQuery: Int
+	
+	maxQueryLookback: Duration
+	
+	maxPartialQueryLength: Duration
+	
+	maxQueryParallelism: Int
+	
+	maxLabelsQueryLength: Duration
+	
+	maxCacheFreshness: Duration
+	
+	maxQueriersPerTenant: Int
+	
+	queryShardingTotalShards: Int
+	
+	queryShardingMaxShardedQueries: Int
+	
+	queryShardingMaxRegexpSizeBytes: Int
+	
+	splitInstantQueriesByInterval: Duration
+
+	
+	
+	maxTotalQueryLength: Duration
+	
+	resultsCacheTTL: Duration
+	
+	resultsCacheTTLForOutOfOrderTimeWindow: Duration
+	
+	maxQueryExpressionSizeBytes: Int
+
+	
+	
+	cardinalityAnalysisEnabled: Boolean
+	
+	labelNamesAndValuesResultsMaxSizeBytes: Int
+	
+	labelValuesMaxCardinalityLabelNamesPerRequest: Int
+
+	
+	
+	rulerEvaluationDelay: Duration
+	
+	rulerTenantShardSize: Int
+	
+	rulerMaxRulesPerRuleGroup: Int
+	
+	rulerMaxRuleGroupsPerTenant: Int
+	
+	rulerRecordingRulesEvaluationEnabled: Boolean
+	
+	rulerAlertingRulesEvaluationEnabled: Boolean
+
+	
+	
+	storeGatewayTenantShardSize: Int
+
+	
+	
+	compactorBlocksRetentionPeriod: Duration
+	
+	compactorSplitAndMergeShards: Int
+	
+	compactorSplitGroups: Int
+	
+	compactorTenantShardSize: Int
+	
+	compactorPartialBlockDeletionDelay: Duration
+	
+	compactorBlockUploadEnabled: Boolean
+	
+	compactorBlockUploadValidationEnabled: Boolean
+	
+	compactorBlockUploadVerifyChunks: Boolean
+
+	
+	
+	
+	s3SSEType: String
+	
+	s3SSEKMSKeyID: String
+	
+	s3SSEKMSEncryptionContext: String
+
+	
+	
+	
+	alertmanagerReceiversBlockCIDRNetworks: String
+	
+	alertmanagerReceiversBlockPrivateAddresses: Boolean
+
+	
+	notificationRateLimit: Float
+	
+	notificationRateLimitPerIntegration: FloatMap
+
+	
+	alertmanagerMaxConfigSizeBytes: Int
+	
+	alertmanagerMaxTemplatesCount: Int
+	
+	alertmanagerMaxTemplateSizeBytes: Int
+	
+	alertmanagerMaxDispatcherAggregationGroups: Int
+	
+	alertmanagerMaxAlertsCount: Int
+	
+	alertmanagerMaxAlertsSizeBytes: Int
+
+	
+	forwardingEndpoint: String
+	
+	forwardingDropOlderThan: Duration
+	
+	forwardingRules: ForwardingRuleMap
+}
+
+input MimirLimitsInput {
   requestRate: Float
 
   requestBurstSize: Int
@@ -299,6 +503,8 @@ extend type Mutation {
     viewers: ObservabilityTenantViewersInput
     "The users and groups that can edit a tenant to add users, groups or oauth2 clients to it."
     editors: ObservabilityTenantEditorsInput
+    "The limits for the tenant."
+    limits: ObservabilityTenantLimitsInput
   ): ObservabilityTenant! @checkPermissions @isAuthenticated
 
   "Update an observability tenant."
@@ -309,6 +515,8 @@ extend type Mutation {
     viewers: ObservabilityTenantViewersInput
     "The users and groups that can edit a tenant to add users, groups or oauth2 clients to it."
     editors: ObservabilityTenantEditorsInput
+    "The limits for the tenant."
+    limits: ObservabilityTenantLimitsInput
   ): ObservabilityTenant! @checkPermissions @isAuthenticated
 
   "Delete an observability tenant."

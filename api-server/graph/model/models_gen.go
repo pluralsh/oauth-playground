@@ -219,10 +219,12 @@ type ObservabilityTenantEditorsInput struct {
 type ObservabilityTenantLimits struct {
 	// The limits for Mimir for the tenant.
 	Mimir *v1alpha1.MimirLimits `json:"mimir"`
-	// The limits for Loki for the tenant.
-	Loki *LokiLimits `json:"loki"`
-	// The limits for Tempo for the tenant.
-	Tempo *TempoLimits `json:"tempo"`
+}
+
+// Inputs for the limits of a tenant.
+type ObservabilityTenantLimitsInput struct {
+	// The limits for Mimir for the tenant.
+	Mimir *v1alpha1.MimirLimitsInput `json:"mimir"`
 }
 
 // Representation of the users, groups and oauth2 clients that can view or send data a tenant.
