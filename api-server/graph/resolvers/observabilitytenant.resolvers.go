@@ -17,8 +17,13 @@ func (r *mimirLimitsResolver) ForwardingRules(ctx context.Context, obj *model.Mi
 	panic(fmt.Errorf("not implemented: ForwardingRules - forwardingRules"))
 }
 
-// ObservabilityTenant is the resolver for the observabilityTenant field.
-func (r *mutationResolver) ObservabilityTenant(ctx context.Context, name string, viewers *model.ObservabilityTenantViewersInput, editors *model.ObservabilityTenantEditorsInput) (*model.ObservabilityTenant, error) {
+// CreateObservabilityTenant is the resolver for the createObservabilityTenant field.
+func (r *mutationResolver) CreateObservabilityTenant(ctx context.Context, name string, viewers *model.ObservabilityTenantViewersInput, editors *model.ObservabilityTenantEditorsInput) (*model.ObservabilityTenant, error) {
+	return r.C.MutateObservabilityTenant(ctx, name, viewers, editors)
+}
+
+// UpdateObservabilityTenant is the resolver for the updateObservabilityTenant field.
+func (r *mutationResolver) UpdateObservabilityTenant(ctx context.Context, name string, viewers *model.ObservabilityTenantViewersInput, editors *model.ObservabilityTenantEditorsInput) (*model.ObservabilityTenant, error) {
 	return r.C.MutateObservabilityTenant(ctx, name, viewers, editors)
 }
 
@@ -94,3 +99,13 @@ type mimirLimitsResolver struct{ *Resolver }
 type observabilityTenantResolver struct{ *Resolver }
 type observabilityTenantEditorsResolver struct{ *Resolver }
 type observabilityTenantViewersResolver struct{ *Resolver }
+
+// !!! WARNING !!!
+// The code below was going to be deleted when updating resolvers. It has been copied here so you have
+// one last chance to move it out of harms way if you want. There are two reasons this happens:
+//   - When renaming or deleting a resolver the old code will be put in here. You can safely delete
+//     it when you're done.
+//   - You have helper methods in this file. Move them out to keep these resolver files clean.
+func (r *mutationResolver) ObservabilityTenant(ctx context.Context, name string, viewers *model.ObservabilityTenantViewersInput, editors *model.ObservabilityTenantEditorsInput) (*model.ObservabilityTenant, error) {
+	return r.C.MutateObservabilityTenant(ctx, name, viewers, editors)
+}

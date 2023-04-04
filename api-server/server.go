@@ -70,7 +70,14 @@ func main() {
 		panic(err)
 	}
 
+	controllerClient, err := clients.NewControllerClient()
+	if err != nil {
+		setupLog.Error(err, "Failed to setup controller client")
+		panic(err)
+	}
+
 	clientWrapper := &clients.ClientWrapper{
+		ControllerClient:   controllerClient,
 		KratosAdminClient:  kratosAdminClient,
 		KratosPublicClient: kratosPublicClient,
 		KetoClient:         ketoClient,

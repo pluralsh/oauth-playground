@@ -291,8 +291,18 @@ extend type Query {
 }
 
 extend type Mutation {
-  "Create or update an observability tenant."
-  observabilityTenant(
+  "Create an observability tenant."
+  createObservabilityTenant(
+    "The name of the tenant."
+    name: String!
+    "The users, groups or OAuth 2.0 client that have access to the observability tenant."
+    viewers: ObservabilityTenantViewersInput
+    "The users and groups that can edit a tenant to add users, groups or oauth2 clients to it."
+    editors: ObservabilityTenantEditorsInput
+  ): ObservabilityTenant! @checkPermissions @isAuthenticated
+
+  "Update an observability tenant."
+  updateObservabilityTenant(
     "The name of the tenant."
     name: String!
     "The users, groups or OAuth 2.0 client that have access to the observability tenant."

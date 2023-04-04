@@ -7,6 +7,7 @@ import (
 	rts "github.com/ory/keto/proto/ory/keto/relation_tuples/v1alpha2"
 	px "github.com/ory/x/pointerx"
 	"github.com/pluralsh/oauth-playground/api-server/graph/model"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
 type ObservabilityTenantPermission string
@@ -24,6 +25,13 @@ func (c *ClientWrapper) MutateObservabilityTenant(ctx context.Context, name stri
 	// TODO: figure out how to distinguish between creating or updating a group
 	// updating a group would require that we first check if it exists and if a user is allowed to update it
 	// creating a group would require that we first check if it exists and if a user is allowed to create it
+
+	test, err := c.ControllerClient.ObservabilityV1alpha1().Tenants("").Get(ctx, name, metav1.GetOptions{})
+	if err != nil {
+		log.Error(err, "Failed to get observability tenant")
+		return nil, err
+	}
+	log.Info("Got observability tenant", "Tenant", test)
 
 	tenantpExists, err := c.ObservabilityTenantExistsInKeto(ctx, name)
 	if err != nil {
@@ -621,18 +629,25 @@ func (c *ClientWrapper) GetTenantFromKeto(ctx context.Context, name string) (*mo
 		return nil, fmt.Errorf("observability tenant name cannot be empty")
 	}
 
-	// check if group exists in keto
-	exists, err := c.ObservabilityTenantExistsInKeto(ctx, name)
+	test, err := c.ControllerClient.ObservabilityV1alpha1().Tenants("").Get(ctx, name, metav1.GetOptions{})
 	if err != nil {
-		log.Error(err, "Failed to check if observability tenant exists in keto")
+		log.Error(err, "Failed to get observability tenant")
 		return nil, err
 	}
-	if !exists {
+	log.Info("Got observability tenant", "Tenant", test)
+
+	// check if group exists in keto
+	// exists, err := c.ObservabilityTenantExistsInKeto(ctx, name)
+	// if err != nil {
+	// 	log.Error(err, "Failed to check if observability tenant exists in keto")
+	// 	return nil, err
+	// }
+	if test == nil {
 		return nil, fmt.Errorf("observability tenant does not exist in keto")
 	}
 
 	return &model.ObservabilityTenant{
-		Name: name,
+		Name: test.Name,
 		Organization: &model.Organization{
 			Name: "main", //TODO: decide whether to hardcode this or not
 		},

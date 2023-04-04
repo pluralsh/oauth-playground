@@ -6,9 +6,9 @@ require (
 	github.com/99designs/gqlgen v0.17.24
 	github.com/go-chi/chi/v5 v5.0.8
 	github.com/go-logr/logr v1.2.3
-	github.com/ory/keto/proto v0.10.0-alpha.0.pre.1
+	github.com/ory/keto/proto v0.11.1-alpha.0
 	github.com/ory/kratos-client-go v0.11.1
-	github.com/pluralsh/trace-shield-controller v0.0.0-20230404093410-6cd1cc4109fb
+	github.com/pluralsh/trace-shield-controller v0.0.0-20230404122537-6ea1f855b08a
 	github.com/rs/cors v1.8.3
 	github.com/vektah/gqlparser/v2 v2.5.1
 	sigs.k8s.io/controller-runtime v0.14.4
@@ -30,7 +30,7 @@ require (
 	github.com/asaskevich/govalidator v0.0.0-20210307081110-f21760c49a8d // indirect
 	github.com/avast/retry-go/v4 v4.3.0 // indirect
 	github.com/aws/aws-sdk-go v1.42.0 // indirect
-	github.com/cenkalti/backoff/v4 v4.1.3 // indirect
+	github.com/cenkalti/backoff/v4 v4.2.0 // indirect
 	github.com/dgraph-io/ristretto v0.1.1 // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
 	github.com/dustin/go-humanize v1.0.0 // indirect
@@ -130,7 +130,7 @@ require (
 	golang.org/x/sync v0.1.0 // indirect
 	golang.org/x/xerrors v0.0.0-20220907171357-04be3eba64a2 // indirect
 	google.golang.org/api v0.103.0 // indirect
-	google.golang.org/genproto v0.0.0-20230110181048-76db0878b65f // indirect
+	google.golang.org/genproto v0.0.0-20230131230820-1c016267d619 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/square/go-jose.v2 v2.6.0 // indirect
 )
@@ -170,7 +170,7 @@ require (
 	github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 // indirect
 	github.com/ory/hydra-client-go/v2 v2.0.3
 	github.com/ory/oathkeeper v0.40.1
-	github.com/ory/x v0.0.541
+	github.com/ory/x v0.0.547
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/prometheus/client_golang v1.14.0 // indirect
 	github.com/prometheus/client_model v0.3.0 // indirect
