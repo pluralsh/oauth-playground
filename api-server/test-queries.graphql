@@ -511,3 +511,111 @@ mutation{
     name
   }
 }
+
+query{
+  listObservabilityTenants{
+    name
+    viewers{
+      users{
+        id
+        email
+      }
+      groups{
+        name
+      }
+      oauth2Clients{
+        clientId
+        clientName
+      }
+    }
+    editors{
+      users{
+        id
+        email
+      }
+      groups{
+        name
+      }
+    }
+    limits{
+      mimir{
+        requestRate
+        requestBurstSize
+        ingestionRate
+        ingestionBurstSize
+        # acceptHASamples
+        # haClusterLabel
+        # haReplicaLabel
+        # haMaxClusters
+        # dropLabels
+        # maxLabelNameLength
+        # maxLabelValueLength
+        # maxLabelNamesPerSeries
+        # maxMetadataLength
+        # creationGracePeriod
+        # enforceMetadataMetricName
+        # ingestionTenantShardSize
+        # maxGlobalSeriesPerUser
+        # maxGlobalSeriesPerMetric
+        # maxGlobalMetricsWithMetadataPerUser
+        # maxGlobalMetadataPerMetric
+        # maxGlobalExemplarsPerUser
+        # nativeHistogramsIngestionEnabled
+        # outOfOrderTimeWindow
+        # outOfOrderBlocksExternalLabelEnabled
+        # separateMetricsGroupLabel
+        # maxChunksPerQuery
+        # maxFetchedSeriesPerQuery
+        # maxFetchedChunkBytesPerQuery
+        # maxQueryLookback
+        # maxPartialQueryLength
+        # maxQueryParallelism
+        # maxLabelsQueryLength
+        # maxCacheFreshness
+        # maxQueriersPerTenant
+        # queryShardingTotalShards
+        # queryShardingMaxShardedQueries
+        # queryShardingMaxRegexpSizeBytes
+        # splitInstantQueriesByInterval
+        # maxTotalQueryLength
+        # resultsCacheTTL
+        # resultsCacheTTLForOutOfOrderTimeWindow
+        # maxQueryExpressionSizeBytes
+        # cardinalityAnalysisEnabled
+        # labelNamesAndValuesResultsMaxSizeBytes
+        # labelValuesMaxCardinalityLabelNamesPerRequest
+        # rulerEvaluationDelay
+        # rulerTenantShardSize
+        # rulerMaxRulesPerRuleGroup
+        # rulerMaxRuleGroupsPerTenant
+        # rulerRecordingRulesEvaluationEnabled
+        # rulerAlertingRulesEvaluationEnabled
+        # storeGatewayTenantShardSize
+        # compactorBlocksRetentionPeriod
+        # compactorSplitAndMergeShards
+        # compactorSplitGroups
+        # compactorTenantShardSize
+        # compactorPartialBlockDeletionDelay
+        # compactorBlockUploadEnabled
+        # compactorBlockUploadValidationEnabled
+        # compactorBlockUploadVerifyChunks
+        # s3SSEType
+        # s3SSEKMSKeyID
+        # s3SSEKMSEncryptionContext
+        # alertmanagerReceiversBlockCIDRNetworks
+        # alertmanagerReceiversBlockPrivateAddresses
+        # notificationRateLimit
+        # notificationRateLimitPerIntegration
+        # alertmanagerMaxConfigSizeBytes
+        # alertmanagerMaxTemplatesCount
+        # alertmanagerMaxTemplateSizeBytes
+        # alertmanagerMaxDispatcherAggregationGroups
+        # alertmanagerMaxAlertsCount
+        # alertmanagerMaxAlertsSizeBytes
+        # forwardingEndpoInt
+        # forwardingDropOlderThan
+        # forwardingRules
+      }
+    }
+  }
+}

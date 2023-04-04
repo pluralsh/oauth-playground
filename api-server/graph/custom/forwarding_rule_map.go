@@ -11,7 +11,7 @@ import (
 	// "github.com/pluralsh/oauth-playground/api-server/graph/model"
 )
 
-func MarshalForwardingRuleMap(val map[string]observabilityv1alpha1.ForwardingRule) graphql.Marshaler {
+func MarshalForwardingRuleMap(val map[string]*observabilityv1alpha1.ForwardingRule) graphql.Marshaler {
 	return graphql.WriterFunc(func(w io.Writer) {
 		err := json.NewEncoder(w).Encode(val)
 		if err != nil {
@@ -20,8 +20,8 @@ func MarshalForwardingRuleMap(val map[string]observabilityv1alpha1.ForwardingRul
 	})
 }
 
-func UnmarshalForwardingRuleMap(v interface{}) (map[string]observabilityv1alpha1.ForwardingRule, error) {
-	if m, ok := v.(map[string]observabilityv1alpha1.ForwardingRule); ok {
+func UnmarshalForwardingRuleMap(v interface{}) (map[string]*observabilityv1alpha1.ForwardingRule, error) {
+	if m, ok := v.(map[string]*observabilityv1alpha1.ForwardingRule); ok {
 		return m, nil
 	}
 	return nil, fmt.Errorf("%T is not a map", v)

@@ -630,7 +630,7 @@ func (c *ClientWrapper) ListTenants(ctx context.Context) ([]*model.Observability
 		outputTenants = append(outputTenants, &model.ObservabilityTenant{
 			Name: tenant.Name,
 			Limits: &model.ObservabilityTenantLimits{
-				Mimir: &tenant.Spec.Limits.Mimir,
+				Mimir: tenant.Spec.Limits.Mimir,
 			},
 		})
 	}
@@ -656,9 +656,9 @@ func (c *ClientWrapper) GetTenant(ctx context.Context, name string) (*model.Obse
 	log.Info("Got observability tenant", "Tenant", tenant)
 
 	outputTenant := &model.ObservabilityTenant{
-		Name: tenant.Name,
+		Name:   tenant.Name,
 		Limits: &model.ObservabilityTenantLimits{
-			Mimir: &tenant.Spec.Limits.Mimir,
+			// Mimir: &tenant.Spec.Limits.Mimir,
 		},
 	}
 
