@@ -8,7 +8,7 @@ require (
 	github.com/go-logr/logr v1.2.3
 	github.com/ory/keto/proto v0.11.1-alpha.0
 	github.com/ory/kratos-client-go v0.11.1
-	github.com/pluralsh/trace-shield-controller v0.0.0-20230404122537-6ea1f855b08a
+	github.com/pluralsh/trace-shield-controller v0.0.0-20230404132121-f186e4ceb10f
 	github.com/rs/cors v1.8.3
 	github.com/vektah/gqlparser/v2 v2.5.1
 	sigs.k8s.io/controller-runtime v0.14.4
@@ -200,7 +200,7 @@ require (
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	k8s.io/api v0.26.2 // indirect
 	k8s.io/apiextensions-apiserver v0.26.1 // indirect
-	k8s.io/apimachinery v0.26.2 // indirect
+	k8s.io/apimachinery v0.26.2
 	k8s.io/client-go v0.26.2 // indirect
 	k8s.io/component-base v0.26.1 // indirect
 	k8s.io/klog/v2 v2.90.1 // indirect

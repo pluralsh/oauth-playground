@@ -26,7 +26,7 @@ func (c *ClientWrapper) MutateObservabilityTenant(ctx context.Context, name stri
 	// updating a group would require that we first check if it exists and if a user is allowed to update it
 	// creating a group would require that we first check if it exists and if a user is allowed to create it
 
-	test, err := c.ControllerClient.ObservabilityV1alpha1().Tenants("").Get(ctx, name, metav1.GetOptions{})
+	test, err := c.ControllerClient.ObservabilityV1alpha1().Tenants().Get(ctx, name, metav1.GetOptions{})
 	if err != nil {
 		log.Error(err, "Failed to get observability tenant")
 		return nil, err
@@ -629,7 +629,7 @@ func (c *ClientWrapper) GetTenantFromKeto(ctx context.Context, name string) (*mo
 		return nil, fmt.Errorf("observability tenant name cannot be empty")
 	}
 
-	test, err := c.ControllerClient.ObservabilityV1alpha1().Tenants("").Get(ctx, name, metav1.GetOptions{})
+	test, err := c.ControllerClient.ObservabilityV1alpha1().Tenants().Get(ctx, name, metav1.GetOptions{})
 	if err != nil {
 		log.Error(err, "Failed to get observability tenant")
 		return nil, err
