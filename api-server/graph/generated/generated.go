@@ -16,6 +16,7 @@ import (
 	"github.com/99designs/gqlgen/graphql/introspection"
 	"github.com/pluralsh/oauth-playground/api-server/graph/custom"
 	"github.com/pluralsh/oauth-playground/api-server/graph/model"
+	"github.com/pluralsh/trace-shield-controller/api/observability/v1alpha1"
 	model1 "github.com/prometheus/common/model"
 	gqlparser "github.com/vektah/gqlparser/v2"
 	"github.com/vektah/gqlparser/v2/ast"
@@ -41,7 +42,6 @@ type Config struct {
 type ResolverRoot interface {
 	Group() GroupResolver
 	LoginBindings() LoginBindingsResolver
-	MimirLimits() MimirLimitsResolver
 	Mutation() MutationResolver
 	OAuth2Client() OAuth2ClientResolver
 	ObservabilityTenant() ObservabilityTenantResolver
@@ -312,9 +312,6 @@ type GroupResolver interface {
 type LoginBindingsResolver interface {
 	Users(ctx context.Context, obj *model.LoginBindings) ([]*model.User, error)
 	Groups(ctx context.Context, obj *model.LoginBindings) ([]*model.Group, error)
-}
-type MimirLimitsResolver interface {
-	ForwardingRules(ctx context.Context, obj *model.MimirLimits) (*string, error)
 }
 type MutationResolver interface {
 	CreateUser(ctx context.Context, email string, name *model.NameInput) (*model.User, error)
@@ -3993,7 +3990,7 @@ func (ec *executionContext) _fieldMiddleware(ctx context.Context, obj interface{
 
 // region    **************************** field.gotpl *****************************
 
-func (ec *executionContext) _ForwardingRule_ingest(ctx context.Context, field graphql.CollectedField, obj *model.ForwardingRule) (ret graphql.Marshaler) {
+func (ec *executionContext) _ForwardingRule_ingest(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.ForwardingRule) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_ForwardingRule_ingest(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -4307,7 +4304,7 @@ func (ec *executionContext) fieldContext_LokiLimits_requestRate(ctx context.Cont
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_requestRate(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_requestRate(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_requestRate(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -4345,7 +4342,7 @@ func (ec *executionContext) fieldContext_MimirLimits_requestRate(ctx context.Con
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_requestBurstSize(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_requestBurstSize(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_requestBurstSize(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -4383,7 +4380,7 @@ func (ec *executionContext) fieldContext_MimirLimits_requestBurstSize(ctx contex
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_ingestionRate(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_ingestionRate(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_ingestionRate(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -4421,7 +4418,7 @@ func (ec *executionContext) fieldContext_MimirLimits_ingestionRate(ctx context.C
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_ingestionBurstSize(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_ingestionBurstSize(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_ingestionBurstSize(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -4459,7 +4456,7 @@ func (ec *executionContext) fieldContext_MimirLimits_ingestionBurstSize(ctx cont
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_acceptHASamples(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_acceptHASamples(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_acceptHASamples(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -4497,7 +4494,7 @@ func (ec *executionContext) fieldContext_MimirLimits_acceptHASamples(ctx context
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_haClusterLabel(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_haClusterLabel(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_haClusterLabel(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -4535,7 +4532,7 @@ func (ec *executionContext) fieldContext_MimirLimits_haClusterLabel(ctx context.
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_haReplicaLabel(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_haReplicaLabel(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_haReplicaLabel(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -4573,7 +4570,7 @@ func (ec *executionContext) fieldContext_MimirLimits_haReplicaLabel(ctx context.
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_haMaxClusters(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_haMaxClusters(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_haMaxClusters(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -4611,7 +4608,7 @@ func (ec *executionContext) fieldContext_MimirLimits_haMaxClusters(ctx context.C
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_dropLabels(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_dropLabels(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_dropLabels(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -4649,7 +4646,7 @@ func (ec *executionContext) fieldContext_MimirLimits_dropLabels(ctx context.Cont
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_maxLabelNameLength(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_maxLabelNameLength(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_maxLabelNameLength(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -4687,7 +4684,7 @@ func (ec *executionContext) fieldContext_MimirLimits_maxLabelNameLength(ctx cont
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_maxLabelValueLength(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_maxLabelValueLength(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_maxLabelValueLength(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -4725,7 +4722,7 @@ func (ec *executionContext) fieldContext_MimirLimits_maxLabelValueLength(ctx con
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_maxLabelNamesPerSeries(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_maxLabelNamesPerSeries(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_maxLabelNamesPerSeries(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -4763,7 +4760,7 @@ func (ec *executionContext) fieldContext_MimirLimits_maxLabelNamesPerSeries(ctx 
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_maxMetadataLength(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_maxMetadataLength(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_maxMetadataLength(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -4801,7 +4798,7 @@ func (ec *executionContext) fieldContext_MimirLimits_maxMetadataLength(ctx conte
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_creationGracePeriod(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_creationGracePeriod(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_creationGracePeriod(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -4839,7 +4836,7 @@ func (ec *executionContext) fieldContext_MimirLimits_creationGracePeriod(ctx con
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_enforceMetadataMetricName(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_enforceMetadataMetricName(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_enforceMetadataMetricName(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -4877,7 +4874,7 @@ func (ec *executionContext) fieldContext_MimirLimits_enforceMetadataMetricName(c
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_ingestionTenantShardSize(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_ingestionTenantShardSize(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_ingestionTenantShardSize(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -4915,7 +4912,7 @@ func (ec *executionContext) fieldContext_MimirLimits_ingestionTenantShardSize(ct
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_maxGlobalSeriesPerUser(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_maxGlobalSeriesPerUser(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_maxGlobalSeriesPerUser(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -4953,7 +4950,7 @@ func (ec *executionContext) fieldContext_MimirLimits_maxGlobalSeriesPerUser(ctx 
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_maxGlobalSeriesPerMetric(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_maxGlobalSeriesPerMetric(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_maxGlobalSeriesPerMetric(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -4991,7 +4988,7 @@ func (ec *executionContext) fieldContext_MimirLimits_maxGlobalSeriesPerMetric(ct
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_maxGlobalMetricsWithMetadataPerUser(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_maxGlobalMetricsWithMetadataPerUser(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_maxGlobalMetricsWithMetadataPerUser(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -5029,7 +5026,7 @@ func (ec *executionContext) fieldContext_MimirLimits_maxGlobalMetricsWithMetadat
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_maxGlobalMetadataPerMetric(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_maxGlobalMetadataPerMetric(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_maxGlobalMetadataPerMetric(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -5067,7 +5064,7 @@ func (ec *executionContext) fieldContext_MimirLimits_maxGlobalMetadataPerMetric(
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_maxGlobalExemplarsPerUser(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_maxGlobalExemplarsPerUser(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_maxGlobalExemplarsPerUser(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -5105,7 +5102,7 @@ func (ec *executionContext) fieldContext_MimirLimits_maxGlobalExemplarsPerUser(c
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_nativeHistogramsIngestionEnabled(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_nativeHistogramsIngestionEnabled(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_nativeHistogramsIngestionEnabled(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -5143,7 +5140,7 @@ func (ec *executionContext) fieldContext_MimirLimits_nativeHistogramsIngestionEn
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_outOfOrderTimeWindow(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_outOfOrderTimeWindow(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_outOfOrderTimeWindow(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -5181,7 +5178,7 @@ func (ec *executionContext) fieldContext_MimirLimits_outOfOrderTimeWindow(ctx co
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_outOfOrderBlocksExternalLabelEnabled(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_outOfOrderBlocksExternalLabelEnabled(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_outOfOrderBlocksExternalLabelEnabled(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -5219,7 +5216,7 @@ func (ec *executionContext) fieldContext_MimirLimits_outOfOrderBlocksExternalLab
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_separateMetricsGroupLabel(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_separateMetricsGroupLabel(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_separateMetricsGroupLabel(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -5257,7 +5254,7 @@ func (ec *executionContext) fieldContext_MimirLimits_separateMetricsGroupLabel(c
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_maxChunksPerQuery(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_maxChunksPerQuery(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_maxChunksPerQuery(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -5295,7 +5292,7 @@ func (ec *executionContext) fieldContext_MimirLimits_maxChunksPerQuery(ctx conte
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_maxFetchedSeriesPerQuery(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_maxFetchedSeriesPerQuery(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_maxFetchedSeriesPerQuery(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -5333,7 +5330,7 @@ func (ec *executionContext) fieldContext_MimirLimits_maxFetchedSeriesPerQuery(ct
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_maxFetchedChunkBytesPerQuery(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_maxFetchedChunkBytesPerQuery(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_maxFetchedChunkBytesPerQuery(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -5371,7 +5368,7 @@ func (ec *executionContext) fieldContext_MimirLimits_maxFetchedChunkBytesPerQuer
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_maxQueryLookback(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_maxQueryLookback(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_maxQueryLookback(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -5409,7 +5406,7 @@ func (ec *executionContext) fieldContext_MimirLimits_maxQueryLookback(ctx contex
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_maxPartialQueryLength(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_maxPartialQueryLength(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_maxPartialQueryLength(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -5447,7 +5444,7 @@ func (ec *executionContext) fieldContext_MimirLimits_maxPartialQueryLength(ctx c
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_maxQueryParallelism(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_maxQueryParallelism(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_maxQueryParallelism(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -5485,7 +5482,7 @@ func (ec *executionContext) fieldContext_MimirLimits_maxQueryParallelism(ctx con
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_maxLabelsQueryLength(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_maxLabelsQueryLength(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_maxLabelsQueryLength(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -5523,7 +5520,7 @@ func (ec *executionContext) fieldContext_MimirLimits_maxLabelsQueryLength(ctx co
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_maxCacheFreshness(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_maxCacheFreshness(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_maxCacheFreshness(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -5561,7 +5558,7 @@ func (ec *executionContext) fieldContext_MimirLimits_maxCacheFreshness(ctx conte
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_maxQueriersPerTenant(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_maxQueriersPerTenant(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_maxQueriersPerTenant(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -5599,7 +5596,7 @@ func (ec *executionContext) fieldContext_MimirLimits_maxQueriersPerTenant(ctx co
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_queryShardingTotalShards(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_queryShardingTotalShards(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_queryShardingTotalShards(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -5637,7 +5634,7 @@ func (ec *executionContext) fieldContext_MimirLimits_queryShardingTotalShards(ct
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_queryShardingMaxShardedQueries(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_queryShardingMaxShardedQueries(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_queryShardingMaxShardedQueries(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -5675,7 +5672,7 @@ func (ec *executionContext) fieldContext_MimirLimits_queryShardingMaxShardedQuer
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_queryShardingMaxRegexpSizeBytes(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_queryShardingMaxRegexpSizeBytes(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_queryShardingMaxRegexpSizeBytes(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -5713,7 +5710,7 @@ func (ec *executionContext) fieldContext_MimirLimits_queryShardingMaxRegexpSizeB
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_splitInstantQueriesByInterval(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_splitInstantQueriesByInterval(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_splitInstantQueriesByInterval(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -5751,7 +5748,7 @@ func (ec *executionContext) fieldContext_MimirLimits_splitInstantQueriesByInterv
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_maxTotalQueryLength(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_maxTotalQueryLength(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_maxTotalQueryLength(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -5789,7 +5786,7 @@ func (ec *executionContext) fieldContext_MimirLimits_maxTotalQueryLength(ctx con
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_resultsCacheTTL(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_resultsCacheTTL(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_resultsCacheTTL(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -5827,7 +5824,7 @@ func (ec *executionContext) fieldContext_MimirLimits_resultsCacheTTL(ctx context
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_resultsCacheTTLForOutOfOrderTimeWindow(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_resultsCacheTTLForOutOfOrderTimeWindow(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_resultsCacheTTLForOutOfOrderTimeWindow(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -5865,7 +5862,7 @@ func (ec *executionContext) fieldContext_MimirLimits_resultsCacheTTLForOutOfOrde
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_maxQueryExpressionSizeBytes(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_maxQueryExpressionSizeBytes(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_maxQueryExpressionSizeBytes(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -5903,7 +5900,7 @@ func (ec *executionContext) fieldContext_MimirLimits_maxQueryExpressionSizeBytes
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_cardinalityAnalysisEnabled(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_cardinalityAnalysisEnabled(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_cardinalityAnalysisEnabled(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -5941,7 +5938,7 @@ func (ec *executionContext) fieldContext_MimirLimits_cardinalityAnalysisEnabled(
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_labelNamesAndValuesResultsMaxSizeBytes(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_labelNamesAndValuesResultsMaxSizeBytes(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_labelNamesAndValuesResultsMaxSizeBytes(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -5979,7 +5976,7 @@ func (ec *executionContext) fieldContext_MimirLimits_labelNamesAndValuesResultsM
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_labelValuesMaxCardinalityLabelNamesPerRequest(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_labelValuesMaxCardinalityLabelNamesPerRequest(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_labelValuesMaxCardinalityLabelNamesPerRequest(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -6017,7 +6014,7 @@ func (ec *executionContext) fieldContext_MimirLimits_labelValuesMaxCardinalityLa
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_rulerEvaluationDelay(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_rulerEvaluationDelay(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_rulerEvaluationDelay(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -6055,7 +6052,7 @@ func (ec *executionContext) fieldContext_MimirLimits_rulerEvaluationDelay(ctx co
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_rulerTenantShardSize(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_rulerTenantShardSize(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_rulerTenantShardSize(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -6093,7 +6090,7 @@ func (ec *executionContext) fieldContext_MimirLimits_rulerTenantShardSize(ctx co
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_rulerMaxRulesPerRuleGroup(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_rulerMaxRulesPerRuleGroup(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_rulerMaxRulesPerRuleGroup(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -6131,7 +6128,7 @@ func (ec *executionContext) fieldContext_MimirLimits_rulerMaxRulesPerRuleGroup(c
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_rulerMaxRuleGroupsPerTenant(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_rulerMaxRuleGroupsPerTenant(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_rulerMaxRuleGroupsPerTenant(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -6169,7 +6166,7 @@ func (ec *executionContext) fieldContext_MimirLimits_rulerMaxRuleGroupsPerTenant
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_rulerRecordingRulesEvaluationEnabled(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_rulerRecordingRulesEvaluationEnabled(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_rulerRecordingRulesEvaluationEnabled(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -6207,7 +6204,7 @@ func (ec *executionContext) fieldContext_MimirLimits_rulerRecordingRulesEvaluati
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_rulerAlertingRulesEvaluationEnabled(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_rulerAlertingRulesEvaluationEnabled(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_rulerAlertingRulesEvaluationEnabled(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -6245,7 +6242,7 @@ func (ec *executionContext) fieldContext_MimirLimits_rulerAlertingRulesEvaluatio
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_storeGatewayTenantShardSize(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_storeGatewayTenantShardSize(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_storeGatewayTenantShardSize(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -6283,7 +6280,7 @@ func (ec *executionContext) fieldContext_MimirLimits_storeGatewayTenantShardSize
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_compactorBlocksRetentionPeriod(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_compactorBlocksRetentionPeriod(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_compactorBlocksRetentionPeriod(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -6321,7 +6318,7 @@ func (ec *executionContext) fieldContext_MimirLimits_compactorBlocksRetentionPer
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_compactorSplitAndMergeShards(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_compactorSplitAndMergeShards(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_compactorSplitAndMergeShards(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -6359,7 +6356,7 @@ func (ec *executionContext) fieldContext_MimirLimits_compactorSplitAndMergeShard
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_compactorSplitGroups(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_compactorSplitGroups(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_compactorSplitGroups(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -6397,7 +6394,7 @@ func (ec *executionContext) fieldContext_MimirLimits_compactorSplitGroups(ctx co
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_compactorTenantShardSize(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_compactorTenantShardSize(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_compactorTenantShardSize(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -6435,7 +6432,7 @@ func (ec *executionContext) fieldContext_MimirLimits_compactorTenantShardSize(ct
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_compactorPartialBlockDeletionDelay(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_compactorPartialBlockDeletionDelay(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_compactorPartialBlockDeletionDelay(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -6473,7 +6470,7 @@ func (ec *executionContext) fieldContext_MimirLimits_compactorPartialBlockDeleti
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_compactorBlockUploadEnabled(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_compactorBlockUploadEnabled(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_compactorBlockUploadEnabled(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -6511,7 +6508,7 @@ func (ec *executionContext) fieldContext_MimirLimits_compactorBlockUploadEnabled
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_compactorBlockUploadValidationEnabled(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_compactorBlockUploadValidationEnabled(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_compactorBlockUploadValidationEnabled(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -6549,7 +6546,7 @@ func (ec *executionContext) fieldContext_MimirLimits_compactorBlockUploadValidat
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_compactorBlockUploadVerifyChunks(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_compactorBlockUploadVerifyChunks(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_compactorBlockUploadVerifyChunks(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -6587,7 +6584,7 @@ func (ec *executionContext) fieldContext_MimirLimits_compactorBlockUploadVerifyC
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_s3SSEType(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_s3SSEType(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_s3SSEType(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -6625,7 +6622,7 @@ func (ec *executionContext) fieldContext_MimirLimits_s3SSEType(ctx context.Conte
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_s3SSEKMSKeyID(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_s3SSEKMSKeyID(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_s3SSEKMSKeyID(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -6663,7 +6660,7 @@ func (ec *executionContext) fieldContext_MimirLimits_s3SSEKMSKeyID(ctx context.C
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_s3SSEKMSEncryptionContext(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_s3SSEKMSEncryptionContext(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_s3SSEKMSEncryptionContext(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -6701,7 +6698,7 @@ func (ec *executionContext) fieldContext_MimirLimits_s3SSEKMSEncryptionContext(c
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_alertmanagerReceiversBlockCIDRNetworks(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_alertmanagerReceiversBlockCIDRNetworks(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_alertmanagerReceiversBlockCIDRNetworks(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -6739,7 +6736,7 @@ func (ec *executionContext) fieldContext_MimirLimits_alertmanagerReceiversBlockC
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_alertmanagerReceiversBlockPrivateAddresses(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_alertmanagerReceiversBlockPrivateAddresses(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_alertmanagerReceiversBlockPrivateAddresses(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -6777,7 +6774,7 @@ func (ec *executionContext) fieldContext_MimirLimits_alertmanagerReceiversBlockP
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_notificationRateLimit(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_notificationRateLimit(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_notificationRateLimit(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -6815,7 +6812,7 @@ func (ec *executionContext) fieldContext_MimirLimits_notificationRateLimit(ctx c
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_notificationRateLimitPerIntegration(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_notificationRateLimitPerIntegration(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_notificationRateLimitPerIntegration(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -6853,7 +6850,7 @@ func (ec *executionContext) fieldContext_MimirLimits_notificationRateLimitPerInt
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_alertmanagerMaxConfigSizeBytes(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_alertmanagerMaxConfigSizeBytes(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_alertmanagerMaxConfigSizeBytes(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -6891,7 +6888,7 @@ func (ec *executionContext) fieldContext_MimirLimits_alertmanagerMaxConfigSizeBy
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_alertmanagerMaxTemplatesCount(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_alertmanagerMaxTemplatesCount(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_alertmanagerMaxTemplatesCount(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -6929,7 +6926,7 @@ func (ec *executionContext) fieldContext_MimirLimits_alertmanagerMaxTemplatesCou
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_alertmanagerMaxTemplateSizeBytes(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_alertmanagerMaxTemplateSizeBytes(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_alertmanagerMaxTemplateSizeBytes(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -6967,7 +6964,7 @@ func (ec *executionContext) fieldContext_MimirLimits_alertmanagerMaxTemplateSize
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_alertmanagerMaxDispatcherAggregationGroups(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_alertmanagerMaxDispatcherAggregationGroups(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_alertmanagerMaxDispatcherAggregationGroups(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -7005,7 +7002,7 @@ func (ec *executionContext) fieldContext_MimirLimits_alertmanagerMaxDispatcherAg
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_alertmanagerMaxAlertsCount(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_alertmanagerMaxAlertsCount(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_alertmanagerMaxAlertsCount(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -7043,7 +7040,7 @@ func (ec *executionContext) fieldContext_MimirLimits_alertmanagerMaxAlertsCount(
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_alertmanagerMaxAlertsSizeBytes(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_alertmanagerMaxAlertsSizeBytes(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_alertmanagerMaxAlertsSizeBytes(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -7081,7 +7078,7 @@ func (ec *executionContext) fieldContext_MimirLimits_alertmanagerMaxAlertsSizeBy
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_forwardingEndpoInt(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_forwardingEndpoInt(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_forwardingEndpoInt(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -7119,7 +7116,7 @@ func (ec *executionContext) fieldContext_MimirLimits_forwardingEndpoInt(ctx cont
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_forwardingDropOlderThan(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_forwardingDropOlderThan(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_forwardingDropOlderThan(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -7157,7 +7154,7 @@ func (ec *executionContext) fieldContext_MimirLimits_forwardingDropOlderThan(ctx
 	return fc, nil
 }
 
-func (ec *executionContext) _MimirLimits_forwardingRules(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+func (ec *executionContext) _MimirLimits_forwardingRules(ctx context.Context, field graphql.CollectedField, obj *v1alpha1.MimirLimits) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_MimirLimits_forwardingRules(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -7171,23 +7168,23 @@ func (ec *executionContext) _MimirLimits_forwardingRules(ctx context.Context, fi
 	}()
 	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.MimirLimits().ForwardingRules(rctx, obj)
+		return obj.ForwardingRules, nil
 	})
 
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*string)
+	res := resTmp.(map[string]v1alpha1.ForwardingRule)
 	fc.Result = res
-	return ec.marshalOForwardingRuleMap2ᚖstring(ctx, field.Selections, res)
+	return ec.marshalOForwardingRuleMap2map(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_MimirLimits_forwardingRules(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "MimirLimits",
 		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
+		IsMethod:   false,
+		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type ForwardingRuleMap does not have child fields")
 		},
@@ -11126,9 +11123,9 @@ func (ec *executionContext) _ObservabilityTenantLimits_mimir(ctx context.Context
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*model.MimirLimits)
+	res := resTmp.(*v1alpha1.MimirLimits)
 	fc.Result = res
-	return ec.marshalOMimirLimits2ᚖgithubᚗcomᚋpluralshᚋoauthᚑplaygroundᚋapiᚑserverᚋgraphᚋmodelᚐMimirLimits(ctx, field.Selections, res)
+	return ec.marshalOMimirLimits2ᚖgithubᚗcomᚋpluralshᚋtraceᚑshieldᚑcontrollerᚋapiᚋobservabilityᚋv1alpha1ᚐMimirLimits(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_ObservabilityTenantLimits_mimir(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -15151,7 +15148,7 @@ func (ec *executionContext) unmarshalInputObservabilityTenantViewersInput(ctx co
 
 var forwardingRuleImplementors = []string{"ForwardingRule"}
 
-func (ec *executionContext) _ForwardingRule(ctx context.Context, sel ast.SelectionSet, obj *model.ForwardingRule) graphql.Marshaler {
+func (ec *executionContext) _ForwardingRule(ctx context.Context, sel ast.SelectionSet, obj *v1alpha1.ForwardingRule) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, forwardingRuleImplementors)
 	out := graphql.NewFieldSet(fields)
 	var invalids uint32
@@ -15308,7 +15305,7 @@ func (ec *executionContext) _LokiLimits(ctx context.Context, sel ast.SelectionSe
 
 var mimirLimitsImplementors = []string{"MimirLimits"}
 
-func (ec *executionContext) _MimirLimits(ctx context.Context, sel ast.SelectionSet, obj *model.MimirLimits) graphql.Marshaler {
+func (ec *executionContext) _MimirLimits(ctx context.Context, sel ast.SelectionSet, obj *v1alpha1.MimirLimits) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, mimirLimitsImplementors)
 	out := graphql.NewFieldSet(fields)
 	var invalids uint32
@@ -15617,22 +15614,9 @@ func (ec *executionContext) _MimirLimits(ctx context.Context, sel ast.SelectionS
 			out.Values[i] = ec._MimirLimits_forwardingDropOlderThan(ctx, field, obj)
 
 		case "forwardingRules":
-			field := field
 
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._MimirLimits_forwardingRules(ctx, field, obj)
-				return res
-			}
+			out.Values[i] = ec._MimirLimits_forwardingRules(ctx, field, obj)
 
-			out.Concurrently(i, func() graphql.Marshaler {
-				return innerFunc(ctx)
-
-			})
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -17744,19 +17728,19 @@ func (ec *executionContext) marshalOFloatMap2map(ctx context.Context, sel ast.Se
 	return res
 }
 
-func (ec *executionContext) unmarshalOForwardingRuleMap2ᚖstring(ctx context.Context, v interface{}) (*string, error) {
+func (ec *executionContext) unmarshalOForwardingRuleMap2map(ctx context.Context, v interface{}) (map[string]v1alpha1.ForwardingRule, error) {
 	if v == nil {
 		return nil, nil
 	}
-	res, err := graphql.UnmarshalString(v)
-	return &res, graphql.ErrorOnPath(ctx, err)
+	res, err := custom.UnmarshalForwardingRuleMap(v)
+	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalOForwardingRuleMap2ᚖstring(ctx context.Context, sel ast.SelectionSet, v *string) graphql.Marshaler {
+func (ec *executionContext) marshalOForwardingRuleMap2map(ctx context.Context, sel ast.SelectionSet, v map[string]v1alpha1.ForwardingRule) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
-	res := graphql.MarshalString(*v)
+	res := custom.MarshalForwardingRuleMap(v)
 	return res
 }
 
@@ -17909,11 +17893,11 @@ func (ec *executionContext) marshalOMap2map(ctx context.Context, sel ast.Selecti
 	return res
 }
 
-func (ec *executionContext) marshalOMimirLimits2ᚖgithubᚗcomᚋpluralshᚋoauthᚑplaygroundᚋapiᚑserverᚋgraphᚋmodelᚐMimirLimits(ctx context.Context, sel ast.SelectionSet, v *model.MimirLimits) graphql.Marshaler {
+func (ec *executionContext) marshalOMimirLimits2ᚖgithubᚗcomᚋpluralshᚋtraceᚑshieldᚑcontrollerᚋapiᚋobservabilityᚋv1alpha1ᚐMimirLimits(ctx context.Context, sel ast.SelectionSet, v *v1alpha1.MimirLimits) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
-	return ec._MimirLimits(ctx, sel, v)
+	return v
 }
 
 func (ec *executionContext) marshalOName2ᚖgithubᚗcomᚋpluralshᚋoauthᚑplaygroundᚋapiᚑserverᚋgraphᚋmodelᚐName(ctx context.Context, sel ast.SelectionSet, v *model.Name) graphql.Marshaler {

@@ -26,13 +26,6 @@ func (c *ClientWrapper) MutateObservabilityTenant(ctx context.Context, name stri
 	// updating a group would require that we first check if it exists and if a user is allowed to update it
 	// creating a group would require that we first check if it exists and if a user is allowed to create it
 
-	test, err := c.ControllerClient.ObservabilityV1alpha1().Tenants().Get(ctx, name, metav1.GetOptions{})
-	if err != nil {
-		log.Error(err, "Failed to get observability tenant")
-		return nil, err
-	}
-	log.Info("Got observability tenant", "Tenant", test)
-
 	tenantpExists, err := c.ObservabilityTenantExistsInKeto(ctx, name)
 	if err != nil {
 		log.Error(err, "Failed to check if observability tenant already exists in keto")
@@ -621,6 +614,81 @@ func (c *ClientWrapper) ListTenantsInKeto(ctx context.Context) ([]*model.Observa
 	return outputTenants, nil
 }
 
+// function that uses the controller client to list all observability tenants
+func (c *ClientWrapper) ListTenants(ctx context.Context) ([]*model.ObservabilityTenant, error) {
+	log := c.Log.WithName("ListTenants")
+
+	tenants, err := c.ControllerClient.ObservabilityV1alpha1().Tenants().List(ctx, metav1.ListOptions{})
+	if err != nil {
+		log.Error(err, "Failed to list observability tenants")
+		return nil, err
+	}
+
+	var outputTenants []*model.ObservabilityTenant
+
+	for _, tenant := range tenants.Items {
+		outputTenants = append(outputTenants, &model.ObservabilityTenant{
+			Name: tenant.Name,
+			Limits: &model.ObservabilityTenantLimits{
+				Mimir: &tenant.Spec.Limits.Mimir,
+			},
+		})
+	}
+
+	log.Info("Success listing observability tenants")
+	return outputTenants, nil
+}
+
+// function that gets an observability tenant using the controller client
+func (c *ClientWrapper) GetTenant(ctx context.Context, name string) (*model.ObservabilityTenant, error) {
+	log := c.Log.WithName("GetTenant").WithValues("Name", name)
+
+	if name == "" {
+		return nil, fmt.Errorf("observability tenant name cannot be empty")
+	}
+
+	tenant, err := c.ControllerClient.ObservabilityV1alpha1().Tenants().Get(ctx, name, metav1.GetOptions{})
+	if err != nil {
+		log.Error(err, "Failed to get observability tenant")
+		return nil, err
+	}
+
+	log.Info("Got observability tenant", "Tenant", tenant)
+
+	outputTenant := &model.ObservabilityTenant{
+		Name: tenant.Name,
+		Limits: &model.ObservabilityTenantLimits{
+			Mimir: &tenant.Spec.Limits.Mimir,
+		},
+	}
+
+	log.Info("Success getting observability tenant")
+	return outputTenant, nil
+}
+
+// function that deletes an observability tenant using the controller client
+func (c *ClientWrapper) DeleteTenant(ctx context.Context, name string) (*model.ObservabilityTenant, error) {
+	log := c.Log.WithName("DeleteTenant").WithValues("Name", name)
+
+	if name == "" {
+		return nil, fmt.Errorf("observability tenant name cannot be empty")
+	}
+
+	err := c.ControllerClient.ObservabilityV1alpha1().Tenants().Delete(ctx, name, metav1.DeleteOptions{})
+	if err != nil {
+		log.Error(err, "Failed to delete observability tenant")
+		return nil, err
+	}
+
+	log.Info("Success deleting observability tenant")
+	return &model.ObservabilityTenant{
+		Name: name,
+		Organization: &model.Organization{
+			Name: "main", //TODO: decide whether to hardcode this or not
+		},
+	}, nil
+}
+
 // function that gets an observability tenant from keto
 func (c *ClientWrapper) GetTenantFromKeto(ctx context.Context, name string) (*model.ObservabilityTenant, error) {
 	log := c.Log.WithName("GetTenantFromKeto").WithValues("Name", name)
@@ -629,25 +697,18 @@ func (c *ClientWrapper) GetTenantFromKeto(ctx context.Context, name string) (*mo
 		return nil, fmt.Errorf("observability tenant name cannot be empty")
 	}
 
-	test, err := c.ControllerClient.ObservabilityV1alpha1().Tenants().Get(ctx, name, metav1.GetOptions{})
+	// check if group exists in keto
+	exists, err := c.ObservabilityTenantExistsInKeto(ctx, name)
 	if err != nil {
-		log.Error(err, "Failed to get observability tenant")
+		log.Error(err, "Failed to check if observability tenant exists in keto")
 		return nil, err
 	}
-	log.Info("Got observability tenant", "Tenant", test)
-
-	// check if group exists in keto
-	// exists, err := c.ObservabilityTenantExistsInKeto(ctx, name)
-	// if err != nil {
-	// 	log.Error(err, "Failed to check if observability tenant exists in keto")
-	// 	return nil, err
-	// }
-	if test == nil {
+	if !exists {
 		return nil, fmt.Errorf("observability tenant does not exist in keto")
 	}
 
 	return &model.ObservabilityTenant{
-		Name: test.Name,
+		Name: name,
 		Organization: &model.Organization{
 			Name: "main", //TODO: decide whether to hardcode this or not
 		},

@@ -44,6 +44,7 @@ resolver:
 # if they match it will use them, otherwise it will generate them.
 autobind:
  - "github.com/pluralsh/oauth-playground/api-server/graph/model"
+ - "github.com/pluralsh/trace-shield-controller/api/observability/v1alpha1"
 
 # This section declares type mapping between the GraphQL and go type systems
 #
@@ -71,9 +72,9 @@ models:
   FloatMap:
     model:
       - github.com/pluralsh/oauth-playground/api-server/graph/custom.FloatMap
-  # ForwardingRuleMap:
-  #   model:
-  #     - github.com/pluralsh/oauth-playground/api-server/graph/custom.FloatMap
+  ForwardingRuleMap:
+    model:
+      - github.com/pluralsh/oauth-playground/api-server/graph/custom.ForwardingRuleMap
   User:
     fields:
       groups:

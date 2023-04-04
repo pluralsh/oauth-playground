@@ -4,6 +4,8 @@ package model
 
 import (
 	"time"
+
+	"github.com/pluralsh/trace-shield-controller/api/observability/v1alpha1"
 )
 
 type AcceptOAuth2ConsentRequestSession struct {
@@ -216,7 +218,7 @@ type ObservabilityTenantEditorsInput struct {
 // Representation of the limits of a tenant.
 type ObservabilityTenantLimits struct {
 	// The limits for Mimir for the tenant.
-	Mimir *MimirLimits `json:"mimir"`
+	Mimir *v1alpha1.MimirLimits `json:"mimir"`
 	// The limits for Loki for the tenant.
 	Loki *LokiLimits `json:"loki"`
 	// The limits for Tempo for the tenant.

@@ -6,16 +6,10 @@ package resolvers
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/pluralsh/oauth-playground/api-server/graph/generated"
 	"github.com/pluralsh/oauth-playground/api-server/graph/model"
 )
-
-// ForwardingRules is the resolver for the forwardingRules field.
-func (r *mimirLimitsResolver) ForwardingRules(ctx context.Context, obj *model.MimirLimits) (*string, error) {
-	panic(fmt.Errorf("not implemented: ForwardingRules - forwardingRules"))
-}
 
 // CreateObservabilityTenant is the resolver for the createObservabilityTenant field.
 func (r *mutationResolver) CreateObservabilityTenant(ctx context.Context, name string, viewers *model.ObservabilityTenantViewersInput, editors *model.ObservabilityTenantEditorsInput) (*model.ObservabilityTenant, error) {
@@ -29,7 +23,7 @@ func (r *mutationResolver) UpdateObservabilityTenant(ctx context.Context, name s
 
 // DeleteObservabilityTenant is the resolver for the deleteObservabilityTenant field.
 func (r *mutationResolver) DeleteObservabilityTenant(ctx context.Context, name string) (*model.ObservabilityTenant, error) {
-	return r.C.DeleteObservabilityTenantInKeto(ctx, name)
+	return r.C.DeleteTenant(ctx, name)
 }
 
 // Viewers is the resolver for the viewers field.
@@ -69,16 +63,13 @@ func (r *observabilityTenantViewersResolver) Oauth2Clients(ctx context.Context, 
 
 // ListObservabilityTenants is the resolver for the listObservabilityTenants field.
 func (r *queryResolver) ListObservabilityTenants(ctx context.Context) ([]*model.ObservabilityTenant, error) {
-	return r.C.ListTenantsInKeto(ctx)
+	return r.C.ListTenants(ctx)
 }
 
 // GetObservabilityTenant is the resolver for the getObservabilityTenant field.
 func (r *queryResolver) GetObservabilityTenant(ctx context.Context, name string) (*model.ObservabilityTenant, error) {
-	return r.C.GetTenantFromKeto(ctx, name)
+	return r.C.GetTenant(ctx, name)
 }
-
-// MimirLimits returns generated.MimirLimitsResolver implementation.
-func (r *Resolver) MimirLimits() generated.MimirLimitsResolver { return &mimirLimitsResolver{r} }
 
 // ObservabilityTenant returns generated.ObservabilityTenantResolver implementation.
 func (r *Resolver) ObservabilityTenant() generated.ObservabilityTenantResolver {
@@ -95,17 +86,6 @@ func (r *Resolver) ObservabilityTenantViewers() generated.ObservabilityTenantVie
 	return &observabilityTenantViewersResolver{r}
 }
 
-type mimirLimitsResolver struct{ *Resolver }
 type observabilityTenantResolver struct{ *Resolver }
 type observabilityTenantEditorsResolver struct{ *Resolver }
 type observabilityTenantViewersResolver struct{ *Resolver }
-
-// !!! WARNING !!!
-// The code below was going to be deleted when updating resolvers. It has been copied here so you have
-// one last chance to move it out of harms way if you want. There are two reasons this happens:
-//   - When renaming or deleting a resolver the old code will be put in here. You can safely delete
-//     it when you're done.
-//   - You have helper methods in this file. Move them out to keep these resolver files clean.
-func (r *mutationResolver) ObservabilityTenant(ctx context.Context, name string, viewers *model.ObservabilityTenantViewersInput, editors *model.ObservabilityTenantEditorsInput) (*model.ObservabilityTenant, error) {
-	return r.C.MutateObservabilityTenant(ctx, name, viewers, editors)
-}
