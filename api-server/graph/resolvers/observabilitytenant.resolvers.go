@@ -6,10 +6,16 @@ package resolvers
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/pluralsh/oauth-playground/api-server/graph/generated"
 	"github.com/pluralsh/oauth-playground/api-server/graph/model"
 )
+
+// ForwardingRules is the resolver for the forwardingRules field.
+func (r *mimirLimitsResolver) ForwardingRules(ctx context.Context, obj *model.MimirLimits) (*string, error) {
+	panic(fmt.Errorf("not implemented: ForwardingRules - forwardingRules"))
+}
 
 // ObservabilityTenant is the resolver for the observabilityTenant field.
 func (r *mutationResolver) ObservabilityTenant(ctx context.Context, name string, viewers *model.ObservabilityTenantViewersInput, editors *model.ObservabilityTenantEditorsInput) (*model.ObservabilityTenant, error) {
@@ -66,6 +72,9 @@ func (r *queryResolver) GetObservabilityTenant(ctx context.Context, name string)
 	return r.C.GetTenantFromKeto(ctx, name)
 }
 
+// MimirLimits returns generated.MimirLimitsResolver implementation.
+func (r *Resolver) MimirLimits() generated.MimirLimitsResolver { return &mimirLimitsResolver{r} }
+
 // ObservabilityTenant returns generated.ObservabilityTenantResolver implementation.
 func (r *Resolver) ObservabilityTenant() generated.ObservabilityTenantResolver {
 	return &observabilityTenantResolver{r}
@@ -81,6 +90,7 @@ func (r *Resolver) ObservabilityTenantViewers() generated.ObservabilityTenantVie
 	return &observabilityTenantViewersResolver{r}
 }
 
+type mimirLimitsResolver struct{ *Resolver }
 type observabilityTenantResolver struct{ *Resolver }
 type observabilityTenantEditorsResolver struct{ *Resolver }
 type observabilityTenantViewersResolver struct{ *Resolver }

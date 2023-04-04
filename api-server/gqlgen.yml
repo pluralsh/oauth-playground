@@ -71,6 +71,9 @@ models:
   FloatMap:
     model:
       - github.com/pluralsh/oauth-playground/api-server/graph/custom.FloatMap
+  # ForwardingRuleMap:
+  #   model:
+  #     - github.com/pluralsh/oauth-playground/api-server/graph/custom.FloatMap
   User:
     fields:
       groups:

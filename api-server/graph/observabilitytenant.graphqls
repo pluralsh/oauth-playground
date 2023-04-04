@@ -30,6 +30,7 @@ type ObservabilityTenantLimits {
 
 scalar Duration
 scalar FloatMap
+scalar ForwardingRuleMap
 
 "Representation of the limits for Mimir for a tenant."
 type MimirLimits {
@@ -65,7 +66,7 @@ type MimirLimits {
 	
 	ingestionTenantShardSize: Int
 	
-
+  # metricRelabelConfigs
 	
 	
 
@@ -88,7 +89,7 @@ type MimirLimits {
 	
 	nativeHistogramsIngestionEnabled: Boolean
 	
-	
+	# activeSeriesCustomTrackersConfig: 
 	
 	
 	outOfOrderTimeWindow: Duration
@@ -221,7 +222,12 @@ type MimirLimits {
 	
 	forwardingDropOlderThan: Duration
 	
-	#forwardingRules: ForwardingRules # TODO: add forwarding rules
+	forwardingRules: ForwardingRuleMap
+}
+
+type ForwardingRule {
+  "Ingest defines whether a metric should still be pushed to the Ingesters despite it being forwarded."
+	ingest: Boolean
 }
 
 "Representation of the limits for Loki for a tenant."

@@ -5,3 +5,5 @@ import (
 )
 
 type MimirLimits observabilityv1alpha1.MimirLimits
+
+type ForwardingRule observabilityv1alpha1.ForwardingRule

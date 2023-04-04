@@ -41,6 +41,7 @@ type Config struct {
 type ResolverRoot interface {
 	Group() GroupResolver
 	LoginBindings() LoginBindingsResolver
+	MimirLimits() MimirLimitsResolver
 	Mutation() MutationResolver
 	OAuth2Client() OAuth2ClientResolver
 	ObservabilityTenant() ObservabilityTenantResolver
@@ -57,6 +58,10 @@ type DirectiveRoot struct {
 }
 
 type ComplexityRoot struct {
+	ForwardingRule struct {
+		Ingest func(childComplexity int) int
+	}
+
 	Group struct {
 		Members      func(childComplexity int) int
 		Name         func(childComplexity int) int
@@ -96,6 +101,7 @@ type ComplexityRoot struct {
 		EnforceMetadataMetricName                     func(childComplexity int) int
 		ForwardingDropOlderThan                       func(childComplexity int) int
 		ForwardingEndpoint                            func(childComplexity int) int
+		ForwardingRules                               func(childComplexity int) int
 		HAClusterLabel                                func(childComplexity int) int
 		HAMaxClusters                                 func(childComplexity int) int
 		HAReplicaLabel                                func(childComplexity int) int
@@ -306,6 +312,9 @@ type LoginBindingsResolver interface {
 	Users(ctx context.Context, obj *model.LoginBindings) ([]*model.User, error)
 	Groups(ctx context.Context, obj *model.LoginBindings) ([]*model.Group, error)
 }
+type MimirLimitsResolver interface {
+	ForwardingRules(ctx context.Context, obj *model.MimirLimits) (*string, error)
+}
 type MutationResolver interface {
 	CreateUser(ctx context.Context, email string, name *model.NameInput) (*model.User, error)
 	DeleteUser(ctx context.Context, id string) (*model.User, error)
@@ -371,6 +380,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 	ec := executionContext{nil, e}
 	_ = ec
 	switch typeName + "." + field {
+
+	case "ForwardingRule.ingest":
+		if e.complexity.ForwardingRule.Ingest == nil {
+			break
+		}
+
+		return e.complexity.ForwardingRule.Ingest(childComplexity), true
 
 	case "Group.members":
 		if e.complexity.Group.Members == nil {
@@ -574,6 +590,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.MimirLimits.ForwardingEndpoint(childComplexity), true
+
+	case "MimirLimits.forwardingRules":
+		if e.complexity.MimirLimits.ForwardingRules == nil {
+			break
+		}
+
+		return e.complexity.MimirLimits.ForwardingRules(childComplexity), true
 
 	case "MimirLimits.haClusterLabel":
 		if e.complexity.MimirLimits.HAClusterLabel == nil {
@@ -2408,6 +2431,7 @@ type ObservabilityTenantLimits {
 
 scalar Duration
 scalar FloatMap
+scalar ForwardingRuleMap
 
 "Representation of the limits for Mimir for a tenant."
 type MimirLimits {
@@ -2443,7 +2467,7 @@ type MimirLimits {
 	
 	ingestionTenantShardSize: Int
 	
-
+  # metricRelabelConfigs
 	
 	
 
@@ -2466,7 +2490,7 @@ type MimirLimits {
 	
 	nativeHistogramsIngestionEnabled: Boolean
 	
-	
+	# activeSeriesCustomTrackersConfig: 
 	
 	
 	outOfOrderTimeWindow: Duration
@@ -2599,7 +2623,12 @@ type MimirLimits {
 	
 	forwardingDropOlderThan: Duration
 	
-	#forwardingRules: ForwardingRules # TODO: add forwarding rules
+	forwardingRules: ForwardingRuleMap # TODO: add forwarding rules
+}
+
+type ForwardingRule {
+  "Ingest defines whether a metric should still be pushed to the Ingesters despite it being forwarded."
+	ingest: Boolean
 }
 
 "Representation of the limits for Loki for a tenant."
@@ -3906,6 +3935,44 @@ func (ec *executionContext) _fieldMiddleware(ctx context.Context, obj interface{
 // endregion ************************** directives.gotpl **************************
 
 // region    **************************** field.gotpl *****************************
+
+func (ec *executionContext) _ForwardingRule_ingest(ctx context.Context, field graphql.CollectedField, obj *model.ForwardingRule) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ForwardingRule_ingest(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Ingest, nil
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalOBoolean2bool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ForwardingRule_ingest(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ForwardingRule",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
 
 func (ec *executionContext) _Group_name(ctx context.Context, field graphql.CollectedField, obj *model.Group) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Group_name(ctx, field)
@@ -7028,6 +7095,44 @@ func (ec *executionContext) fieldContext_MimirLimits_forwardingDropOlderThan(ctx
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type Duration does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MimirLimits_forwardingRules(ctx context.Context, field graphql.CollectedField, obj *model.MimirLimits) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_MimirLimits_forwardingRules(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp := ec._fieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.MimirLimits().ForwardingRules(rctx, obj)
+	})
+
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOForwardingRuleMap2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_MimirLimits_forwardingRules(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MimirLimits",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ForwardingRuleMap does not have child fields")
 		},
 	}
 	return fc, nil
@@ -11037,6 +11142,8 @@ func (ec *executionContext) fieldContext_ObservabilityTenantLimits_mimir(ctx con
 				return ec.fieldContext_MimirLimits_forwardingEndpoInt(ctx, field)
 			case "forwardingDropOlderThan":
 				return ec.fieldContext_MimirLimits_forwardingDropOlderThan(ctx, field)
+			case "forwardingRules":
+				return ec.fieldContext_MimirLimits_forwardingRules(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type MimirLimits", field.Name)
 		},
@@ -14895,6 +15002,31 @@ func (ec *executionContext) unmarshalInputObservabilityTenantViewersInput(ctx co
 
 // region    **************************** object.gotpl ****************************
 
+var forwardingRuleImplementors = []string{"ForwardingRule"}
+
+func (ec *executionContext) _ForwardingRule(ctx context.Context, sel ast.SelectionSet, obj *model.ForwardingRule) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, forwardingRuleImplementors)
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("ForwardingRule")
+		case "ingest":
+
+			out.Values[i] = ec._ForwardingRule_ingest(ctx, field, obj)
+
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
 var groupImplementors = []string{"Group"}
 
 func (ec *executionContext) _Group(ctx context.Context, sel ast.SelectionSet, obj *model.Group) graphql.Marshaler {
@@ -15337,6 +15469,23 @@ func (ec *executionContext) _MimirLimits(ctx context.Context, sel ast.SelectionS
 
 			out.Values[i] = ec._MimirLimits_forwardingDropOlderThan(ctx, field, obj)
 
+		case "forwardingRules":
+			field := field
+
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._MimirLimits_forwardingRules(ctx, field, obj)
+				return res
+			}
+
+			out.Concurrently(i, func() graphql.Marshaler {
+				return innerFunc(ctx)
+
+			})
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -17439,6 +17588,22 @@ func (ec *executionContext) marshalOFloatMap2map(ctx context.Context, sel ast.Se
 		return graphql.Null
 	}
 	res := custom.MarshalFloatMap(v)
+	return res
+}
+
+func (ec *executionContext) unmarshalOForwardingRuleMap2ᚖstring(ctx context.Context, v interface{}) (*string, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := graphql.UnmarshalString(v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOForwardingRuleMap2ᚖstring(ctx context.Context, sel ast.SelectionSet, v *string) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	res := graphql.MarshalString(*v)
 	return res
 }
 
